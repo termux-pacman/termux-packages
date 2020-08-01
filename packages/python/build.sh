@@ -54,6 +54,13 @@ termux_step_pre_configure() {
 	CPPFLAGS+=" -I$TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/include"
 	LDFLAGS+=" -L$TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib"
 	if [ $TERMUX_ARCH = x86_64 ]; then LDFLAGS+=64; fi
+
+	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
+		# Python's configure script fails with
+		#    Fatal: you must define __ANDROID_API__
+		# if __ANDROID_API__ is not defined.
+		CPPFLAGS+=" -D__ANDROID_API__=$(getprop ro.build.version.sdk)"
+	fi
 }
 
 termux_step_post_make_install() {
