@@ -10,9 +10,9 @@ TERMUX_PKG_BREAKS="cmark-dev"
 TERMUX_PKG_REPLACES="cmark-dev"
 
 termux_step_post_make_install() {
-    cd $TERMUX_PREFIX/bin
-    ln -f -s cmark-gfm cmark
+	cd $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin
+	ln -f -s cmark-gfm cmark
 
-    cd $TERMUX_PREFIX/share/man/man1
-    ln -f -s cmark-gfm.1 cmark.1
+	cd $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/share/man/man1
+	ln -f -s cmark-gfm.1 cmark.1
 }
