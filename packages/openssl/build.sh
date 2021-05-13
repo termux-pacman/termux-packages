@@ -45,12 +45,12 @@ termux_step_make_install() {
 	# "install_sw" instead of "install" to not install man pages:
 	make -j 1 DESTDIR=$TERMUX_PKG_MASSAGEDIR install_sw MANDIR=$TERMUX_PREFIX/share/man MANSUFFIX=.ssl
 
-	mkdir -p $TERMUX_PKG_MASSAGEDIR$TERMUX_PREFIX/etc/tls/
+	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/etc/tls/
 
-	cp apps/openssl.cnf $TERMUX_PKG_MASSAGEDIR$TERMUX_PREFIX/etc/tls/openssl.cnf
+	cp apps/openssl.cnf $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/etc/tls/openssl.cnf
 
 	sed "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" \
 		$TERMUX_PKG_BUILDER_DIR/add-trusted-certificate \
-		> $TERMUX_PKG_MASSAGEDIR$TERMUX_PREFIX/bin/add-trusted-certificate
-	chmod 700 $TERMUX_PKG_MASSAGEDIR$TERMUX_PREFIX/bin/add-trusted-certificate
+		> $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/add-trusted-certificate
+	chmod 700 $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/add-trusted-certificate
 }
