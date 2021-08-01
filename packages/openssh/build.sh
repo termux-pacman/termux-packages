@@ -40,6 +40,10 @@ ac_cv_header_sys_un_h=yes
 ac_cv_search_getrrsetbyname=no
 ac_cv_func_bzero=yes
 "
+# Configure script require this variable to set
+# prefixed path to program 'passwd'
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS+="PATH_PASSWD_PROG=${TERMUX_PREFIX}/bin/passwd"
+
 TERMUX_PKG_MAKE_INSTALL_TARGET="install-nokeys"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/slogin share/man/man1/slogin.1"
 TERMUX_PKG_CONFFILES="etc/ssh/ssh_config etc/ssh/sshd_config"
@@ -47,10 +51,6 @@ TERMUX_PKG_SERVICE_SCRIPT=("sshd" 'exec sshd -D -e 2>&1')
 
 termux_step_pre_configure() {
 	autoreconf
-
-    ## Configure script require this variable to set
-    ## prefixed path to program 'passwd'
-    export PATH_PASSWD_PROG="${TERMUX_PREFIX}/bin/passwd"
 
 	CPPFLAGS+=" -DHAVE_ATTRIBUTE__SENTINEL__=1 -DBROKEN_SETRESGID"
 	LD=$CC # Needed to link the binaries
