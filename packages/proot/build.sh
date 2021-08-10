@@ -13,15 +13,17 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_MAKE_ARGS="-C src"
 
 # Install loader in libexec instead of extracting it every time
-export PROOT_UNBUNDLE_LOADER=$TERMUX_PREFIX/libexec/proot
+export PROOT_UNBUNDLE_LOADER=$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/libexec/proot
 
 termux_step_pre_configure() {
 	CPPFLAGS+=" -DARG_MAX=131072"
 }
 
 termux_step_post_make_install() {
-	mkdir -p $TERMUX_PREFIX/share/man/man1
-	cp $TERMUX_PKG_SRCDIR/doc/proot/man.1 $TERMUX_PREFIX/share/man/man1/proot.1
+	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/share/man/man1
+	cp $TERMUX_PKG_SRCDIR/doc/proot/man.1 \
+		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/share/man/man1/proot.1
 
-	cp $TERMUX_PKG_BUILDER_DIR/termux-chroot $TERMUX_PREFIX/bin/
+	cp $TERMUX_PKG_BUILDER_DIR/termux-chroot \
+		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/
 }
