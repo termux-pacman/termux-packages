@@ -10,17 +10,18 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_make_install() {
-	mkdir -p $TERMUX_PREFIX/share/ant/lib
+	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/share/ant/lib
 
 	for jar in ant ant-launcher; do
 		$TERMUX_D8 \
 		--classpath $ANDROID_HOME/platforms/android-$TERMUX_PKG_API_LEVEL/android.jar \
 		--release \
 		--min-api $TERMUX_PKG_API_LEVEL \
-		--output $TERMUX_PREFIX/share/ant/lib/${jar}.jar \
+		--output $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/share/ant/lib/${jar}.jar \
 			lib/${jar}.jar
 	done
 
-	install $TERMUX_PKG_BUILDER_DIR/ant $TERMUX_PREFIX/bin/ant
-	perl -p -i -e "s%\@TERMUX_PREFIX\@%${TERMUX_PREFIX}%g" $TERMUX_PREFIX/bin/ant
+	sed "s%@TERMUX_PREFIX@%${TERMUX_PREFIX}%g" $TERMUX_PKG_BUILDER_DIR/ant \
+		> $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/ant
+	chmod 700 $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/ant
 }
