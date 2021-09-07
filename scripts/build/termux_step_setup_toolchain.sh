@@ -103,13 +103,6 @@ termux_step_setup_toolchain() {
 
 	termux_setup_standalone_toolchain
 
-	# On Android 7, libutil functionality is provided by libc.
-	# But many programs still may search for libutil.
-	if [ ! -f $TERMUX_PREFIX/lib/libutil.so ]; then
-		mkdir -p "$TERMUX_PREFIX/lib"
-		echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/libutil.so
-	fi
-
 	export PKG_CONFIG_LIBDIR="$TERMUX_PKG_CONFIG_LIBDIR"
 
 	if [ "$TERMUX_ON_DEVICE_BUILD" = "false" ]; then
