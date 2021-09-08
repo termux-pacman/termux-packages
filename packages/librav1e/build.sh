@@ -26,17 +26,17 @@ termux_step_post_make_install(){
 		$TERMUX_PKG_EXTRA_CONFIGURE_ARGS
 
 	cd target/$CARGO_TARGET_NAME/release/
-	mkdir -p $TERMUX_PREFIX/include/rav1e/
-	cp rav1e.h $TERMUX_PREFIX/include/rav1e/
-	mkdir -p $TERMUX_PREFIX/lib/pkgconfig/
-	cp rav1e.pc $TERMUX_PREFIX/lib/pkgconfig/
-	cp librav1e.a $TERMUX_PREFIX/lib/
-	cp librav1e.so $TERMUX_PREFIX/lib/librav1e.so.$TERMUX_PKG_VERSION
+	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/include/rav1e/
+	cp rav1e.h $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/include/rav1e/
+	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/pkgconfig/
+	cp rav1e.pc $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/pkgconfig/
+	cp librav1e.a $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/
+	cp librav1e.so $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/librav1e.so.$TERMUX_PKG_VERSION
 	ln -s librav1e.so.$TERMUX_PKG_VERSION \
-		$TERMUX_PREFIX/lib/librav1e.so.${TERMUX_PKG_VERSION%%.*}
-	ln -s librav1e.so.$TERMUX_PKG_VERSION $TERMUX_PREFIX/lib/librav1e.so
+		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/librav1e.so.${TERMUX_PKG_VERSION%%.*}
+	ln -s librav1e.so.$TERMUX_PKG_VERSION $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/librav1e.so
 
 	# https://github.com/rust-lang/cargo/issues/3316:
-	rm -f $TERMUX_PREFIX/.crates.toml
-	rm -f $TERMUX_PREFIX/.crates2.json
+	rm -f $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/.crates.toml
+	rm -f $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/.crates2.json
 }
