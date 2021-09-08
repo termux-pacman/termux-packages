@@ -6,8 +6,8 @@
  DESTDIR ?= /
 -INCDIR ?= $(DESTDIR)/usr/include
 -INSTALLDIR ?= $(DESTDIR)/usr/lib
-+INCDIR ?= @TERMUX_PREFIX@/include
-+INSTALLDIR ?= @TERMUX_PREFIX@/lib
++INCDIR ?= $(DESTDIR)/$(PREFIX)/include
++INSTALLDIR ?= $(DESTDIR)/$(PREFIX)/lib
 +
 +SRCS += Source/LibRawLite/internal/swab.cpp
  
