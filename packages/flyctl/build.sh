@@ -8,7 +8,6 @@ TERMUX_PKG_SHA256=52a59efa526ab13615fc921aa3eef1c7ec1c7632e6580073edc92d46339970
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_BLACKLISTED_ARCHES="i686, arm"
 
-
 termux_step_post_get_source() {
 	termux_setup_golang
 	export GOPATH=$TERMUX_PKG_SRCDIR/go
@@ -22,5 +21,6 @@ termux_step_make() {
 }
 
 termux_step_make_install() {
-	install -Dm700 -t "$TERMUX_PREFIX"/bin "$TERMUX_PKG_SRCDIR/bin/flyctl"
+	install -Dm700 -t "$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX"/bin \
+		"bin/flyctl"
 }
