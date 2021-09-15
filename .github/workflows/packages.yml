@@ -164,7 +164,7 @@ jobs:
         uploaded_files=false
         shopt -s nullglob
         for filename in $(cat output/built_packages.txt | sed -E 's/(..*)/output\/\1_\*.pkg.tar.xz output\/\1-static_\*.pkg.tar.xz/g'); do
-          echo $filename
+          echo "==> $filename"
           uploaded_files=true
         done
         shopt -u nullglob
