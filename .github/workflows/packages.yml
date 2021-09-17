@@ -168,10 +168,10 @@ jobs:
         #done
     - name: Push
       uses: cpina/github-action-push-to-another-repository@v1.3
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: 'output'
-          destination-github-username: 'github-actions[bot]'
-          destination-repository-name: 'termux-packages-in-pacman-format'
-          user-email: 41898282+github-actions[bot]@users.noreply.github.com
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source-directory: 'output'
+        destination-github-username: 'github-actions[bot]'
+        destination-repository-name: 'termux-packages-in-pacman-format'
+        user-email: 41898282+github-actions[bot]@users.noreply.github.com
