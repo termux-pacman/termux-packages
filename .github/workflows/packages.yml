@@ -173,10 +173,10 @@ jobs:
           mv output/$filename termux-packages-in-pacman-format/docs/main/$arch
         done
 
-       #Push repo
-       cd termux-packages-in-pacman-format
-       git add .
-       git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-       git config --local user.name "github-actions[bot]"
-       git commit -m "Uploading packages." -a
-       git push
+        #Push repo
+        cd termux-packages-in-pacman-format
+        git add .
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "Uploading packages." -a
+        git push
