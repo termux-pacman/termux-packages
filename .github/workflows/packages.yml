@@ -147,6 +147,7 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v2
     - name: Get *.pkg.tar.xz files
+
       uses: actions/download-artifact@v2
       with:
         name: termux-packages-${{ github.sha }}
@@ -157,35 +158,25 @@ jobs:
         REPOSITORY_DISTRIBUTION: stable
       run: |
         for archive in *.tar; do
+          echo "=> $archive"
           tar xf "$archive"
         done
 
+        #Clone repo
+        git clone https://github.com/Maxython/termux-packages-in-pacman-format
+
         # Upload file to temporary directory.
-        uploaded_files=false
-        shopt -s nullglob
-        for filename in $(cat output/built_packages.txt | sed -E 's/(..*)/output\/\1_\*.pkg.tar.xz output\/\1-static_\*.pkg.tar.xz/g'); do
-          echo "==> $filename"
-          uploaded_files=true
+        for filename in $(ls output | grep pkg.tar.xz); do
+          echo "-> $filename"
+          filename_sp=(${filename//-/ })
+          arch="${filename_sp[-1]/.pkg.tar.xz}"
+          mv output/$filename termux-packages-in-pacman-format/docs/main/$arch
         done
-        shopt -u nullglob
 
-        # Publishing repository changes.
-        if [ "$uploaded_files" = "true" ]; then
-          echo "[*] Adding packages to repository '$REPOSITORY_NAME'..."
-
-          # Final part to make changes appear in web root.
-          echo "[*] Publishing repository changes..."
-          set +e
-          exit_code=$?
-          echo
-
-          if [ "$exit_code" = 0 ]; then
-            echo "[*] Repository updated successfully."
-          elif [ "$exit_code" = 52 ]; then
-            echo "[!] Repository update takes more time than expected, server returned empty response."
-            echo "[!] This is expected if large amount of data has been submitted."
-          else
-            echo "[!] curl exited with error code $exit_status."
-            exit "$exit_code"
-          fi
-        fi
+       #Push repo
+       cd termux-packages-in-pacman-format
+       git add .
+       git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+       git config --local user.name "github-actions[bot]"
+       git commit -m "Uploading packages." -a
+       git push
