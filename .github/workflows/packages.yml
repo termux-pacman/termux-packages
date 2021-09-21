@@ -146,6 +146,9 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
     - name: Get *.pkg.tar.xz files
       uses: actions/download-artifact@v2
       with:
@@ -173,5 +176,6 @@ jobs:
         git add .
         git config --local user.email "${{ secrets.GH_USER }}"
         git config --local user.name "${{ secrets.GH_MAIL }}"
+        git remote add origin "https://${{ secrets.GITHUB_TOKEN}}@github.com/Maxython/termux-packages-in-pacman-format.git"
         git commit -m "Uploading packages." -a
         git push origin main
