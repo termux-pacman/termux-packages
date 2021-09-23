@@ -169,7 +169,7 @@ jobs:
           echo "-> $filename"
           filename_sp=(${filename//-/ })
           arch="${filename_sp[-1]/.pkg.tar.xz}"
-          mv output/$filename termux-packages-in-pacman-format/docs/main/$arch
+          mv output/$filename termux-packages-in-pacman-format/docs
         done
         #Push repo
         cd termux-packages-in-pacman-format
