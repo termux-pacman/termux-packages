@@ -169,13 +169,13 @@ jobs:
           echo "-> $filename"
           filename_sp=(${filename//-/ })
           arch="${filename_sp[-1]/.pkg.tar.xz}"
-          mv output/$filename termux-packages-in-pacman-format/docs
+          mv output/$filename termux-packages-in-pacman-format/docs/${{ REPOSITORY_NAME }}/${arch}
         done
         #Push repo
         cd termux-packages-in-pacman-format
         git add .
-        git config --local user.email "mixython@gmail.com"
-        git config --local user.name "Maxython"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-in-pacman-format.git"
         git commit -m "Uploading packages." -a
         git push origin main
