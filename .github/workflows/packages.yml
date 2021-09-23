@@ -174,8 +174,8 @@ jobs:
         #Push repo
         cd termux-packages-in-pacman-format
         git add .
-        git config --local user.email "${{ secrets.GH_USER }}"
-        git config --local user.name "${{ secrets.GH_MAIL }}"
-        git remote add origin "https://${{ secrets.GITHUB_TOKEN}}@github.com/Maxython/termux-packages-in-pacman-format.git"
+        git config --local user.email "mixython@gmail.com"
+        git config --local user.name "Maxython"
+        git remote set-url origin "https://${{ secrets.GITHUB_TOKEN}}@github.com/Maxython/termux-packages-in-pacman-format.git"
         git commit -m "Uploading packages." -a
         git push origin main
