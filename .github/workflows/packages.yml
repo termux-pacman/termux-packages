@@ -156,7 +156,7 @@ jobs:
         path: ./
     - name: Upload to maxython.github.io/termux-packages-in-pacman-format
       env:
-        REPOSITORY_NAME: main
+        REPOSITORY_NAME: "main"
       run: |
         # Clone repo
         git clone https://github.com/Maxython/termux-packages-in-pacman-format
