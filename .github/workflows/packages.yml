@@ -158,20 +158,19 @@ jobs:
       env:
         REPOSITORY_NAME: main
       run: |
-        for archive in *.tar; do
-          echo "=> $archive"
-          tar xf "$archive"
-        done
-        #Clone repo
+        # Clone repo
         git clone https://github.com/Maxython/termux-packages-in-pacman-format
-        # Upload file to temporary directory.
-        for filename in $(ls output | grep pkg.tar.xz); do
-          echo "-> $filename"
-          filename_sp=(${filename//-/ })
-          arch="${filename_sp[-1]/.pkg.tar.xz}"
-          mv output/$filename termux-packages-in-pacman-format/docs/${{ REPOSITORY_NAME }}/${arch}
+        # Replacing old packages with new ones
+        for archive in *.tar; do
+          tar xf "$archive"
+          archive_sp=(${archive//-/ })
+          arch=${archive_sp[1]}
+          for j in $(cat output/built_packages.txt); do
+            rm termux-packages-in-pacman-format/docs/${{ REPOSITORY_NAME }}/$arch/$j*.pkg.tar.xz
+            mv output/$j*.pkg.tar.xz termux-packages-in-pacman-format/docs/${{ REPOSITORY_NAME }}/$arch
+          done
         done
-        #Push repo
+        # Push repo
         cd termux-packages-in-pacman-format
         git add .
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
