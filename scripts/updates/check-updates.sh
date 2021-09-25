@@ -46,7 +46,12 @@ if [ -f "${BASEDIR}/github-projects.txt" ]; then
 
 		# If needed, filter version numbers from tag by using regexp.
 		if [ -n "$version_regexp" ]; then
-			latest_version=$(grep -oP "$version_regexp" <<< "$latest_version")
+			latest_version=$(grep -oP "$version_regexp" <<< "$latest_version" || true)
+		fi
+
+		if [ -z "$latest_version" ]; then
+			echo "Failed to get latest version for '${package}'. Update 'github-projects.txt'."
+			exit 1
 		fi
 
 		# Translate "_" into ".".

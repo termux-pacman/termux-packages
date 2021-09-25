@@ -139,6 +139,7 @@ jobs:
       with:
         name: termux-packages-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
+
   upload:
     if: github.event_name != 'pull_request'
     needs: build
