@@ -137,7 +137,7 @@ jobs:
     - name: Store *.pkg.tar.xz files
       uses: actions/upload-artifact@v2
       with:
-        name: termux-packages-${{ github.sha }}
+        name: termux-packages-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
   upload:
     if: github.event_name != 'pull_request'
@@ -152,14 +152,13 @@ jobs:
     - name: Get *.pkg.tar.xz files
       uses: actions/download-artifact@v2
       with:
-        name: termux-packages-${{ github.sha }}
         path: ./
     - name: Upload to maxython.github.io/termux-packages-in-pacman-format
       run: |
         # Clone repo
         git clone https://github.com/Maxython/termux-packages-in-pacman-format
         # Replacing old packages with new ones
-        for archive in *.tar; do
+        for archive in termux-packages-*/*.tar; do
           tar xf "$archive"
           archive_sp=(${archive//-/ })
           arch=${archive_sp[1]}
