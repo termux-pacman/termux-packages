@@ -162,7 +162,7 @@ jobs:
         for archive in termux-packages-*/*.tar; do
           tar xf "$archive"
           archive_sp=(${archive//-/ })
-          arch=${archive_sp[1]}
+          arch=${archive_sp[2]}
           for j in $(cat output/built_packages.txt); do
             if [[ $(ls termux-packages-in-pacman-format/docs/main/$arch | grep .pkg. | grep $j-) ]]; then
               rm termux-packages-in-pacman-format/docs/main/$arch/$j-*.pkg.tar.xz
