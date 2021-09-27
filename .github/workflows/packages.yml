@@ -175,7 +175,7 @@ jobs:
             if [[ $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*$arch.pkg.*") ]]; then
               rm termux-packages-in-pacman-format/docs/main/$arch/$name-*$arch.pkg.*
             fi
-            mv output/$name-*$arch.pkg.* termux-packages-in-pacman-format/docs/main/$arch
+            mv $name-*$arch.pkg.* termux-packages-in-pacman-format/docs/main/$arch
           done
         done
         # Push repo
