@@ -172,11 +172,23 @@ jobs:
                 name+="-${file_sp[i]}"
               fi
             done
-            if [[ $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*$arch.pkg.*") ]]; then
-              rm termux-packages-in-pacman-format/docs/main/$arch/$name-*$arch.pkg.*
-            fi
-            mv $name-*$arch.pkg.* termux-packages-in-pacman-format/docs/main/$arch
-            unset name
+            for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
+              dir_sp=(${i//// })
+              file_sp=(${dir_sp[-1]//-/ })
+              for ((z=0; z<${#file_sp[*]}-3; z++)); do
+                if [ -z $name ]; then
+                  name2="${file_sp[z]}"
+                else
+                  name2+="-${file_sp[z]}"
+                fi
+              done
+              if [ $name = $name2 ]; then
+                rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
+                break
+              fi
+            done
+            unset name name2
+            mv $j termux-packages-in-pacman-format/docs/main/$arch
           done
         done
         # Push repo
