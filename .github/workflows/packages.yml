@@ -164,7 +164,7 @@ jobs:
           archive_sp=(${archive//-/ })
           arch=${archive_sp[2]}
           for j in $(ls output/* | grep "$arch.pkg."); do
-            file_sp=(${j//-/ }
+            file_sp=(${j//-/ })
             for ((i=0; i<${#file_sp[*]}-3; i++)); do
               if [ -z $name ]; then
                 name="${file_sp[i]}"
