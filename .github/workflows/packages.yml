@@ -176,6 +176,7 @@ jobs:
               rm termux-packages-in-pacman-format/docs/main/$arch/$name-*$arch.pkg.*
             fi
             mv $name-*$arch.pkg.* termux-packages-in-pacman-format/docs/main/$arch
+            unset name
           done
         done
         # Push repo
