@@ -163,11 +163,19 @@ jobs:
           tar xf "$archive"
           archive_sp=(${archive//-/ })
           arch=${archive_sp[2]}
-          for j in $(cat output/built_packages.txt); do
-            if [[ $(ls termux-packages-in-pacman-format/docs/main/$arch | grep .pkg. | grep $j-) ]]; then
-              rm termux-packages-in-pacman-format/docs/main/$arch/$j-*.pkg.tar.xz
+          for j in $(ls output/* | grep "$arch.pkg."); do
+            file_sp=(${j//-/ }
+            for ((i=0; i<${#file_sp[*]}-3; i++)); do
+              if [ -z $name ]; then
+                name="${file_sp[i]}"
+              else
+                name+="-${file_sp[i]}"
+              fi
+            done
+            if [[ $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*$arch.pkg.*") ]]; then
+              rm termux-packages-in-pacman-format/docs/main/$arch/$name-*$arch.pkg.*
             fi
-            mv output/$j-*.pkg.tar.xz termux-packages-in-pacman-format/docs/main/$arch
+            mv output/$name-*$arch.pkg.* termux-packages-in-pacman-format/docs/main/$arch
           done
         done
         # Push repo
