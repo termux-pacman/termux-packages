@@ -18,7 +18,7 @@ jobs:
       NDK: "/opt/termux/android-ndk"
     strategy:
       matrix:
-        target_arch: [aarch64, arm, i686, x86_64]
+        target_arch: [aarch64, arm, i686, x86_64, any]
       fail-fast: false
     steps:
     - name: Clone repository
@@ -122,19 +122,19 @@ jobs:
         fi
 
         test -d ./termux-packages/output && mv ./termux-packages/output/* ./output/
-        # Put package lists into directory with *.pkg.tar.xz files so they will be transferred to
+        # Put package lists into directory with *.pkg.* files so they will be transferred to
         # upload job.
         test -f ./built_packages.txt && mv ./built_packages.txt ./output/
         test -f ./built_subpackages.txt && cat ./built_subpackages.txt >> ./output/built_packages.txt \
           && rm ./built_subpackages.txt
         test -f ./deleted_packages.txt && mv ./deleted_packages.txt ./output/
         # Files containing certain symbols (e.g. ":") will cause failure in actions/upload-artifact.
-        # Archiving *.pkg.tar.xz files in a tarball to avoid issues with uploading.
+        # Archiving *.pkg.* files in a tarball to avoid issues with uploading.
         tar cf artifacts/output-${{ matrix.target_arch }}-${{ github.sha }}.tar output
-    - name: Checksums for built *.pkg.tar.xz files
+    - name: Checksums for built *.pkg.* files
       run: |
-        find output -type f -name "*.pkg.tar.xz" -exec sha256sum "{}" \; | sort -k2
-    - name: Store *.pkg.tar.xz files
+        find output -type f -name "*.pkg.*" -exec sha256sum "{}" \; | sort -k2
+    - name: Store *.pkg.* files
       uses: actions/upload-artifact@v2
       with:
         name: termux-packages-${{ matrix.target_arch }}-${{ github.sha }}
@@ -150,7 +150,7 @@ jobs:
       with:
         persist-credentials: false
         fetch-depth: 0
-    - name: Get *.pkg.tar.xz files
+    - name: Get *.pkg.* files
       uses: actions/download-artifact@v2
       with:
         path: ./
