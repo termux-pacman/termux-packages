@@ -18,7 +18,7 @@ jobs:
       NDK: "/opt/termux/android-ndk"
     strategy:
       matrix:
-        target_arch: [aarch64, arm, i686, x86_64, any]
+        target_arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
     steps:
     - name: Clone repository
@@ -162,9 +162,9 @@ jobs:
         for archive in termux-packages-*/*.tar; do
           tar xf "$archive"
           archive_sp=(${archive//-/ })
-          arch=${archive_sp[2]}
-          for j in $(ls output/* | grep "$arch.pkg."); do
+          for j in $(ls output/* | grep ".pkg."); do
             file_sp=(${j//-/ })
+            arch="${file_sp[-1]/.pkg.*}"
             for ((i=0; i<${#file_sp[*]}-3; i++)); do
               if [ -z $name ]; then
                 name="${file_sp[i]}"
@@ -172,21 +172,24 @@ jobs:
                 name+="-${file_sp[i]}"
               fi
             done
-            for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
-              dir_sp=(${i//// })
-              file_sp=(${dir_sp[-1]//-/ })
-              for ((z=0; z<${#file_sp[*]}-3; z++)); do
-                if [ -z $name ]; then
-                  name2="${file_sp[z]}"
-                else
-                  name2+="-${file_sp[z]}"
+            if [[ -z "$(echo $no_del | grep "${name}-${arch}")" ]]; then
+              for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
+                dir_sp=(${i//// })
+                file_sp=(${dir_sp[-1]//-/ })
+                for ((z=0; z<${#file_sp[*]}-3; z++)); do
+                  if [ -z $name ]; then
+                    name2="${file_sp[z]}"
+                  else
+                    name2+="-${file_sp[z]}"
+                  fi
+                done
+                if [ $name = $name2 ]; then
+                  rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
+                  no_del+="${name}-${arch} "
+                  break
                 fi
               done
-              if [ $name = $name2 ]; then
-                rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
-                break
-              fi
-            done
+            fi
             unset name name2
             mv $j termux-packages-in-pacman-format/docs/main/$arch
           done
