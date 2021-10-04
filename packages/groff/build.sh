@@ -17,7 +17,6 @@ share/man/man1/soelim.1*
 share/man/man7/roff.7*
 "
 
-
 termux_step_pre_configure() {
 	sed -i "s|@abs_top_builddir@|${TERMUX_TOPDIR}/groff/host-build|" Makefile.in
 }

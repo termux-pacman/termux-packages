@@ -10,7 +10,6 @@ TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_GROUPS="base-devel"
 
-
 termux_step_pre_configure() {
 	CFLAGS+=" -D__USE_FORTIFY_LEVEL=2"
 }
