@@ -10,6 +10,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 ac_cv_header_spawn_h=no
 "
 
+
 termux_step_pre_configure() {
 	CPPFLAGS+=" -D__USE_FORTIFY_LEVEL=0"
 }
