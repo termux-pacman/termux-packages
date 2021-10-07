@@ -206,6 +206,7 @@ jobs:
         while true; do
           {
             git push origin main
+            break
           } || {
             git pull --rebase
           }
