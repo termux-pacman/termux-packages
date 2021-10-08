@@ -2,20 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://gradle.org/
 TERMUX_PKG_DESCRIPTION="Powerful build system for the JVM"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-<<<<<<< HEAD
-<<<<<<< HEAD
-TERMUX_PKG_VERSION=7.2
-TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL=https://services.gradle.org/distributions/gradle-$TERMUX_PKG_VERSION-all.zip
-=======
-TERMUX_PKG_VERSION=1:7.2
-TERMUX_PKG_SRCURL=https://services.gradle.org/distributions/gradle-${TERMUX_PKG_VERSION:2}-all.zip
->>>>>>> fc7b5d6dbe277c518873cadb51b96692e6c5429c
-=======
 TERMUX_PKG_VERSION=1:7.2
 TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://services.gradle.org/distributions/gradle-${TERMUX_PKG_VERSION:2}-all.zip
->>>>>>> 891b3c30fbdd33a2d47a56450d736f8282555d80
 TERMUX_PKG_SHA256=a8da5b02437a60819cad23e10fc7e9cf32bcb57029d9cb277e26eeff76ce014b
 TERMUX_PKG_DEPENDS="openjdk-17"
 TERMUX_PKG_BUILD_IN_SRC=true
