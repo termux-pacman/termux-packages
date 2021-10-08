@@ -8,12 +8,6 @@ commet() {
 	echo -e "\033[0;32m-> $1\033[0m"
 }
 
-# Set repo for auto push
-read -p "Username: " username
-read -sp "Key: " key
-echo
-git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages.git"
-
 # Update repo
 info "Update repo."
 git pull upstream master
@@ -25,6 +19,12 @@ select yn in "Yes" "No"; do
 		No ) exit 1;;
 	esac
 done
+
+# Set repo for auto push
+read -p "Username: " username
+read -sp "Key: " key
+echo
+git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages.git"
 git reset
 
 # Sort file
