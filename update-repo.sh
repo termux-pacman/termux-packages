@@ -29,7 +29,7 @@ git reset
 
 # Sort file
 info "Sort and push packages."
-for i in $(git status packages/ | grep "packages/" | sed "s|modified:||g; s|new file:||g; s|deleted||g"); do
+for i in $(git status packages/ | grep "packages/" | sed "s|modified:||g; s|new file:||g; s|deleted:||g; s|both||g; s|added:||g"); do
 	file_sp=(${i//// })
 	name=${file_sp[1]}
 	commet "Package ${name}: ${i}."
