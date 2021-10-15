@@ -27,6 +27,11 @@ echo
 git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages.git"
 git reset
 
+# Edit file
+for i in $(grep -l ">>>>>>>" packages/*/build.sh); do
+	sed -i '/^<<<<<<< HEAD/,/^=======$/d; /^>>>>>>> /,/^$/d' $i
+done
+
 # Sort file
 info "Sort and push packages."
 for i in $(git status packages/ | grep "packages/" | sed "s|modified:||g; s|new file:||g; s|deleted:||g; s|both||g; s|added:||g"); do
