@@ -187,7 +187,6 @@ jobs:
                 if [ $name = $name2 ]; then
                   rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
                   no_del+="${name}-${arch} "
-                  break
                 fi
               done
             fi
@@ -211,3 +210,4 @@ jobs:
             git pull --rebase
           }
         done
+
