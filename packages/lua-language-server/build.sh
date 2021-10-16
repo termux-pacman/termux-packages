@@ -4,6 +4,11 @@ TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="MrAdityaAlok <dev.aditya.alok@gmail.com>"
 TERMUX_PKG_VERSION=2.4.1
 TERMUX_PKG_REVISION=4
+TERMUX_PKG_SRCURL=https://github.com/sumneko/lua-language-server.git
+TERMUX_PKG_GIT_BRANCH="${TERMUX_PKG_VERSION}"
+TERMUX_PKG_BUILD_DEPENDS="libandroid-spawn"
+TERMUX_PKG_HOSTBUILD=true
+
 termux_step_host_build() {
 	termux_setup_ninja
 
