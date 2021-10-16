@@ -10,6 +10,7 @@ commet() {
 
 # Update repo
 info "Update repo."
+git config pull.rebase false
 git pull upstream master
 commet "Continue?"
 git status
