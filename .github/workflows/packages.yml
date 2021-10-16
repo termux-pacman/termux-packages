@@ -173,23 +173,20 @@ jobs:
                 name+="-${file_sp[i]}"
               fi
             done
-            if [[ -z "$(echo $no_del | grep "${name}-${arch}")" ]]; then
-              for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
-                dir_sp=(${i//// })
-                file_sp=(${dir_sp[-1]//-/ })
-                for ((z=0; z<${#file_sp[*]}-3; z++)); do
-                  if [ -z $name ]; then
-                    name2="${file_sp[z]}"
-                  else
-                    name2+="-${file_sp[z]}"
-                  fi
-                done
-                if [ $name = $name2 ]; then
-                  rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
-                  no_del+="${name}-${arch} "
+            for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
+              dir_sp=(${i//// })
+              file_sp=(${dir_sp[-1]//-/ })
+              for ((z=0; z<${#file_sp[*]}-3; z++)); do
+                if [ -z $name ]; then
+                  name2="${file_sp[z]}"
+                else
+                  name2+="-${file_sp[z]}"
                 fi
               done
-            fi
+              if [ $name = $name2 ]; then
+                rm termux-packages-in-pacman-format/docs/main/$arch/${dir_sp[-1]}
+              fi
+            done
             unset name name2
             mv $j termux-packages-in-pacman-format/docs/main/$arch
           done
