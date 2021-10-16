@@ -28,8 +28,9 @@ git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux
 git reset
 
 # Edit file
-for i in $(grep -l ">>>>>>>" packages/*/build.sh); do
-	sed -i '/^<<<<<<< HEAD/,/^=======$/d; /^>>>>>>> /,/^$/d' $i
+for i in $(grep -l ">>>>>>>" packages/*/*); do
+	rm $i
+	wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
 done
 
 # Sort file
