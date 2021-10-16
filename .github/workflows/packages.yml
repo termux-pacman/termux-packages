@@ -20,6 +20,7 @@ jobs:
       matrix:
         target_arch: [aarch64, arm, i686, x86_64]
       fail-fast: false
+      max-parallel: 1
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
