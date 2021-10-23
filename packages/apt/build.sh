@@ -3,6 +3,10 @@ TERMUX_PKG_DESCRIPTION="Front-end for the dpkg package manager"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=2.3.11
+<<<<<<< HEAD
+=======
+TERMUX_PKG_REVISION=1
+>>>>>>> c1f3a1e5aeed62b22d3161c5a6a060a76e29402a
 TERMUX_PKG_SRCURL=https://deb.debian.org/debian/pool/main/a/apt/apt_${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=cc0c5b24240176e333b11bce1a7ac528ae263317d137ceeebad3ec2d8682cb91
 # apt-key requires utilities from coreutils, findutils, gpgv, grep, sed.

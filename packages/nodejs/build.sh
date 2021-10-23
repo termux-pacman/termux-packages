@@ -3,6 +3,10 @@ TERMUX_PKG_DESCRIPTION="Open Source, cross-platform JavaScript runtime environme
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="Yaksh Bariya <yakshbari4@gmail.com>"
 TERMUX_PKG_VERSION=16.11.1
+<<<<<<< HEAD
+=======
+TERMUX_PKG_REVISION=1
+>>>>>>> c1f3a1e5aeed62b22d3161c5a6a060a76e29402a
 TERMUX_PKG_SRCURL=https://nodejs.org/dist/v${TERMUX_PKG_VERSION}/node-v${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=67587f4de25e30a9cc0b51a6033eca3bc82d7b4e0d79bb84a265e88f76ab6278
 # Note that we do not use a shared libuv to avoid an issue with the Android

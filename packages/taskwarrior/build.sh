@@ -3,6 +3,10 @@ TERMUX_PKG_DESCRIPTION="Utility for managing your TODO list"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=2.6.1
+<<<<<<< HEAD
+=======
+TERMUX_PKG_REVISION=1
+>>>>>>> c1f3a1e5aeed62b22d3161c5a6a060a76e29402a
 TERMUX_PKG_SRCURL=https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${TERMUX_PKG_VERSION}/task-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=00aa6032b3d8379a5cfa29afb66d2b0703a69e3d1fea733d225d654dbcb0084f
 TERMUX_PKG_AUTO_UPDATE=true

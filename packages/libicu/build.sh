@@ -6,7 +6,11 @@ TERMUX_PKG_LICENSE="BSD"
 TERMUX_PKG_LICENSE_FILE="../LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=69.1
+<<<<<<< HEAD
 TERMUX_PKG_REVISION=1
+=======
+TERMUX_PKG_REVISION=2
+>>>>>>> c1f3a1e5aeed62b22d3161c5a6a060a76e29402a
 TERMUX_PKG_SRCURL=https://github.com/unicode-org/icu/releases/download/release-${TERMUX_PKG_VERSION//./-}/icu4c-${TERMUX_PKG_VERSION//./_}-src.tgz
 TERMUX_PKG_SHA256=4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745
 TERMUX_PKG_DEPENDS="libc++"
@@ -18,4 +22,5 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-samples --disable-tests --with-cross-
 
 termux_step_post_get_source() {
 	TERMUX_PKG_SRCDIR+="/source"
+	find . -type f | xargs touch
 }
