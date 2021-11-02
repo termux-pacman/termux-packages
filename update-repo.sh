@@ -11,6 +11,7 @@ commet() {
 # Update repo
 info "Update repo."
 git config pull.rebase false
+git fetch --all
 git pull upstream master
 commet "Continue?"
 git status
@@ -40,12 +41,15 @@ for i in $(git status packages/ | grep "packages/" | sed "s|modified:||g; s|new 
 	file_sp=(${i//// })
 	name=${file_sp[1]}
 	commet "Package ${name}: ${i}."
-	if [[ -n $old_name ]] && [[ $old_name != $name ]]; then
+	if [[ -n $list_name ]] && [[ ! $(echo $list_name | grep $name) ]]; then
 		commet "Push package ${old_name}."
 		git commit -m "Update package ${old_name}"
 		git push origin master
+	else
+		git reset packages/${old_name}
 	fi
-	git add $i
+	git add packages/${name}
+	list_name+="$name "
 	old_name="$name"
 done
 commet "Push package ${old_name}."
