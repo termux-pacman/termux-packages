@@ -8,19 +8,21 @@ termux_step_setup_toolchain() {
 	export AS=$TERMUX_HOST_PLATFORM-clang
 	export CC=$TERMUX_HOST_PLATFORM-clang
 	export CXX=$TERMUX_HOST_PLATFORM-clang++
-	export AR=llvm-ar
 	export CPP=$TERMUX_HOST_PLATFORM-cpp
 	export LD=ld.lld
+	export AR=llvm-ar
 	export OBJCOPY=llvm-objcopy
 	export OBJDUMP=llvm-objdump
 	export RANLIB=llvm-ranlib
 	export READELF=llvm-readelf
 	export STRIP=llvm-strip
+	export NM=llvm-nm
 
 	if [ "$TERMUX_ON_DEVICE_BUILD" = "false" ]; then
 		export PATH=$TERMUX_STANDALONE_TOOLCHAIN/bin:$PATH
 		export CC_FOR_BUILD=gcc
 		export PKG_CONFIG=$TERMUX_STANDALONE_TOOLCHAIN/bin/pkg-config
+		export PKGCONFIG=$PKG_CONFIG
 		export CCTERMUX_HOST_PLATFORM=$TERMUX_HOST_PLATFORM$TERMUX_PKG_API_LEVEL
 		if [ $TERMUX_ARCH = arm ]; then
 			CCTERMUX_HOST_PLATFORM=armv7a-linux-androideabi$TERMUX_PKG_API_LEVEL
@@ -97,6 +99,7 @@ termux_step_setup_toolchain() {
 	export RUSTFLAGS="-C link-arg=-Wl,-rpath=$TERMUX_PREFIX/lib -C link-arg=-Wl,--enable-new-dtags"
 
 	export ac_cv_func_getpwent=no
+	export ac_cv_func_endpwent=yes
 	export ac_cv_func_getpwnam=no
 	export ac_cv_func_getpwuid=no
 	export ac_cv_func_sigsetmask=no
