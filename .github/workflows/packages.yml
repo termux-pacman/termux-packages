@@ -193,7 +193,7 @@ jobs:
               dir_sp=(${i//// })
               file_sp=(${dir_sp[-1]//-/ })
               for z in $(seq 0 $((${#file_sp[*]}-4))); do
-                if [ -z $name ]; then
+                if [ -z $name2 ]; then
                   name2="${file_sp[z]}"
                 else
                   name2+="-${file_sp[z]}"
