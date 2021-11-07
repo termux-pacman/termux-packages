@@ -189,7 +189,7 @@ jobs:
                 name+="-${file_sp[i]}"
               fi
             done
-            for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name-*.pkg.*"); do
+            for i in $(ls termux-packages-in-pacman-format/docs/main/$arch | grep "$name"); do
               dir_sp=(${i//// })
               file_sp=(${dir_sp[-1]//-/ })
               for z in $(seq 0 $((${#file_sp[*]}-4))); do
