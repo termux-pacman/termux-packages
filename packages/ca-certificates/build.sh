@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Common CA certificates"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=1:2021-10-26
-#TERMUX_PKG_REVISION=2
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://curl.se/ca/cacert-${TERMUX_PKG_VERSION:2}.pem
 # If the checksum has changed, it may be time to update the package version:
 TERMUX_PKG_SHA256=ae31ecb3c6e9ff3154cb7a55f017090448f88482f0e94ac927c0c67a1f33b9cf
