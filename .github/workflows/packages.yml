@@ -171,34 +171,18 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         path: ./
-    - name: Upload to maxython.github.io/termux-packages-in-pacman-format
+    - name: Extract packages
       run: |
-        # Clone repo
-        git clone https://github.com/Maxython/termux-packages-in-pacman-format
-        # Replacing old packages with new ones
+        mkdir output
         for archive in termux-packages-*/*.tar; do
-          tar xf "$archive"
-          archive_sp=(${archive//-/ })
-          for j in $(ls output/* | grep ".pkg."); do
-            file_sp=(${j//-/ })
-            arch="${file_sp[-1]/.pkg.*}"
-            mv $j termux-packages-in-pacman-format/docs/main/$arch
-          done
+          tar xf "$archive" -C output
         done
-        # Push repo
-        cd termux-packages-in-pacman-format
-        git add .
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-in-pacman-format.git"
-        git commit -m "Uploading packages." -a
-        set +e
-        while true; do
-          {
-            git push origin main
-            break
-          } || {
-            git pull --rebase
-          }
-        done
+    - name: Uploading packages to hosting
+      uses: shallwefootball/upload-s3-action@v1.1.3
+      id: S3
+      with:
+        aws_key_id: ${{ secrets.AWS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+        aws_bucket: ${{ secrets.AWS_BUCKET }}
+        source_dir: 'output'
 
