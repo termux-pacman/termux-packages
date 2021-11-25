@@ -176,7 +176,7 @@ jobs:
         for archive in termux-packages-*/*.tar; do
           dir_sp=(${archive//// })
           file_sp=(${dir_sp[-1]//-/ })
-          dir=output/${file_sp[2]}
+          dir=output/${file_sp[1]}
           mkdir -p $dir
           tar xf "$archive" -C $dir
         done
