@@ -173,9 +173,12 @@ jobs:
         path: ./
     - name: Extract packages
       run: |
-        mkdir output
         for archive in termux-packages-*/*.tar; do
-          tar xf "$archive" -C output
+          dir_sp=(${archive//// })
+          file_sp=(${dir_sp[-1]//-/ })
+          dir=output/${file_sp[2]}
+          mkdir -p $dir
+          tar xf "$archive" -C $dir
         done
     - name: Uploading packages to hosting
       uses: shallwefootball/upload-s3-action@v1.1.3
