@@ -15,7 +15,6 @@ etc/motd-playstore
 etc/termux-login.sh
 "
 
-
 # Some of these packages are not dependencies and used only to ensure
 # that core packages are installed after upgrading (we removed busybox
 # from essentials).
