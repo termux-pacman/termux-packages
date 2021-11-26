@@ -140,14 +140,9 @@ jobs:
         test -d ./termux-packages/output && mv ./termux-packages/output/* ./output/
         # Put package lists into directory with *.pkg.* files so they will be transferred to
         # upload job.
-        test -f ./built_packages.txt && mv ./built_packages.txt ./output/
-        test -f ./built_subpackages.txt && cat ./built_subpackages.txt >> ./output/built_packages.txt \
-          && rm ./built_subpackages.txt
         test -f ./deleted_packages.txt && mv ./deleted_packages.txt ./output/
         # Files containing certain symbols (e.g. ":") will cause failure in actions/upload-artifact.
         # Archiving *.pkg.* files in a tarball to avoid issues with uploading.
-        rm output/built_packages.txt
-        rm output/built_subpackages.txt
         tar cf artifacts/output-${{ matrix.target_arch }}-${{ github.sha }}.tar output
     - name: Checksums for built *.pkg.* files
       run: |
