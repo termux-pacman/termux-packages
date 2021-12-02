@@ -3,9 +3,10 @@ TERMUX_PKG_DESCRIPTION="Server-side, HTML-embedded scripting language"
 TERMUX_PKG_LICENSE="PHP-3.01"
 TERMUX_PKG_LICENSE_FILE=LICENSE
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=8.0.12
+TERMUX_PKG_VERSION=8.1.0
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/php/php-src/archive/php-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=889cfbd76ffdde521ac093605e17dacb34cc0734b2bbedd466ee00d224746b6c
+TERMUX_PKG_SHA256=b5aecb953f8938fb7435709d620cd9946df7cd53459a4abc27ef4e64a1fa7eb9
 # Build native php for phar to build (see pear-Makefile.frag.patch):
 TERMUX_PKG_HOSTBUILD=true
 # Build the native php without xml support as we only need phar:
@@ -30,6 +31,7 @@ ac_cv_func_res_nsearch=no
 --with-curl=$TERMUX_PREFIX
 --with-openssl=$TERMUX_PREFIX
 --with-readline=$TERMUX_PREFIX
+--with-sodium=shared,$TERMUX_PREFIX
 --with-iconv-dir=$TERMUX_PREFIX
 --with-zlib
 --with-pgsql=shared,$TERMUX_PREFIX
@@ -59,7 +61,7 @@ termux_step_host_build() {
 }
 
 termux_step_pre_configure() {
-	LDFLAGS+=" -landroid-glob -llog"
+	LDFLAGS+=" -landroid-glob -llog $($CC -print-libgcc-file-name)"
 
 	export PATH=$PATH:$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/
 	export NATIVE_PHP_EXECUTABLE=$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/php
@@ -90,6 +92,12 @@ termux_step_post_make_install() {
 	mkdir -p $TERMUX_PREFIX/etc/php-fpm.d
 	cp sapi/fpm/php-fpm.conf $TERMUX_PREFIX/etc/
 	cp sapi/fpm/www.conf $TERMUX_PREFIX/etc/php-fpm.d/
+
+	docdir=$TERMUX_PREFIX/share/doc/php
+	mkdir -p $docdir
+	for suffix in development production; do
+		cp $TERMUX_PKG_SRCDIR/php.ini-$suffix $docdir/
+	done
 
 	sed -i 's/SED=.*/SED=sed/' $TERMUX_PREFIX/bin/phpize
 }
