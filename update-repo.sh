@@ -41,7 +41,7 @@ git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux
 git reset
 
 # Edit file
-for i in $(grep -l ">>>>>>>" packages/*/*); do
+for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -prune -o -type f -not -name update-repo.sh)); do
 	rm $i
 	wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
 done
