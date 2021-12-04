@@ -14,6 +14,7 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="
 HELP2MAN=:
 "
 
+
 termux_step_pre_configure() {
 	CPPFLAGS+=" -D__USE_FORTIFY_LEVEL=0"
 }
