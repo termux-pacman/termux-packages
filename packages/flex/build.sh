@@ -14,6 +14,7 @@ TERMUX_PKG_CONFLICTS="flex-dev"
 TERMUX_PKG_REPLACES="flex-dev"
 TERMUX_PKG_GROUPS="base-devel"
 
+
 # Work around https://github.com/westes/flex/issues/241 when building
 # under ubuntu 17.10:
 TERMUX_PKG_EXTRA_HOSTBUILD_CONFIGURE_ARGS="CFLAGS=-D_GNU_SOURCE=1"
