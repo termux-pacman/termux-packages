@@ -8,6 +8,17 @@ commet() {
 	echo -e "\033[0;32m-> $1\033[0m"
 }
 
+list_pkg() {
+	local list
+	for i in $(git status -s packages | awk '{print $2}'); do
+		local dir_sp=(${i//// })
+		if [[ ! $(echo $list | grep "${dir_sp[1]} ") ]]; then
+			list+="packages/${dir_sp[1]} "
+		fi
+	done
+	echo $list
+}
+
 # Update repo
 info "Update repo."
 git config pull.rebase false
@@ -37,24 +48,12 @@ done
 
 # Sort file
 info "Sort and push packages."
-for i in $(git status packages/ | grep "packages/" | sed "s|modified:||g; s|new file:||g; s|deleted:||g; s|both||g; s|added:||g"); do
-	file_sp=(${i//// })
-	name=${file_sp[1]}
-	commet "Package ${name}: ${i}."
-	if [[ -n $list_name ]] && [[ ! $(echo $list_name | grep $name) ]]; then
-		commet "Push package ${old_name}."
-		git commit -m "Update package ${old_name}"
-		git push origin master
-	else
-		git reset packages/${old_name}
-	fi
-	git add packages/${name}
-	list_name+="$name "
-	old_name="$name"
+for i in $(list_pkg); do
+	commet "${i}"
+	git add $i
+	git commit -m "${i}"
+	git push origin master
 done
-commet "Push package ${old_name}."
-git commit -m "Update package ${old_name}"
-git push origin master
 
 git remote set-url origin "https://github.com/Maxython/termux-packages"
 
