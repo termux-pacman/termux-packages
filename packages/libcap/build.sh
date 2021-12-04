@@ -10,6 +10,7 @@ TERMUX_PKG_BREAKS="libcap-dev"
 TERMUX_PKG_REPLACES="libcap-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
 
+
 termux_step_make() {
 	make CC="$CC -Wl,-rpath=$TERMUX_PREFIX/lib -Wl,--enable-new-dtags" OBJCOPY=llvm-objcopy PREFIX="$TERMUX_PREFIX" PTHREADS=no
 }
