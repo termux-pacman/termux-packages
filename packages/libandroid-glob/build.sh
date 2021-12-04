@@ -9,6 +9,7 @@ TERMUX_PKG_BREAKS="libandroid-glob-dev"
 TERMUX_PKG_REPLACES="libandroid-glob-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
 
+
 termux_step_make() {
 	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/glob.c
 	$CC $LDFLAGS -shared glob.o -o libandroid-glob.so
