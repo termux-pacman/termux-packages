@@ -13,6 +13,7 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-openmp"
 TERMUX_PKG_GROUPS="base-devel"
 
+
 termux_step_pre_configure() {
 	autoreconf
 }
