@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="liblzma, zlib"
 TERMUX_PKG_BREAKS="zstd-dev"
 TERMUX_PKG_REPLACES="zstd-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
+
