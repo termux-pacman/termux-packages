@@ -13,6 +13,7 @@ TERMUX_PKG_CONFLICTS="libcurl (<< 7.61.0-1)"
 TERMUX_PKG_BREAKS="openssl-tool (<< 1.1.1b-1), openssl-dev"
 TERMUX_PKG_REPLACES="openssl-tool (<< 1.1.1b-1), openssl-dev"
 
+
 termux_step_configure() {
 	# Certain packages are not safe to build on device because their
 	# build.sh script deletes specific files in $TERMUX_PREFIX.
