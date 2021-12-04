@@ -10,6 +10,7 @@ TERMUX_PKG_BREAKS="chroot, busybox (<< 1.30.1-4)"
 TERMUX_PKG_REPLACES="chroot, busybox (<< 1.30.1-4)"
 TERMUX_PKG_ESSENTIAL=true
 
+
 # pinky has no usage on Android.
 # df does not work either, let system binary prevail.
 # $PREFIX/bin/env is provided by busybox for shebangs to work directly.
