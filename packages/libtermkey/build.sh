@@ -31,4 +31,3 @@ termux_step_make_install() {
 	LIBDIR=$TERMUX_PREFIX/lib INCDIR=$TERMUX_PREFIX/include VERSION=$TERMUX_PKG_VERSION sh termkey.pc.sh > \
 	        $PKG_CONFIG_LIBDIR/termkey.pc
 }
-
