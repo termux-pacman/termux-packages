@@ -46,6 +46,12 @@ for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -
 	wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
 done
 
+# Update repo
+git add .
+git reset .github packages
+git commit -m "Update repo"
+git push origin master
+
 # Sort file
 info "Sort and push packages."
 for i in $(list_pkg); do
