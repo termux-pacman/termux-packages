@@ -10,6 +10,7 @@ TERMUX_PKG_DEPENDS="libffi, libiconv, pcre, libandroid-support, zlib"
 TERMUX_PKG_BREAKS="glib-dev"
 TERMUX_PKG_REPLACES="glib-dev"
 
+
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dlibmount=disabled
 -Diconv=external
