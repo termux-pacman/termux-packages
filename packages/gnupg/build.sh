@@ -24,3 +24,4 @@ termux_step_post_make_install() {
 	cd $TERMUX_PREFIX/bin
 	ln -sf gpg gpg2
 }
+
