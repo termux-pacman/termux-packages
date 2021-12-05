@@ -15,6 +15,7 @@ ac_cv_lib_pthread_pthread_create=yes
 --disable-jent-support
 "
 
+
 termux_step_pre_configure() {
 	CFLAGS+=" -no-integrated-as"
 	if [ $TERMUX_ARCH = "arm" ]; then
