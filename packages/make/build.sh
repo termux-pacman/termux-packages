@@ -12,6 +12,7 @@ TERMUX_PKG_GROUPS="base-devel"
 # Prevent linking against libelf:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_lib_elf_elf_begin=no"
 
+
 termux_step_pre_configure() {
     if [ "$TERMUX_ARCH" = arm ]; then
 	# Fix issue with make on arm hanging at least under cmake:
