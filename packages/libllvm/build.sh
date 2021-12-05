@@ -47,7 +47,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DLLVM_ENABLE_FFI=ON
 "
 
-
 if [ $TERMUX_ARCH_BITS = 32 ]; then
 	# Do not set _FILE_OFFSET_BITS=64
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DLLVM_FORCE_SMALLFILE_FOR_ANDROID=on"
@@ -141,15 +140,4 @@ termux_step_post_make_install() {
 			chmod u+x $tool
 		done
 	fi
-}
-
-termux_step_post_massage() {
-	# Not added to the package but kept around on the host for other packages like rust,
-	# which relies on LLVM, to use for configuration.
-	sed $TERMUX_PKG_BUILDER_DIR/llvm-config.in \
-		-e "s|@TERMUX_PKG_VERSION@|$TERMUX_PKG_VERSION|g" \
-		-e "s|@TERMUX_PKG_SRCDIR@|$TERMUX_PKG_SRCDIR|g" \
-		-e "s|@LLVM_DEFAULT_TARGET_TRIPLE@|$LLVM_DEFAULT_TARGET_TRIPLE|g" \
-		-e "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" > $TERMUX_PREFIX/bin/llvm-config
-	chmod 755 $TERMUX_PREFIX/bin/llvm-config
 }
