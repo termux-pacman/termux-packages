@@ -19,3 +19,4 @@ termux_step_post_get_source() {
 	TERMUX_PKG_SRCDIR+="/source"
 	find . -type f | xargs touch
 }
+
