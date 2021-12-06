@@ -12,3 +12,4 @@ TERMUX_PKG_REPLACES="c-ares-dev"
 # Build with cmake to install cmake/c-ares/*.cmake files:
 TERMUX_PKG_FORCE_CMAKE=true
 TERMUX_PKG_RM_AFTER_INSTALL="bin/"
+
