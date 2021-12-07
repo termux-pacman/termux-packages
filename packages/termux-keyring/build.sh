@@ -19,3 +19,4 @@ termux_step_make_install() {
 	# Key for automatic builds (via CI).
 	install -Dm600 $TERMUX_PKG_BUILDER_DIR/termux-autobuilds.gpg $TERMUX_PREFIX/etc/apt/trusted.gpg.d/
 }
+
