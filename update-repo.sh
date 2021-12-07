@@ -21,7 +21,7 @@ list_pkg() {
 
 # Update repo
 info "Update repo."
-git config pull.rebase false
+#git config pull.rebase false
 git fetch --all
 git pull upstream master
 commet "Continue?"
@@ -37,7 +37,7 @@ done
 read -p "Username: " username
 read -sp "Key: " key
 echo
-git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages.git"
+git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages-pacman.git"
 git reset
 
 # Edit file
@@ -61,6 +61,6 @@ for i in $(list_pkg); do
 	git push origin master
 done
 
-git remote set-url origin "https://github.com/Maxython/termux-packages"
+git remote set-url origin "https://github.com/Maxython/termux-packages-pacman.git"
 
 info "Done."
