@@ -9,3 +9,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 # binutils for ar:
 TERMUX_PKG_DEPENDS="binutils, python, tar"
+
