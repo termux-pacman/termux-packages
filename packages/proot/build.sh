@@ -28,3 +28,4 @@ termux_step_post_make_install() {
 		> $TERMUX_PREFIX/bin/termux-chroot
 	chmod 700 $TERMUX_PREFIX/bin/termux-chroot
 }
+
