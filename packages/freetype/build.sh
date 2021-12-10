@@ -16,3 +16,4 @@ termux_step_post_make_install() {
 	install -Dm600 ../src/docs/freetype-config.1 $TERMUX_PREFIX/share/man/man1/freetype-config.1
 }
 
+
