@@ -10,3 +10,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_func_setpgrp_void=yes"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
+
