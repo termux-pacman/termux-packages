@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f7295
 TERMUX_PKG_DEPENDS="libogg"
 TERMUX_PKG_BREAKS="libvorbis-dev"
 TERMUX_PKG_REPLACES="libvorbis-dev"
+
