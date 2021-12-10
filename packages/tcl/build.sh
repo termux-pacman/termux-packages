@@ -44,3 +44,4 @@ termux_step_post_make_install() {
 	#avoid conflict with perl
 	mv $TERMUX_PREFIX/share/man/man3/Thread.3 $TERMUX_PREFIX/share/man/man3/Tcl_Thread.3
 }
+
