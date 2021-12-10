@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="libc++, libjpeg-turbo, liblzma, zlib"
 TERMUX_PKG_BREAKS="libtiff-dev"
 TERMUX_PKG_REPLACES="libtiff-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-cxx --disable-webp"
+
