@@ -21,3 +21,4 @@ termux_step_post_make_install() {
 	install -Dm600 "$TERMUX_PKG_SRCDIR"/etc/completion/completion.bash \
 		"$TERMUX_PREFIX"/share/bash-completion/completions/delta
 }
+
