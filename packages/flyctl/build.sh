@@ -9,7 +9,6 @@ TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_BLACKLISTED_ARCHES="i686, arm"
 
-
 termux_step_post_get_source() {
 	termux_setup_golang
 	export GOPATH=$TERMUX_PKG_SRCDIR/go
