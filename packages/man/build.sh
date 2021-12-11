@@ -10,7 +10,6 @@ TERMUX_PKG_DEPENDS="less,libandroid-glob,zlib"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_RM_AFTER_INSTALL="share/examples"
 
-
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob"
 	echo "PREFIX=\"$TERMUX_PREFIX\"" > configure.local
