@@ -29,4 +29,3 @@ termux_step_post_make_install() {
 		fi
 	done
 }
-
