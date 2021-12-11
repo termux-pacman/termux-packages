@@ -16,3 +16,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --with-default-fonts=/system/fonts
 --with-add-fonts=$TERMUX_PREFIX/share/fonts
 "
+
