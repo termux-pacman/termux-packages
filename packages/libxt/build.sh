@@ -14,3 +14,4 @@ termux_step_pre_configure() {
 	export CFLAGS_FOR_BUILD=" "
 	export LDFLAGS_FOR_BUILD=" "
 }
+
