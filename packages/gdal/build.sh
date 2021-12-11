@@ -16,4 +16,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --with-spatialite=$TERMUX_PREFIX
 --with-expat=$TERMUX_PREFIX
 "
-
