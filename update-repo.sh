@@ -12,7 +12,7 @@ list_pkg() {
 	local list
 	for i in $(git status -s packages | awk '{print $2}'); do
 		local dir_sp=(${i//// })
-		if [[ ! $(echo $list | grep "$/{dir_sp[1]} ") ]]; then
+		if [[ ! $(echo "$list" | grep "/${dir_sp[1]} ") ]]; then
 			list+="packages/${dir_sp[1]} "
 		fi
 	done
