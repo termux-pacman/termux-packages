@@ -10,3 +10,4 @@ termux_step_post_make_install() {
       mv "${TERMUX_PREFIX}"/share/pkgconfig/spice-protocol.pc \
       "${TERMUX_PREFIX}"/lib/pkgconfig
 }
+
