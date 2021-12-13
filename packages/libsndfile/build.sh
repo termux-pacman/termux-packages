@@ -11,3 +11,4 @@ TERMUX_PKG_BREAKS="libsndfile-dev"
 TERMUX_PKG_REPLACES="libsndfile-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-sqlite --disable-alsa"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/ share/man/man1/"
+
