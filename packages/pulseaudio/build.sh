@@ -37,7 +37,11 @@ termux_step_pre_configure() {
 		_NDK_ARCHNAME=x86
 	fi
 	mkdir $TERMUX_PKG_TMPDIR/libaaudio
+	echo "----------"
 	ls $NDK/*
+	echo "----------"
+	ls $NDK/*/*
+	echo "----------"
 	cp $NDK/platforms/android-26/arch-$_NDK_ARCHNAME/usr/lib*/libaaudio.so \
 		$TERMUX_PKG_TMPDIR/libaaudio/
 	LDFLAGS+=" -L$TERMUX_PKG_TMPDIR/libaaudio/"
