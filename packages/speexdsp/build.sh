@@ -14,3 +14,4 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/doc/speexdsp/manual.pdf"
 termux_step_pre_configure() {
 	./autogen.sh
 }
+
