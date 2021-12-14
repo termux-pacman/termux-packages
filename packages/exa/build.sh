@@ -40,3 +40,4 @@ termux_step_post_make_install() {
 			$TERMUX_PREFIX/share/zsh/site-functions/_exa
 	fi
 }
+
