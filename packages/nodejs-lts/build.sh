@@ -17,7 +17,7 @@ TERMUX_PKG_RM_AFTER_INSTALL="lib/node_modules/npm/html lib/node_modules/npm/make
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
 
-#TERMUX_PKG_PROVIDES="nodejs"
+TERMUX_PKG_PROVIDES="nodejs"
 
 termux_step_post_get_source() {
 	# Prevent caching of host build:
