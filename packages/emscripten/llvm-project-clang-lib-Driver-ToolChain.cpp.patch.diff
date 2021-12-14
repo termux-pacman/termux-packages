@@ -1,7 +1,7 @@
 diff -uNr llvm-project/clang/lib/Driver/ToolChain.cpp llvm-project.mod/clang/lib/Driver/ToolChain.cpp
---- llvm-project/clang/lib/Driver/ToolChain.cpp	2021-10-20 02:24:04.000000000 +0800
-+++ llvm-project.mod/clang/lib/Driver/ToolChain.cpp	2021-10-29 10:06:11.727942353 +0800
-@@ -405,7 +405,7 @@
+--- llvm-project/clang/lib/Driver/ToolChain.cpp	2021-11-27 10:21:24.849951600 +0800
++++ llvm-project.mod/clang/lib/Driver/ToolChain.cpp	2021-11-27 12:35:59.478509300 +0800
+@@ -403,7 +403,7 @@
    case llvm::Triple::AIX:
      return "aix";
    default:
@@ -10,7 +10,7 @@ diff -uNr llvm-project/clang/lib/Driver/ToolChain.cpp llvm-project.mod/clang/lib
    }
  }
  
-@@ -943,7 +943,7 @@
+@@ -941,7 +941,7 @@
  
    switch (Type) {
    case ToolChain::CST_Libcxx:
