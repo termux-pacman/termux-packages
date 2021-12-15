@@ -32,4 +32,3 @@ termux_step_make_install() {
 	install -Dm700 "./bin/pandoc" "$TERMUX_PREFIX/bin/pandoc"
 	install -Dm600 "./share/man/man1/pandoc.1.gz" "$TERMUX_PREFIX/share/man/man1/pandoc.1.gz"
 }
-
