@@ -12,3 +12,4 @@ termux_step_post_make_install() {
 	mkdir -p ${TERMUX_PREFIX}/lib/pkgconfig
 	mv ${TERMUX_PREFIX}/share/pkgconfig/xorg-macros.pc ${TERMUX_PREFIX}/lib/pkgconfig/
 }
+
