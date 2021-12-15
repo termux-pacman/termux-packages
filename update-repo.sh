@@ -21,7 +21,7 @@ list_pkg() {
 
 # Update repo
 info "Update repo."
-#git config pull.rebase false
+git config pull.rebase false
 git fetch --all
 git pull upstream master
 commet "Continue?"
