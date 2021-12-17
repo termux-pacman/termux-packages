@@ -72,3 +72,4 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/lib/nim/tools
 	cp -r tools/dochack $TERMUX_PREFIX/lib/nim/tools/
 }
+
