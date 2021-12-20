@@ -1,9 +1,8 @@
 name: Update repo
 
 on:
-  push
-  #schedule:
-  #  - cron:  '0 0-23 * * *'
+  schedule:
+    - cron:  '0 0-23 * * *'
 
 jobs:
   update-repo:
@@ -16,8 +15,8 @@ jobs:
     - name: Update repo
       run: |
         # Set profile git
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Maxython"
+        git config --global user.email "mixython@gmail.com"
         # Create func
         list_pkg() {
           local list
