@@ -18,8 +18,8 @@ jobs:
         # Set profile git
         #git config --global user.name "Maxython"
         #git config --global user.email "mixython@gmail.com"
-        git config --global user.name 'Termux Action Update'
-        git config --global user.email 'TermuxActionUpdate@users.noreply.github.com'
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         # Create func
         list_pkg() {
           local list
