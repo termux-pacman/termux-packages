@@ -8,13 +8,12 @@ on:
 jobs:
   update-repo:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 1000
-    - name: Install wget
-      run: sudo apt-get install wget
     - name: Update repo
       run: |
         # Set profile git
