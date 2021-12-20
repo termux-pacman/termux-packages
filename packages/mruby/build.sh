@@ -35,4 +35,3 @@ termux_step_make_install() {
 	done
 	cp -a "$TERMUX_PKG_SRCDIR/include" $TERMUX_PREFIX/
 }
-
