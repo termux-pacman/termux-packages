@@ -41,8 +41,9 @@ jobs:
         info "Set git repo"
         git remote add upstream https://github.com/termux/termux-packages
         git config pull.rebase false
-        git fetch --all
+        git fetch upstream
         git pull upstream master
+        git reset
         for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -prune -o -type f -not -name update-repo.sh)); do
           rm $i
           wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
