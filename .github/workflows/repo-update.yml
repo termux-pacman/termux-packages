@@ -10,16 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 1000
+      #uses: actions/checkout@v2
+      #with:
+      #  fetch-depth: 1000
+      run: git clone https://github.com/Maxython/termux-packages-pacman
     - name: Update repo
       run: |
         # Set profile git
-        #git config --global user.name "Maxython"
-        #git config --global user.email "mixython@gmail.com"
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Maxython"
+        git config --global user.email "mixython@gmail.com"
         # Create func
         list_pkg() {
           local list
@@ -39,6 +38,7 @@ jobs:
         }
         # Set git repo
         info "Set git repo"
+        cd termux-packages-pacman
         git remote add upstream https://github.com/termux/termux-packages.git
         git config pull.rebase false
         git fetch --all
