@@ -26,3 +26,4 @@ termux_step_configure() {
 		$TERMUX_PKG_EXTRA_CONFIGURE_ARGS
 	TERMUX_PKG_EXTRA_MAKE_ARGS="-C $(echo O*)"
 }
+
