@@ -13,4 +13,3 @@ termux_step_make_install() {
 	cd "$TERMUX_PKG_SRCDIR"
 	make install PREFIX=$TERMUX_PREFIX
 }
-
