@@ -52,7 +52,7 @@ jobs:
         git reset .github packages
         {
           git commit -m "Update repo"
-          #git push origin master
+          git push origin master
         } || true
         # Update repo packages
         info "Update repo packages"
@@ -60,5 +60,5 @@ jobs:
           commet "${i}"
           git add $i
           git commit -m "${i}"
-          #git push origin master
+          git push origin master
         done
