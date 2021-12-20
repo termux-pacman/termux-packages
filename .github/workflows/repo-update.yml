@@ -1,8 +1,9 @@
 name: Update repo
 
 on:
-  schedule:
-    - cron:  '0,30 0-23 * * *'
+  push
+  #schedule:
+  #  - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:
@@ -15,8 +16,10 @@ jobs:
     - name: Update repo
       run: |
         # Set profile git
-        git config --global user.name "Maxython"
-        git config --global user.email "mixython@gmail.com"
+        #git config --global user.name "Maxython"
+        #git config --global user.email "mixython@gmail.com"
+        git config --global user.name 'Termux Action Update'
+        git config --global user.email 'TermuxActionUpdate@users.noreply.github.com'
         # Create func
         list_pkg() {
           local list
@@ -36,7 +39,7 @@ jobs:
         }
         # Set git repo
         info "Set git repo"
-        git remote add upstream https://github.com/termux/termux-packages
+        git remote add upstream https://github.com/termux/termux-packages.git
         git config pull.rebase false
         git fetch --all
         git pull upstream master || true
@@ -52,7 +55,7 @@ jobs:
         git reset .github packages
         {
           git commit -m "Update repo"
-          git push origin master
+          #git push origin master
         } || true
         # Update repo packages
         info "Update repo packages"
@@ -60,5 +63,5 @@ jobs:
           commet "${i}"
           git add $i
           git commit -m "${i}"
-          git push origin master
+          #git push origin master
         done
