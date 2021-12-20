@@ -1,24 +1,22 @@
 name: Update repo
 
 on:
-  push
-  #schedule:
-  #  - cron:  '0,30 0-23 * * *'
+  schedule:
+    - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      #uses: actions/checkout@v2
-      #with:
-      #  fetch-depth: 1000
       run: git clone https://github.com/Maxython/termux-packages-pacman
     - name: Update repo
       run: |
+        cd termux-packages-pacman
         # Set profile git
         git config --global user.name "Maxython"
         git config --global user.email "mixython@gmail.com"
+        git remote set-url origin "https://Maxython:${{ secrets.GITHUB_TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
         # Create func
         list_pkg() {
           local list
@@ -38,12 +36,10 @@ jobs:
         }
         # Set git repo
         info "Set git repo"
-        cd termux-packages-pacman
         git remote add upstream https://github.com/termux/termux-packages.git
         git config pull.rebase false
         git fetch --all
         git pull upstream master || true
-        git status
         git reset
         for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -prune -o -type f -not -name update-repo.sh)); do
           rm $i
@@ -55,7 +51,7 @@ jobs:
         git reset .github packages
         {
           git commit -m "Update repo"
-          #git push origin master
+          git push origin master
         } || true
         # Update repo packages
         info "Update repo packages"
@@ -63,5 +59,5 @@ jobs:
           commet "${i}"
           git add $i
           git commit -m "${i}"
-          #git push origin master
+          git push origin master
         done
