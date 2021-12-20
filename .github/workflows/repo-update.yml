@@ -1,0 +1,63 @@
+name: Update repo
+
+on:
+  push
+  #schedule:
+  #  - cron:  '0 0-23 * * *'
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1000
+    - name: Install wget
+      run: sudo apt-get install wget
+    - name: Update repo
+      run: |
+        # Set profile git
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        # Create func
+        list_pkg() {
+          local list
+          for i in $(git status -s packages | awk '{print $2}'); do
+            local dir_sp=(${i//// })
+            if [[ ! $(echo "$list" | grep "/${dir_sp[1]} ") ]]; then
+              list+="packages/${dir_sp[1]} "
+            fi
+          done
+          echo $list
+        }
+        info() {
+          echo "==> $1"
+        }
+        commet() {
+          echo "-> $1"
+        }
+        # Set git repo
+        info "Set git repo"
+        git remote add upstream https://github.com/termux/termux-packages
+        git config pull.rebase false
+        git fetch --all
+        git pull upstream master
+        for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -prune -o -type f -not -name update-repo.sh)); do
+          rm $i
+          wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
+        done
+        # Update system repo
+        info "Update system repo"
+        git add .
+        git reset .github packages
+        git commit -m "Update repo"
+        #git push origin master
+        # Update repo packages
+        info "Update repo packages"
+        for i in $(list_pkg); do
+          commet "${i}"
+          git add $i
+          git commit -m "${i}"
+          #git push origin master
+        done
