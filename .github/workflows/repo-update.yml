@@ -50,8 +50,10 @@ jobs:
         info "Update system repo"
         git add .
         git reset .github packages
-        git commit -m "Update repo"
-        #git push origin master
+        {
+          git commit -m "Update repo"
+          #git push origin master
+        } || true
         # Update repo packages
         info "Update repo packages"
         for i in $(list_pkg); do
