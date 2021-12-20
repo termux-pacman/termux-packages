@@ -1,8 +1,8 @@
 name: Update repo
 
-#on:
-#  schedule:
-#    - cron:  '0,30 0-23 * * *'
+on:
+  schedule:
+    - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:
@@ -14,9 +14,9 @@ jobs:
       run: |
         cd termux-packages-pacman
         # Set profile git
-        git config --global user.name "Maxython"
-        git config --global user.email "mixython@gmail.com"
-        git remote set-url origin "https://Maxython:${{ secrets.GITHUB_TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
+        git config --global user.name "termux-actions[bot]"
+        git config --global user.email "termux-actions[bot]@users.noreply.github.com"
+        git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
         # Create func
         list_pkg() {
           local list
