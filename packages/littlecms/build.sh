@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/project/lcms/lcms/${TERMUX_P
 TERMUX_PKG_SHA256=18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5
 TERMUX_PKG_BREAKS="littlecms-dev"
 TERMUX_PKG_REPLACES="littlecms-dev"
-
