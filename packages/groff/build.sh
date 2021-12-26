@@ -11,7 +11,6 @@ TERMUX_PKG_GROUPS="base-devel"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
 
-
 TERMUX_PKG_RM_AFTER_INSTALL="
 bin/soelim
 share/man/man1/soelim.1*
