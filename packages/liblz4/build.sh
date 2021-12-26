@@ -10,7 +10,6 @@ TERMUX_PKG_BREAKS="liblz4-dev"
 TERMUX_PKG_REPLACES="liblz4-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
 
-
 termux_step_pre_configure() {
 	TERMUX_PKG_SRCDIR+=lib
 }
