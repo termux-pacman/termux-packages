@@ -12,4 +12,3 @@ TERMUX_PKG_REVISION=2
 termux_step_pre_configure() {
 	./autogen.sh
 }
-
