@@ -15,7 +15,7 @@ termux_step_pre_configure() {
 	echo "PREFIX=\"$TERMUX_PREFIX\"" > configure.local
 	echo "CC=\"$CC\"" >> configure.local
 	echo "MANDIR=\"$TERMUX_PREFIX/share/man\"" >> configure.local
-	echo "CFLAGS=\"$CFLAGS -std=c99 -DNULL=0 $CFLAGS\"" >> configure.local
+	echo "CFLAGS=\"$CFLAGS -std=c99 -DNULL=0 $CPPFLAGS\"" >> configure.local
 	echo "LDFLAGS=\"$LDFLAGS\"" >> configure.local
 	for HAVING in HAVE_FGETLN HAVE_MMAP HAVE_STRLCAT HAVE_STRLCPY HAVE_SYS_ENDIAN HAVE_ENDIAN HAVE_NTOHL HAVE_NANOSLEEP HAVE_O_DIRECTORY HAVE_ISBLANK; do
 		echo "$HAVING=1" >> configure.local
