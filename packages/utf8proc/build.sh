@@ -13,4 +13,3 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	rm $TERMUX_PKG_SRCDIR/CMakeLists.txt
 }
-
