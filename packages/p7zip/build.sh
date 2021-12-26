@@ -25,4 +25,3 @@ termux_step_make_install() {
 	chmod +x install.sh
 	make install DEST_HOME=$TERMUX_PREFIX DEST_MAN=$TERMUX_PREFIX/share/man
 }
-
