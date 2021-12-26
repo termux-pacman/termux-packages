@@ -9,4 +9,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/lib/libXcurso
 TERMUX_PKG_SHA256=3ad3e9f8251094af6fe8cb4afcf63e28df504d46bfa5a5529db74a505d628782
 TERMUX_PKG_DEPENDS="libx11, libxfixes, libxrender"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
-
