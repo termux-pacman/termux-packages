@@ -17,4 +17,3 @@ termux_step_make_install() {
 	install -Dm600 libandroid-wordexp.a $TERMUX_PREFIX/lib/libandroid-wordexp.a
 	install -Dm600 libandroid-wordexp.so $TERMUX_PREFIX/lib/libandroid-wordexp.so
 }
-
