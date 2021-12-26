@@ -19,4 +19,3 @@ termux_step_make_install() {
         install -Dm700 "$TERMUX_PKG_BUILDDIR"/client/proxmark3 \
                 "$TERMUX_PREFIX"/bin/proxmark3
 }
-
