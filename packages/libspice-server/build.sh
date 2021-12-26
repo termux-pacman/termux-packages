@@ -16,4 +16,3 @@ termux_step_post_make_install() {
         ln -sfr "${TERMUX_PREFIX}"/lib/libspice-server.so \
                 "${TERMUX_PREFIX}"/lib/libspice-server.so.1
 }
-
