@@ -10,4 +10,3 @@ TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_AUTO_UPDATE_TAG_REGEXP="\d+\.\d+\.\d+"
 TERMUX_PKG_BREAKS="libsodium-dev"
 TERMUX_PKG_REPLACES="libsodium-dev"
-
