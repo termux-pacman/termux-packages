@@ -32,4 +32,3 @@ termux_step_make_install() {
 		sed "s|@LIBDIR@|$TERMUX_PREFIX/lib|" > \
 		$PKG_CONFIG_LIBDIR/unibilium.pc
 }
-
