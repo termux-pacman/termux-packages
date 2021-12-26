@@ -10,7 +10,6 @@ TERMUX_PKG_DEPENDS="glib"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/*-pkg-config"
 TERMUX_PKG_GROUPS="base-devel"
 
-
 termux_step_pre_configure() {
 	# Certain packages are not safe to build on device because their
 	# build.sh script deletes specific files in $TERMUX_PREFIX.
