@@ -11,7 +11,6 @@ TERMUX_PKG_BREAKS="libgnutls-dev"
 TERMUX_PKG_REPLACES="libgnutls-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
 
-
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-cxx
 --disable-hardware-acceleration
