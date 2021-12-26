@@ -10,7 +10,6 @@ TERMUX_PKG_DEPENDS="m4, make, perl"
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_GROUPS="base-devel"
 
-
 termux_step_post_get_source() {
 	perl -p -i -e "s|/bin/sh|$TERMUX_PREFIX/bin/sh|" lib/*/*.m4
 }
