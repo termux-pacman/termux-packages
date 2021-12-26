@@ -10,4 +10,3 @@ TERMUX_PKG_AUTO_UPDATE_TAG_REGEXP="\d+.\d+.\d+"
 TERMUX_PKG_BREAKS="libexpat-dev"
 TERMUX_PKG_REPLACES="libexpat-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--without-xmlwf --without-docbook"
-
