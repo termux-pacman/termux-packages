@@ -8,4 +8,3 @@ TERMUX_PKG_SHA256=3c5a671e7bc5736c677ef75017eaf008e8838ac03605953410e8d4de6b363b
 TERMUX_PKG_BREAKS="libmpdclient-dev"
 TERMUX_PKG_REPLACES="libmpdclient-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS=" -D default_socket==${TERMUX_PREFIX}/var/run/mpd/socket"
-
