@@ -55,4 +55,3 @@ termux_step_post_make_install() {
 	install -dm 700 $TERMUX_PREFIX/share/aclocal
 	install -m 600 $TERMUX_PKG_SRCDIR/util/ac_check_krb5.m4 $TERMUX_PREFIX/share/aclocal
 }
-
