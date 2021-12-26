@@ -10,7 +10,6 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_CONFLICTS="termux-tools (<< 0.51)"
 _GRADLE_VERSION=6.5.1
 
-
 termux_step_make() {
 	# Download and use a new enough gradle version to avoid the process hanging after running:
 	termux_download \
