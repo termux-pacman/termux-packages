@@ -10,7 +10,6 @@ TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_path_GREP=grep"
 TERMUX_PKG_GROUPS="base-devel"
 
-
 termux_step_pre_configure() {
 	if [ $TERMUX_ARCH = i686 ]; then
 		# Avoid text relocations
