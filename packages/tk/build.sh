@@ -32,4 +32,3 @@ termux_step_post_make_install() {
 		install -m644 -t "$TERMUX_PREFIX/include/tk-private/$dir" "$dir"/*.h
 	done
 }
-
