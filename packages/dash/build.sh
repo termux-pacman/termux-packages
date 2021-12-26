@@ -8,7 +8,6 @@ TERMUX_PKG_SHA256=db778110891f7937985f29bf23410fe1c5d669502760f584e54e0e7b29e123
 TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-static"
 
-
 termux_step_post_make_install() {
 	# Symlink sh -> dash
 	ln -sfr $TERMUX_PREFIX/bin/{dash,sh}
