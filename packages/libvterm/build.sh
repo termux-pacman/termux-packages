@@ -21,4 +21,3 @@ termux_step_make_install() {
 	$CC -std=c99 -shared -fPIC $LDFLAGS -o $TERMUX_PREFIX/lib/libvterm.so *.c -I../include -I.
 	cp ../include/*.h $TERMUX_PREFIX/include/
 }
-
