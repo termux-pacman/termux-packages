@@ -12,4 +12,3 @@ termux_step_pre_configure() {
 	termux_setup_protobuf
 	termux_setup_golang
 }
-
