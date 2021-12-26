@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/axel-download-accelerator/axel/releases/dow
 TERMUX_PKG_SHA256=f12682f981c83f374b82b0668f25f694a2042b617b236ee6fb057e5473c54e31
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="openssl"
-
