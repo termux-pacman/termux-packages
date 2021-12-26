@@ -9,7 +9,6 @@ TERMUX_PKG_DEPENDS="libandroid-support"
 TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_GROUPS="base-devel"
 
-
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 gl_cv_func_fflush_stdin=yes
 SORT_SUPPORTS_Z=yes
