@@ -15,4 +15,3 @@ ac_cv_lib_pq_PQsendQueryPrepared=no
 --without-sqlite3
 "
 TERMUX_PKG_RM_AFTER_INSTALL="lib/aprutil.exp"
-
