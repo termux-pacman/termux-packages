@@ -20,4 +20,3 @@ termux_step_make_install() {
 	# sudo - is an included addon in tsu now
 	ln -sf "$TERMUX_PREFIX/bin/tsu" "$TERMUX_PREFIX/bin/sudo"
 }
-
