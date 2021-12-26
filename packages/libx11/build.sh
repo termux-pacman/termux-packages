@@ -15,4 +15,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-malloc0returnsnull"
 termux_step_post_make_install() {
 	ln -sfr "${TERMUX_PREFIX}/lib/libX11.so" "${TERMUX_PREFIX}/lib/libX11.so.6"
 }
-
