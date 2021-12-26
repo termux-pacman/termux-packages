@@ -17,7 +17,6 @@ ac_cv_search_dlopen=
 --enable-watch8bit
 "
 
-
 termux_step_pre_configure() {
 	autoreconf -fi
 }
