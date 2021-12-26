@@ -17,4 +17,3 @@ share/man/man8/runit-init.8
 termux_step_pre_configure() {
 	autoreconf -vfi
 }
-
