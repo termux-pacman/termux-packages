@@ -8,7 +8,6 @@ TERMUX_PKG_SHA256=63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d
 TERMUX_PKG_DEPENDS="libandroid-glob, libiconv"
 TERMUX_PKG_ESSENTIAL=true
 
-
 # When cross-compiling configure guesses that d_ino in struct dirent only exists
 # if triplet matches linux*-gnu*, so we force set it explicitly:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="gl_cv_struct_dirent_d_ino=yes"
