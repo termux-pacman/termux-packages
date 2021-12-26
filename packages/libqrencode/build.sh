@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="libandroid-support, libpng, zlib"
 TERMUX_PKG_BREAKS="libqrencode-dev"
 TERMUX_PKG_REPLACES="libqrencode-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DBUILD_SHARED_LIBS=ON"
-
