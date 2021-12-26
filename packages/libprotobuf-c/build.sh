@@ -10,4 +10,3 @@ TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++, libprotobuf, protobuf"
 TERMUX_PKG_BREAKS="libprotobuf-c-dev"
 TERMUX_PKG_REPLACES="libprotobuf-c-dev"
-
