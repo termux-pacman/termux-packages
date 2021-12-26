@@ -25,4 +25,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/man/man1"
 termux_step_pre_configure() {
 	./autogen.sh
 }
-
