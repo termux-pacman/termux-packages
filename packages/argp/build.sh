@@ -12,4 +12,3 @@ termux_step_post_make_install() {
 	cp libargp.a $TERMUX_PREFIX/lib
 	cp $TERMUX_PKG_SRCDIR/argp.h $TERMUX_PREFIX/include
 }
-
