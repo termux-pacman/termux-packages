@@ -64,4 +64,3 @@ termux_step_post_make_install() {
 	$AR rcu libtalloc.a talloc*.o
 	install -Dm600 libtalloc.a $TERMUX_PREFIX/lib/libtalloc.a
 }
-
