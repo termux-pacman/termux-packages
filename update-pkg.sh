@@ -19,38 +19,11 @@ list_pkg() {
 	echo $list
 }
 
-# Update repo
-info "Update repo."
-git config pull.rebase false
-git fetch --all
-git pull upstream master
-commet "Continue?"
-git status
-select yn in "Yes" "No"; do
-	case $yn in
-		Yes ) break;;
-		No ) exit 1;;
-	esac
-done
-
 # Set repo for auto push
 read -p "Username: " username
 read -sp "Key: " key
 echo
 git remote set-url origin "https://${username}:${key}@github.com/Maxython/termux-packages-pacman.git"
-git reset
-
-# Edit file
-for i in $(grep -s -l ">>>>>>>" $(find . \( -path ./.git -o -path ./.github \) -prune -o -type f -not -name update-repo.sh)); do
-	rm $i
-	wget -O $i https://raw.githubusercontent.com/termux/termux-packages/master/$i
-done
-
-# Update repo
-git add .
-git reset .github packages
-git commit -m "Update repo"
-git push origin master
 
 # Sort file
 info "Sort and push packages."
