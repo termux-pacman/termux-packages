@@ -16,3 +16,4 @@ termux_step_pre_configure() {
 	sh build.sh createassets
 	cd release
 }
+
