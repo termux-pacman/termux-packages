@@ -12,4 +12,3 @@ TERMUX_PKG_BREAKS="libass-dev"
 TERMUX_PKG_REPLACES="libass-dev"
 # Avoid text relocations.
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" ac_cv_prog_nasm_check=no"
-
