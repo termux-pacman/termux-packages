@@ -93,4 +93,3 @@ termux_step_post_make_install() {
 	sed 's',"$TERMUX_STANDALONE_TOOLCHAIN"/sysroot,"-I${TERMUX_PREFIX%%/usr}",'g' Config_heavy.pl.new > Config_heavy.pl
 	rm Config_heavy.pl.new
 }
-

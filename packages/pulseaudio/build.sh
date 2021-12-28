@@ -62,4 +62,3 @@ termux_step_post_make_install() {
 	echo "load-module module-sles-sink" >> $TERMUX_PREFIX/etc/pulse/default.pa
 	echo "#load-module module-aaudio-sink" >> $TERMUX_PREFIX/etc/pulse/default.pa
 }
-

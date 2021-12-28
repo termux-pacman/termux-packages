@@ -17,4 +17,3 @@ ac_cv_prog_XML2_CONFIG=$TERMUX_PREFIX/bin/xml2-config
 termux_step_pre_configure() {
 	CPPFLAGS+=" -DHAVE_LOCALE_H"
 }
-
