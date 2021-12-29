@@ -23,3 +23,4 @@ termux_step_pre_configure() {
 	done
 	export PATH="$bin":$PATH
 }
+
