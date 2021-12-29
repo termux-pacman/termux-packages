@@ -12,3 +12,4 @@ termux_step_pre_configure() {
 	cp $TERMUX_PKG_BUILDER_DIR/efgcvt-dbl-macros.h $TERMUX_PKG_SRCDIR/libvbisam/
 	autoreconf -fi
 }
+
