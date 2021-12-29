@@ -10,3 +10,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-libodbc
 --with-layout=gnu
 "
+
