@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Shared library for the Lua interpreter"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=5.4.3
-TERMUX_PKG_REVISION=5
+TERMUX_PKG_REVISION=6
 TERMUX_PKG_SRCURL=https://www.lua.org/ftp/lua-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=f8612276169e3bfcbcfb8f226195bfc6e466fe13042f1076cbde92b7ec96bbfb
 TERMUX_PKG_EXTRA_MAKE_ARGS=linux-readline
@@ -28,7 +28,7 @@ termux_step_pre_configure() {
 termux_step_make_install() {
 	make \
 		TO_BIN="lua5.4 luac5.4" \
-		TO_LIB="liblua5.4.so liblua5.4.so.5.4 liblua5.4.so.${TERMUX_PKG_VERSION}" \
+		TO_LIB="liblua5.4.so liblua5.4.so.5.4 liblua5.4.so.${TERMUX_PKG_VERSION} liblua5.4.a" \
 		INSTALL_DATA="cp -d" \
 		INSTALL_TOP="$TERMUX_PREFIX" \
 		INSTALL_INC="$TERMUX_PREFIX/include/lua5.4" \
