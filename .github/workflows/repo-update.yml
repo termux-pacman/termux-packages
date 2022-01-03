@@ -37,16 +37,24 @@ jobs:
         done
         list_sort=($list_sort)
         copy_list_sort=($(sort -n <(printf "%s\n" "${list_sort[@]}")))
+        search_index() {
+          for i in "${!list_sort[@]}"; do
+            if [[ "${list_sort[$i]}" = "${1}" ]]; then
+              echo "${i}";
+            fi
+          done
+        }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          index=$(echo ${list_sort[@]/$i//} | cut -d/ -f1 | wc -w | tr -d ' ')
-          if [ "$index" = "$old_index" ]; then
-            index=$(($index + $e))
-            e=$(($e + 1))
-          else
-            old_index=$index
-            e=1
-          fi
+          e=1
+          while :; do
+            index=$(search_index "$i" | sed -n "${e}p")
+            if [[ $(echo "$sort_list_files " | grep "${list_files[$index]} ") ]]; then
+              e=$(($e+1))
+            else
+              break
+            fi
+          done
           sort_list_files+="${list_files[$index]} "
         done
         # Start upload
@@ -71,8 +79,6 @@ jobs:
         for i in $sort_list_files; do
           commet "${i}"
           git add $i
-          {
-            git commit -m "${i}"
-            git push origin master
-          } || true
+          git commit -m "${i}"
+          git push origin master
         done
