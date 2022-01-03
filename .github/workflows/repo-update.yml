@@ -71,6 +71,8 @@ jobs:
         for i in $sort_list_files; do
           commet "${i}"
           git add $i
-          git commit -m "${i}"
-          git push origin master
+          {
+            git commit -m "${i}"
+            git push origin master
+          } || true
         done
