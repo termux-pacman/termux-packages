@@ -13,3 +13,4 @@ TERMUX_PKG_REPLACES="libpsl-dev"
 termux_step_pre_configure() {
 	autoreconf -fiv
 }
+
