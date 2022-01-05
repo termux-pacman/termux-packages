@@ -16,3 +16,4 @@ TERMUX_PKG_GROUPS="base-devel"
 termux_step_pre_configure() {
 	autoreconf
 }
+
