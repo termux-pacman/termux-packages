@@ -55,4 +55,3 @@ termux_step_configure() {
 		--enable-small \
 		--extra-cflags="-fPIC"
 }
-
