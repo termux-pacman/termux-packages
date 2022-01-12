@@ -22,3 +22,4 @@ termux_step_make_install() {
 termux_step_install_license() {
 	install -Dm600 -t $TERMUX_PREFIX/share/doc/lsof $TERMUX_PKG_BUILDER_DIR/license.txt
 }
+
