@@ -16,3 +16,4 @@ share/man/man8/installkernel.8
 share/man/man8/remove-shell.8
 share/man/man8/update-shells.8
 "
+
