@@ -23,3 +23,4 @@ termux_step_pre_configure() {
 	CPPFLAGS+=" -Dfputs_unlocked=fputs -DPR_SET_VMA=0x53564d41"
 	# remove the -DPR_SET_VMA for >5.13
 }
+
