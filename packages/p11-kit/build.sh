@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL="https://github.com/p11-glue/p11-kit/releases/download/$TERMUX
 TERMUX_PKG_SHA256="81e6140584f635e4e956a1b93a32239acf3811ff5b2d3a5c6094e94e99d2c685"
 TERMUX_PKG_DEPENDS="gettext, libffi, libtasn1"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--without-trust-paths --disable-static"
-
