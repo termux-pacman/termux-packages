@@ -8,3 +8,4 @@ TERMUX_PKG_SRCURL=https://gitlab.com/gnutls/libtasn1.git
 termux_step_post_get_source() {
 	./bootstrap
 }
+
