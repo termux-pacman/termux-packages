@@ -1,8 +1,8 @@
 name: Update repo
 
-on: push
-  #schedule:
-  #  - cron:  '0,30 0-23 * * *'
+on:
+  schedule:
+    - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:
@@ -42,7 +42,7 @@ jobs:
         cd ../termux-packages
         list_sort=""
         for i in ${list_files[@]}; do
-          list_sort+="$(git rev-list --count "$(git log -n 1 --pretty=format:%H $i)") "
+          list_sort+="$(git rev-list --count "$(git log -n 1 --pretty=format:%H -- $i)") "
         done
         list_sort=($list_sort)
         copy_list_sort=($(sort -n <(printf "%s\n" "${list_sort[@]}")))
