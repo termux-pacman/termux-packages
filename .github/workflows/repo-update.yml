@@ -21,7 +21,7 @@ jobs:
           echo "-> $1"
         }
         # Edit
-        imfo "Edit"
+        info "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
