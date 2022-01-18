@@ -1,8 +1,8 @@
 name: Update repo
 
-on:
-  schedule:
-    - cron:  '0,30 0-23 * * *'
+on: push
+  #schedule:
+  #  - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:
@@ -14,12 +14,20 @@ jobs:
       run: git clone https://github.com/Maxython/termux-packages-pacman.git
     - name: Update repo
       run: |
+        info() {
+          echo "==> $1"
+        }
+        commet() {
+          echo "-> $1"
+        }
         # Edit
+        imfo "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
         cp -r * ../termux-packages-pacman
         # Get list pkg
+        info "Get list pkg"
         cd ../termux-packages-pacman
         list_files=""
         for i in $(git status -s packages | awk '{print $2}'); do
@@ -30,6 +38,7 @@ jobs:
         done
         list_files=($list_files)
         # Sort list pkg
+        info "Sort list pkg"
         cd ../termux-packages
         list_sort=""
         for i in ${list_files[@]}; do
@@ -63,26 +72,21 @@ jobs:
           sort_list_files+="${list_files[$index]}"
         done
         # Start upload
+        info "Start upload"
         cd ../termux-packages-pacman
-        info() {
-          echo "==> $1"
-        }
-        commet() {
-          echo "-> $1"
-        }
         git config --global user.name "termux-actions[bot]"
         git config --global user.email "termux-actions[bot]@users.noreply.github.com"
         git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
-        info "Update system repo"
+        commet "Update system repo"
         git add .
         git reset packages
         {
           git commit -m "Update repo"
           git push origin master
         } || true
-        info "Update repo packages"
+        commet "Update repo packages"
         for i in $sort_list_files; do
-          commet "${i}"
+          commet "    ${i}"
           git add $(echo $i | sed 's/&&/ /g')
           git commit -m "${i}"
           git push origin master
