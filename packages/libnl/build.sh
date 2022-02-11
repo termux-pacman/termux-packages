@@ -15,3 +15,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-pthreads --disable-cli"
 termux_step_pre_configure() {
 	CFLAGS+=" -Dsockaddr_storage=__kernel_sockaddr_storage"
 }
+
