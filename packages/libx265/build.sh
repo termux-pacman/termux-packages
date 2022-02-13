@@ -37,3 +37,4 @@ termux_step_pre_configure() {
 	sed -i "s/@ARM_ARGS@/${ARM_ARGS}/" \
 		${TERMUX_PKG_SRCDIR}/CMakeLists.txt
 }
+
