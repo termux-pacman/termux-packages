@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/project/lame/lame/${TERMUX_P
 TERMUX_PKG_SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 TERMUX_PKG_BREAKS="libmp3lame-dev"
 TERMUX_PKG_REPLACES="libmp3lame-dev"
-
