@@ -36,3 +36,4 @@ termux_step_create_debscripts() {
 	echo "#!$TERMUX_PREFIX/bin/sh" > postinst
 	echo "mkdir -p $TERMUX_PREFIX/var/run" >> postinst
 }
+
