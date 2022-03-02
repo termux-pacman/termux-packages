@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/enlightenment/imlib2-${TERMU
 TERMUX_PKG_SHA256=c15eb370225e3e3c64a6421c3f153a4117958e0a3b395e06926568b4090aa425
 TERMUX_PKG_DEPENDS="freetype, giflib, libandroid-shmem, libbz2, libid3tag, libjpeg-turbo, libpng, libtiff, libxext, zlib"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="LIBS=-landroid-shmem"
-
