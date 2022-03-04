@@ -17,4 +17,3 @@ termux_step_post_massage() {
 termux_step_pre_configure() {
 	CPPFLAGS+=" -DLINE_MAX=_POSIX2_LINE_MAX"
 }
-
