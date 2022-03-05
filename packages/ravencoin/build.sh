@@ -32,4 +32,3 @@ termux_step_post_make_install() {
 		rm -f $_LIBPTHREAD_A
 	fi
 }
-
