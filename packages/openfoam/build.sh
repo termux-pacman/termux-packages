@@ -91,4 +91,3 @@ termux_step_make_install() {
 termux_step_post_make_install() {
 	sed -i 's%$ARCH%$(uname -m)%g' $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/opt/OpenFOAM-v${TERMUX_PKG_VERSION}/etc/config.sh/settings
 }
-
