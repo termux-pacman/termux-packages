@@ -64,3 +64,4 @@ termux_step_post_make_install() {
 		rm -f $_LIBRT_A
 	fi
 }
+
