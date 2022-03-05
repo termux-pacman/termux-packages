@@ -19,3 +19,4 @@ TERMUX_CMAKE_BUILD="Unix Makefiles"
 termux_step_pre_configure() {
 	LDFLAGS+=" -ljsoncpp"
 }
+
