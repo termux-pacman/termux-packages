@@ -22,3 +22,4 @@ termux_step_make_install () {
 	cp -r $TERMUX_PKG_SRCDIR/libraries $TERMUX_PREFIX/share/openscad/
 	cp -r $TERMUX_PKG_SRCDIR/examples $TERMUX_PREFIX/share/openscad/
 }
+
