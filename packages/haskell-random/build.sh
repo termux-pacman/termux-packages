@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/random-${TERMUX_PKG_VERSI
 TERMUX_PKG_SHA256="265c768fc5f2ca53cde6a87e706b4448cad474c3deece933c103f24453661457"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-splitmix"
-
