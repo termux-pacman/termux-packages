@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256="dcf99e1d5f1c6e569e7386312fe96e9804b3cfb2d4f17ded1e01f60149bd3
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-edit-distance, haskell-zlib, haskell-http, haskell-network-uri, haskell-regex-base, haskell-async, haskell-lukko, haskell-cabal, haskell-resolv, haskell-echo, haskell-random, haskell-hashable, haskell-cryptohash-sha256, haskell-tar, haskell-base16-bytestring, haskell-hackage-security, haskell-regex-posix"
 TERMUX_PKG_IS_HASKELL_LIB=false
+
