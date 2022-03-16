@@ -55,6 +55,19 @@ source "$TERMUX_SCRIPTDIR/scripts/build/termux_download.sh"
 # shellcheck source=scripts/build/setup/termux_setup_ghc.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/setup/termux_setup_ghc.sh"
 
+# Utility function to setup a GHC cross-compiler toolchain targeting Android.
+# shellcheck source=scripts/build/setup/termux_setup_ghc_cross_compiler.sh
+source "$TERMUX_SCRIPTDIR/scripts/build/setup/termux_setup_ghc_cross_compiler.sh"
+
+# Utility function to setup cabal-install (may be used by ghc toolchain).
+# shellcheck source=scripts/build/setup/termux_setup_cabal.sh.
+source "$TERMUX_SCRIPTDIR/scripts/build/setup/termux_setup_cabal.sh"
+
+# Utility function to setup jailbreak-cabal. It is used to remove version constraints
+# from Cabal packages.
+# shellcheck source=scripts/build/setup/termux_setup_jailbreak_cabal.sh
+source "$TERMUX_SCRIPTDIR/scripts/build/setup/termux_setup_jailbreak_cabal.sh"
+
 # Utility function for setting up GN toolchain.
 # shellcheck source=scripts/build/setup/termux_setup_gn.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/setup/termux_setup_gn.sh"
@@ -195,6 +208,10 @@ source "$TERMUX_SCRIPTDIR/scripts/build/configure/termux_step_configure_cmake.sh
 # shellcheck source=scripts/build/configure/termux_step_configure_meson.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/configure/termux_step_configure_meson.sh"
 
+# Setup configure args and run haskell build system. This function is called from termux_step_configure.
+# shellcheck source=scripts/build/configure/termux_step_configure_haskell_build.sh
+source "$TERMUX_SCRIPTDIR/scripts/build/configure/termux_step_configure_haskell_build.sh"
+
 # Configure the package
 # shellcheck source=scripts/build/configure/termux_step_configure.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/configure/termux_step_configure.sh"
@@ -253,7 +270,22 @@ termux_step_post_massage() {
 
 # Hook function to create {pre,post}install, {pre,post}rm-scripts and similar
 termux_step_create_debscripts() {
-	return
+	# Create debscripts for haskell packages.
+	if ls "${TERMUX_PKG_SRCDIR}"/*.cabal &>/dev/null && [ "${TERMUX_PKG_IS_HASKELL_LIB}" = true ]; then
+		cat <<-EOF >./postinst
+			#!${TERMUX_PREFIX}/bin/sh
+				sh ${TERMUX_PREFIX}/share/haskell/register/${TERMUX_PKG_NAME}.sh
+		EOF
+
+		cat <<-EOF >./prerm
+			#!${TERMUX_PREFIX}/bin/sh
+			if  [ "${TERMUX_PACKAGE_FORMAT}" = "pacman" ] || [ "\$1" = "remove" ] || [ "\$1" = "update" ]; then
+					sh ${TERMUX_PREFIX}/share/haskell/unregister/${TERMUX_PKG_NAME}.sh
+			fi
+		EOF
+	else
+		return 0
+	fi
 }
 
 # Convert Debian maintainer scripts into pacman-compatible installation hooks.
