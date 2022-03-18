@@ -9,3 +9,4 @@ TERMUX_PKG_DEPENDS="gst-plugins-base, libx264"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtests=disabled
 "
+
