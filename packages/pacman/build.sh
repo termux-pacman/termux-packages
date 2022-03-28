@@ -11,12 +11,6 @@ TERMUX_PKG_BUILD_DEPENDS="doxygen, asciidoc, nettle"
 TERMUX_PKG_GROUPS="base-devel"
 TERMUX_PKG_CONFFILES="etc/pacman.conf etc/makepkg.conf"
 
-# A temporary solution to the problem with compiling the documentation.
-# https://github.com/termux/termux-packages/pull/7759#issuecomment-945664581
-TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
--Ddoc=disabled
-"
-
 termux_step_pre_configure() {
 	rm -f ./scripts/libmakepkg/executable/sudo.sh.in
 	rm -f ./scripts/libmakepkg/executable/fakeroot.sh.in
