@@ -9,4 +9,3 @@ TERMUX_PKG_SHA256=3035255ca79e0464567d255baa5544f7794e2b7eb791dcc60cc339cf1aa01e
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_lib_ncursesw6_addnwstr=yes"
 TERMUX_PKG_RM_AFTER_INSTALL="share/applications share/pixmaps"
-
