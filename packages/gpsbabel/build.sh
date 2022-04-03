@@ -12,3 +12,4 @@ TERMUX_PKG_DEPENDS="libexpat"
 termux_step_post_get_source() {
 	TERMUX_PKG_SRCDIR+=/gpsbabel
 }
+
