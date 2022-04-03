@@ -11,3 +11,4 @@ termux_step_make_install() {
   cp $TERMUX_PKG_SRCDIR/ipcalc $TERMUX_PREFIX/bin/
 }
 
+
