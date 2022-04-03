@@ -18,3 +18,4 @@ termux_step_post_configure() {
 		-o gfshare_maketable
 	touch -d "next hour" gfshare_maketable
 }
+
