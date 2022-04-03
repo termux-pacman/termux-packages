@@ -59,4 +59,3 @@ termux_step_make_install() {
 	cp src/.libs/espeak-ng $TERMUX_PREFIX/bin/espeak
 	cp src/.libs/libespeak-ng.so $TERMUX_PREFIX/lib/libespeak-ng.so.1.1.49
 }
-
