@@ -9,4 +9,3 @@ TERMUX_PKG_SRCURL=https://github.com/williamh/dotconf/archive/v${TERMUX_PKG_VERS
 termux_step_pre_configure () {
 	aclocal && libtoolize --force && autoreconf -fi
 }
-
