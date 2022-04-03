@@ -11,3 +11,4 @@ TERMUX_PKG_DEPENDS="libc++"
 TERMUX_PKG_BREAKS="libgraphite-dev"
 TERMUX_PKG_REPLACES="libgraphite-dev"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/gr2fonttest"
+
