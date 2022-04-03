@@ -37,4 +37,3 @@ termux_step_make_install() {
 	install -D -m 600 -t "$TERMUX_PREFIX"/share/man/man1 \
 		"$TERMUX_PKG_HOSTBUILD_DIR"/gopath/src/github.com/github/hub/share/man/man1/*.1
 }
-
