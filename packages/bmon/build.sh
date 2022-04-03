@@ -14,4 +14,3 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	./autogen.sh
 }
-
