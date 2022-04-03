@@ -30,4 +30,3 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/games/fortunes
 	cp * $TERMUX_PREFIX/share/games/fortunes
 }
-
