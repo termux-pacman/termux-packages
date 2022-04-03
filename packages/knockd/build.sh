@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://www.zeroflux.org/proj/knock/files/knock-${TERMUX_PKG_V
 TERMUX_PKG_SHA256=698d8c965624ea2ecb1e3df4524ed05afe387f6d20ded1e8a231209ad48169c7
 TERMUX_PKG_DEPENDS="libpcap"
 TERMUX_PKG_BUILD_IN_SRC=true
-
