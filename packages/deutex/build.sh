@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="libpng, zlib"
 termux_step_pre_configure() {
 	./bootstrap
 }
-
