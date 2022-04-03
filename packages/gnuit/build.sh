@@ -14,4 +14,3 @@ termux_step_post_massage() {
 	ln -s gnuitrc.screen gnuitrc.screen-color
 	ln -s gnuitrc.screen gnuitrc.screen-256color
 }
-
