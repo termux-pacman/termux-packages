@@ -37,3 +37,4 @@ termux_step_make_install() {
 	install -Dm600 "$TERMUX_PKG_SRCDIR"/lib/libwren.a \
 		"$TERMUX_PREFIX"/lib/libwren.a
 }
+
