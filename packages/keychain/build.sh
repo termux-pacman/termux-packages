@@ -16,4 +16,3 @@ termux_step_make_install() {
 	install -Dm700 keychain "${TERMUX_PREFIX}"/bin/keychain
 	install -Dm600 keychain.1 "${TERMUX_PREFIX}"/share/man/man1/keychain.1
 }
-
