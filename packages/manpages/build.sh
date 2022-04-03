@@ -39,3 +39,4 @@ termux_step_pre_configure() {
 	cd man-pages-posix-${TERMUX_PKG_VERSION[1]}
 	make install
 }
+
