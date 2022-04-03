@@ -14,4 +14,3 @@ ac_cv_header_syslog_h=no
 --with-external-zlib
 "
 TERMUX_PKG_RM_AFTER_INSTALL="bin/cvsbug share/man/man8/cvsbug.8"
-
