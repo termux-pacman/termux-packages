@@ -15,3 +15,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--with-libsodium --disable-libunwind --disable-
 termux_step_post_get_source() {
 	./autogen.sh
 }
+
