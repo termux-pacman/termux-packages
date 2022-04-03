@@ -9,3 +9,4 @@ TERMUX_PKG_DEPENDS="libidn"
 TERMUX_PKG_BREAKS="libgsasl-dev"
 TERMUX_PKG_REPLACES="libgsasl-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--without-libgcrypt"
+
