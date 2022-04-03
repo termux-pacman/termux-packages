@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/facebookincubator/fastmod/archive/v$TERMUX_
 TERMUX_PKG_SHA256=5afb4c449aa7d1efe34e0540507fc1d1f40f7eba0861b2bb10409080faeffc4a
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
-
