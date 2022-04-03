@@ -30,3 +30,4 @@ termux_step_make_install() {
 	cp -a "$GOPATH"/src/github.com/xyproto/algernon/samples \
 		"$TERMUX_PREFIX"/share/doc/algernon/
 }
+
