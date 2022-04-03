@@ -14,3 +14,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-tests"
 termux_step_pre_configure() {
 	./bootstrap
 }
+
