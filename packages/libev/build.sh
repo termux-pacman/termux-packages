@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://fossies.org/linux/misc/libev-$TERMUX_PKG_VERSION.tar.g
 TERMUX_PKG_SHA256=507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea
 TERMUX_PKG_BREAKS="libev-dev"
 TERMUX_PKG_REPLACES="libev-dev"
-
