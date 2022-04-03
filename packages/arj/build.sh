@@ -39,4 +39,3 @@ termux_step_post_massage() {
 	"$TERMUX_PKG_SRCDIR/$build_subdir"/en/rs/tools/postproc \
 		bin/arj
 }
-
