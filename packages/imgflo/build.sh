@@ -10,3 +10,4 @@ TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="gegl, libsoup, zlib"
 TERMUX_PKG_BUILD_IN_SRC=true
 
+
