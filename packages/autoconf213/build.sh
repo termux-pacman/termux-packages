@@ -17,3 +17,4 @@ termux_step_post_massage() {
 	perl -p -i -e "s|/usr/bin/m4|$TERMUX_PREFIX/bin/m4|" $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/*
 	perl -p -i -e "s|CONFIG_SHELL-/bin/sh|CONFIG_SHELL-$TERMUX_PREFIX/bin/sh|" $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin/autoconf-2.13
 }
+
