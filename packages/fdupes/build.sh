@@ -11,3 +11,4 @@ TERMUX_PKG_DEPENDS="ncurses, pcre2"
 termux_step_pre_configure() {
 	autoreconf --install
 }
+
