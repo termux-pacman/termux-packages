@@ -22,3 +22,4 @@ termux_step_make_install() {
 		"$GOPATH"/src/github.com/elves/elvish/elvish \
 		"$TERMUX_PREFIX"/bin/elvish
 }
+
