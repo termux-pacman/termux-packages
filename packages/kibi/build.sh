@@ -12,4 +12,3 @@ termux_step_post_make_install() {
     install -Dm644 "config_example.ini" "$TERMUX_PREFIX/etc/kibi/config.ini"
     install -Dm644 syntax.d/* -t "$TERMUX_PREFIX/share/kibi/syntax.d"
 }
-
