@@ -30,4 +30,3 @@ termux_step_make_install() {
 termux_step_post_make_install() {
     install -Dm644 LICENSE "$TERMUX_PREFIX/share/licenses/alass/LICENSE"
 }
-
