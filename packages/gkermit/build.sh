@@ -16,4 +16,3 @@ termux_step_post_get_source() {
 	file="$TERMUX_PKG_CACHEDIR/$filename"
 	tar xf "$file" -C "$TERMUX_PKG_SRCDIR"
 }
-
