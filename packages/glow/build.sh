@@ -25,4 +25,3 @@ termux_step_make_install() {
         install -Dm700 ${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet/glow/glow \
                 $TERMUX_PREFIX/bin/glow
 }
-
