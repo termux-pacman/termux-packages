@@ -18,4 +18,3 @@ termux_step_post_configure() {
     # removing tests
     sed --in-place 's/test_kit//g' sources/Makefile.am
 }
-
