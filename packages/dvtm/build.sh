@@ -13,3 +13,4 @@ TERMUX_PKG_DEPENDS="ncurses"
 termux_step_pre_configure() {
 	CFLAGS+=" $CPPFLAGS"
 }
+
