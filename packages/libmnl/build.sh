@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://netfilter.org/projects/libmnl/files/libmnl-${TERMUX_PK
 TERMUX_PKG_SHA256=171f89699f286a5854b72b91d06e8f8e3683064c5901fb09d954a9ab6f551f81
 TERMUX_PKG_BREAKS="libmnl-dev"
 TERMUX_PKG_REPLACES="libmnl-dev"
-
