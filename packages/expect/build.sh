@@ -18,4 +18,3 @@ termux_step_post_make_install() {
 	cd $TERMUX_PREFIX/lib
 	ln -f -s expect${TERMUX_PKG_VERSION}/libexpect${TERMUX_PKG_VERSION}.so .
 }
-
