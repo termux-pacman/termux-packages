@@ -7,4 +7,3 @@ TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://mirrors.kernel.org/gnu/ddrescue/ddrescue-${TERMUX_PKG_VERSION}.tar.lz
 TERMUX_PKG_SHA256=ce538ebd26a09f45da67d3ad3f7431932428231ceec7a2d255f716fa231a1063
 TERMUX_PKG_DEPENDS="libc++"
-
