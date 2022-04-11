@@ -74,6 +74,7 @@ Checking for the maximum value of the 'time_t' type: NO
 Checking whether the realpath function allows a NULL argument: OK
 Checking for ftruncate extend: OK
 getcwd takes a NULL argument: OK
+Checking for readlink breakage: NO
 EOF
 
 	USING_SYSTEM_ASN1_COMPILE=1 ASN1_COMPILE=/usr/bin/asn1_compile \
@@ -123,10 +124,11 @@ EOF
 		--without-utmp \
 		--without-winbind \
 		--with-shared-modules="${_vfs_modules},${_pdb_modules},${_auth_modules}" \
-		--with-static-modules='!auth_winbind'
+		--with-static-modules='!auth_winbind' ||
 		# --disable-fault-handling \
 		# --disable-rpath-private-install \
 		# --with-logfilebase="$TERMUX_PREFIX/tmp/log/samba" \
+                (cat cross-answers.txt | grep UNKNOWN && return 1)
 
 	./buildtools/bin/waf install --jobs="$TERMUX_MAKE_PROCESSES"
 
