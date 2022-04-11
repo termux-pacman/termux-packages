@@ -8,10 +8,12 @@ jobs:
   update-repo:
     runs-on: ubuntu-latest
     steps:
+    - name: Clone repository
+      run: |
+        git clone https://github.com/termux-pacman/termux-packages.git
+        mv termux-packages termux-packages-pacman
     - name: Clone root repository
       run: git clone https://github.com/termux/termux-packages.git
-    - name: Clone repository
-      run: git clone https://github.com/Maxython/termux-packages-pacman.git
     - name: Update repo
       run: |
         info() {
