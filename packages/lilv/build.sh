@@ -34,4 +34,3 @@ termux_step_make() {
 termux_step_make_install() {
 	./waf install
 }
-
