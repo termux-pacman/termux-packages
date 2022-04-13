@@ -2,8 +2,8 @@ TERMUX_PKG_HOMEPAGE=https://clang.llvm.org/
 TERMUX_PKG_DESCRIPTION="Modular compiler and toolchain technologies library"
 TERMUX_PKG_LICENSE="NCSA"
 TERMUX_PKG_MAINTAINER="@buttaface"
-TERMUX_PKG_VERSION=13.0.1
-TERMUX_PKG_SHA256=326335a830f2e32d06d0a36393b5455d17dc73e0bd1211065227ee014f92cbf8
+TERMUX_PKG_VERSION=14.0.0
+TERMUX_PKG_SHA256=35ce9edbc8f774fe07c8f4acdf89ec8ac695c8016c165dd86b8d10e7cba07e23
 TERMUX_PKG_SRCURL=https://github.com/llvm/llvm-project/releases/download/llvmorg-$TERMUX_PKG_VERSION/llvm-project-$TERMUX_PKG_VERSION.src.tar.xz
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_RM_AFTER_INSTALL="
@@ -20,9 +20,10 @@ TERMUX_PKG_REPLACES="gcc, libclang, libclang-dev, libllvm-dev"
 TERMUX_PKG_GROUPS="base-devel"
 # See http://llvm.org/docs/CMake.html:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DANDROID_PLATFORM_LEVEL=$TERMUX_PKG_API_LEVEL
 -DPYTHON_EXECUTABLE=$(command -v python3)
 -DLLVM_ENABLE_PIC=ON
--DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;compiler-rt;lld;lldb;openmp;polly
+-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;compiler-rt;lld;lldb;mlir;openmp;polly
 -DLLVM_ENABLE_LIBEDIT=OFF
 -DLLVM_INCLUDE_TESTS=OFF
 -DCLANG_DEFAULT_CXX_STDLIB=libc++
@@ -33,18 +34,22 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DDEFAULT_SYSROOT=$(dirname $TERMUX_PREFIX)
 -DLLVM_LINK_LLVM_DYLIB=ON
 -DLLDB_ENABLE_PYTHON=OFF
+-DCLANG_TABLEGEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/clang-tblgen
 -DLLDB_TABLEGEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/lldb-tblgen
 -DLLVM_TABLEGEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/llvm-tblgen
--DCLANG_TABLEGEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/clang-tblgen
+-DMLIR_TABLEGEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/mlir-tblgen
 -DLIBOMP_ENABLE_SHARED=FALSE
 -DOPENMP_ENABLE_LIBOMPTARGET=OFF
 -DLLVM_ENABLE_SPHINX=ON
 -DSPHINX_OUTPUT_MAN=ON
 -DSPHINX_WARNINGS_AS_ERRORS=OFF
 -DLLVM_TARGETS_TO_BUILD=all
--DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=AVR;RISCV
+-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=ARC;CSKY;M68k;VE
 -DPERL_EXECUTABLE=$(command -v perl)
 -DLLVM_ENABLE_FFI=ON
+-DLLVM_INSTALL_UTILS=ON
+-DMLIR_INSTALL_AGGREGATE_OBJECTS=OFF
+-DMLIR_LINALG_ODS_YAML_GEN=$TERMUX_PKG_HOSTBUILD_DIR/bin/mlir-linalg-ods-yaml-gen
 "
 
 if [ $TERMUX_ARCH_BITS = 32 ]; then
@@ -62,8 +67,8 @@ termux_step_host_build() {
 	termux_setup_cmake
 	termux_setup_ninja
 
-	cmake -G Ninja -DLLVM_ENABLE_PROJECTS='clang;lldb' $TERMUX_PKG_SRCDIR/llvm
-	ninja -j $TERMUX_MAKE_PROCESSES clang-tblgen lldb-tblgen llvm-tblgen
+	cmake -G Ninja -DLLVM_ENABLE_PROJECTS='clang;lldb;mlir' $TERMUX_PKG_SRCDIR/llvm
+	ninja -j $TERMUX_MAKE_PROCESSES clang-tblgen lldb-tblgen llvm-tblgen mlir-tblgen mlir-linalg-ods-yaml-gen
 }
 
 termux_step_pre_configure() {
@@ -97,13 +102,13 @@ termux_step_post_configure() {
 
 termux_step_post_make_install() {
 	if [ "$TERMUX_CMAKE_BUILD" = Ninja ]; then
-		ninja docs-llvm-man docs-clang-man
+		ninja -j $TERMUX_MAKE_PROCESSES docs-{llvm,clang}-man
 	else
-		make docs-llvm-man docs-clang-man
+		make -j $TERMUX_MAKE_PROCESSES docs-{llvm,clang}-man
 	fi
 
 	cp docs/man/* $TERMUX_PREFIX/share/man/man1
-	cp tools/clang/docs/man/clang.1 $TERMUX_PREFIX/share/man/man1
+	cp tools/clang/docs/man/{clang,diagtool}.1 $TERMUX_PREFIX/share/man/man1
 	cd $TERMUX_PREFIX/bin
 
 	for tool in clang clang++ cc c++ cpp gcc g++ ${TERMUX_HOST_PLATFORM}-{clang,clang++,gcc,g++,cpp}; do
