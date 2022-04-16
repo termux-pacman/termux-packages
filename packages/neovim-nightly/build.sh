@@ -2,7 +2,7 @@ TERMUX_PKG_HOMEPAGE=https://neovim.io
 TERMUX_PKG_DESCRIPTION="Ambitious Vim-fork focused on extensibility and agility (nvim-nightly)"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="Aditya Alok <dev.aditya.alok@gmail.com>"
-TERMUX_PKG_VERSION=""
+TERMUX_PKG_VERSION="0.7.0-dev+1453-g8486c87e5"
 TERMUX_PKG_SRCURL="https://github.com/neovim/neovim/archive/nightly.tar.gz"
 TERMUX_PKG_SHA256=ef9ef44569b9959511890de0c8268454e5bcabd6e43483abb5fb568d191ea7fa
 TERMUX_PKG_DEPENDS="libiconv, libuv, luv, libmsgpack, libandroid-support, libvterm, libtermkey, libluajit, libunibilium, libtreesitter"
@@ -50,19 +50,22 @@ termux_pkg_auto_update() {
 
 	if [ -z "$remote_nvim_version" ]; then
 		echo "ERROR: No version found in nightly page."
-		exit 1
+		return 1
 	fi
 
-	remote_nvim_version="$(grep -qP '^\d+\.\d+\.\d+-dev\+\d+-g[0-9a-f]+$' <<<"$remote_nvim_version" || true)"
+	remote_nvim_version="$(grep -oP '^\d+\.\d+\.\d+-dev\+\d+-g[0-9a-f]+$' <<<"$remote_nvim_version" || true)"
 
 	if [ -z "$remote_nvim_version" ]; then
 		echo "WARNING: Version in nightly page is not in expected format. Skipping auto-update."
 		echo "remote_nvim_version: $remote_nvim_version"
+		return 0
 	fi
 
 	# since we are using a nightly build, therefore no need to check for version increment/decrement.
 	if [ "${TERMUX_PKG_VERSION}" != "${remote_nvim_version}" ]; then
 		termux_pkg_upgrade_version "${remote_nvim_version}" --skip-version-check
+	else
+		echo "INFO: No update available."
 	fi
 }
 
