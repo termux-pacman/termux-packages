@@ -19,9 +19,10 @@ scripts/.vagrant/
 
 # Predownloaded packages sources.
 /packages/*/cache
+/root-packages/*/cache
+/x11-packages/*/cache
 
 # Packages not supported for pacman
 /packages/root-repo/
 /packages/science-repo/
 /packages/x11-repo/
-/packages/apt-file/
