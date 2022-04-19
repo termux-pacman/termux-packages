@@ -57,18 +57,18 @@ jobs:
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "${BASE_COMMIT}" "HEAD")
           fi
         fi
-        mkdir -p ./artifacts ./output
-        touch ./output/.placeholder
-
-        # Process tag '%ci:no-build' that may be added as line to commit message.
-        # Forces CI to cancel current build with status 'passed'
-        if grep -qiP '^\s*%ci:no-build\s*$' <(git log --format="%B" -n 1 "HEAD"); then
-          tar cf artifacts/output-${{ matrix.target_arch }}.tar output
-          echo "[!] Force exiting as tag '%ci:no-build' was applied to HEAD commit message."
-          exit 0
-        fi
+        mkdir -p ./artifacts ./pkgs
+        touch ./pkgs/.placeholder
 
         if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+          # Process tag '%ci:no-build' that may be added as line to commit message.
+          # Forces CI to cancel current build with status 'passed'
+          if grep -qiP '^\s*%ci:no-build\s*$' <(git log --format="%B" -n 1 "HEAD"); then
+            tar cf artifacts/pkgs-${{ matrix.target_arch }}.tar pkgs
+            echo "[!] Force exiting as tag '%ci:no-build' was applied to HEAD commit message."
+            exit 0
+          fi
+
           # Build local Docker image if setup scripts were changed.
           # Useful for pull requests submitting changes for both build environment and packages.
           if grep -qP '^scripts/(Dockerfile|setup-android-sdk\.sh|setup-ubuntu\.sh)$' <<< "$CHANGED_FILES"; then
@@ -168,7 +168,9 @@ jobs:
           fi
         done
 
-        ./scripts/lint-packages.sh $package_recipes
+        if [ ! -z "$package_recipes" ]; then
+          ./scripts/lint-packages.sh $package_recipes
+        fi
 
     - name: Build packages
       run: |
@@ -181,7 +183,9 @@ jobs:
           fi
         done
 
-        ./scripts/run-docker.sh ./build-package.sh --format pacman -I -a ${{ matrix.target_arch }} $packages
+        if [ ! -z "$packages" ]; then
+          ./scripts/run-docker.sh ./build-package.sh --format pacman -I -a ${{ matrix.target_arch }} $packages
+        fi
 
     - name: Generate build artifacts
       if: always()
@@ -191,31 +195,31 @@ jobs:
         for repo in $(jq --raw-output '.[]' < repo.json); do
           # Put package lists into directory with *.pkg.* files so they will be transferred to
           # upload job.
-          test -f ./built_${repo}_packages.txt && mv ./built_${repo}_packages.txt ./output/
-          test -f ./built_${repo}_subpackages.txt && cat ./built_${repo}_subpackages.txt >> ./output/built_${repo}_packages.txt \
+          test -f ./built_${repo}_packages.txt && mv ./built_${repo}_packages.txt ./pkgs/
+          test -f ./built_${repo}_subpackages.txt && cat ./built_${repo}_subpackages.txt >> ./pkgs/built_${repo}_packages.txt \
             && rm ./built_${repo}_subpackages.txt
-          test -f ./deleted_${repo}_packages.txt && mv ./deleted_${repo}_packages.txt ./output/
+          test -f ./deleted_${repo}_packages.txt && mv ./deleted_${repo}_packages.txt ./pkgs/
 
-          # Move only output from built_packages into debs/ folder before
+          # Move only pkgs from built_packages into pkgs/ folder before
           # creating an archive.
           while read -r pkg; do
             # Match both $pkg.pkg.* and $pkg-static.pkg.*.
-            find output \( -name "$pkg-*.pkg.*" -o -name "$pkg-static-*.pkg.*" \) -type f -print0 | xargs -0r mv -t output/
-          done < <(cat ./output/built_${repo}_packages.txt)
+            find output \( -name "$pkg-*.pkg.*" -o -name "$pkg-static-*.pkg.*" \) -type f -print0 | xargs -0r mv -t pkgs/
+          done < <(cat ./pkgs/built_${repo}_packages.txt)
         done
 
         # Files containing certain symbols (e.g. ":") will cause failure in actions/upload-artifact.
         # Archiving *.pkg.* files in a tarball to avoid issues with uploading.
-        tar cf artifacts/output-${{ matrix.target_arch }}-${{ github.sha }}.tar output
+        tar cf artifacts/pkgs-${{ matrix.target_arch }}-${{ github.sha }}.tar pkgs
     - name: Checksums for built *.pkg.* files
       if: always()
       run: |
-        find output -type f -name "*.pkg.*" -exec sha256sum "{}" \; | sort -k2
+        find pkgs -type f -name "*.pkg.*" -exec sha256sum "{}" \; | sort -k2
     - name: Store *.pkg.* files
       if: always()
       uses: actions/upload-artifact@v3
       with:
-        name: output-${{ matrix.target_arch }}-${{ github.sha }}
+        name: pkgs-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
 
 #  upload:
