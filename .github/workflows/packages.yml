@@ -200,7 +200,7 @@ jobs:
           # creating an archive.
           while read -r pkg; do
             # Match both $pkg.pkg.* and $pkg-static.pkg.*.
-            find output \( -name "$pkg_*.pkg.*" -o -name "$pkg-static_*.pkg.*" \) -type f -print0 | xargs -0r mv -t output/
+            find output \( -name "$pkg-*.pkg.*" -o -name "$pkg-static-*.pkg.*" \) -type f -print0 | xargs -0r mv -t output/
           done < <(cat ./output/built_${repo}_packages.txt)
         done
 
