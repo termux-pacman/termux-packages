@@ -90,6 +90,8 @@ jobs:
         for i in $sort_list_files; do
           commet "    ${i}"
           git add $(echo $i | sed 's/&&/ /g')
-          git commit -m "${i}"
-          git push origin master
+          {
+            git commit -m "${i}"
+            git push origin master
+          } || true
         done
