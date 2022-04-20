@@ -1,0 +1,95 @@
+name: Update repo
+
+on:
+  schedule:
+    - cron:  '0,30 0-23 * * *'
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      run: |
+        git clone https://github.com/termux-pacman/termux-packages.git
+        mv termux-packages termux-packages-pacman
+    - name: Clone root repository
+      run: git clone https://github.com/termux/termux-packages.git
+    - name: Update repo
+      run: |
+        info() {
+          echo "==> $1"
+        }
+        commet() {
+          echo "-> $1"
+        }
+        # Edit
+        info "Edit"
+        cd termux-packages-pacman
+        rm -fr */
+        cd ../termux-packages
+        cp -r * ../termux-packages-pacman
+        # Get list pkg
+        info "Get list pkg"
+        cd ../termux-packages-pacman
+        list_files=""
+        for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
+          dir_sp=(${i//// })
+          if [[ ! $(echo "$list_files" | grep "${dir_sp[0]}/${dir_sp[1]} ") ]]; then
+            list_files+="${dir_sp[0]}/${dir_sp[1]} "
+          fi
+        done
+        list_files=($list_files)
+        # Sort list pkg
+        info "Sort list pkg"
+        cd ../termux-packages
+        list_sort=""
+        for i in ${list_files[@]}; do
+          list_sort+="$(git rev-list --count "$(git log -n 1 --pretty=format:%H -- $i)") "
+        done
+        list_sort=($list_sort)
+        copy_list_sort=($(sort -n <(printf "%s\n" "${list_sort[@]}")))
+        search_index() {
+          for i in "${!list_sort[@]}"; do
+            if [[ "${list_sort[$i]}" = "${1}" ]]; then
+              echo "${i}";
+            fi
+          done
+        }
+        sort_list_files=""
+        for i in ${copy_list_sort[@]}; do
+          e=1
+          while :; do
+            index=$(search_index "$i" | sed -n "${e}p")
+            if [[ $(echo "$sort_list_files " | grep "${list_files[$index]} ") ]]; then
+              e=$(($e+1))
+            else
+              break
+            fi
+          done
+          if (( $e == 1 )); then
+            sort_list_files+=" "
+          else
+            sort_list_files+="&&"
+          fi
+          sort_list_files+="${list_files[$index]}"
+        done
+        # Start upload
+        info "Start upload"
+        cd ../termux-packages-pacman
+        git config --global user.name "termux-actions[bot]"
+        git config --global user.email "termux-actions[bot]@users.noreply.github.com"
+        git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
+        commet "Update system repo"
+        git add .
+        git reset packages root-packages x11-packages
+        {
+          git commit -m "Update repo"
+          git push origin master
+        } || true
+        commet "Update repo packages"
+        for i in $sort_list_files; do
+          commet "    ${i}"
+          git add $(echo $i | sed 's/&&/ /g')
+          git commit -m "${i}"
+          git push origin master
+        done
