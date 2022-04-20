@@ -1,8 +1,8 @@
 name: Update repo
 
-#on:
-#  schedule:
-#    - cron:  '0,30 0-23 * * *'
+on:
+  schedule:
+    - cron:  '0,30 0-23 * * *'
 
 jobs:
   update-repo:

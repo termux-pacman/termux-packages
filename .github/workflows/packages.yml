@@ -78,8 +78,8 @@ jobs:
             cd ..
           fi
 
-          for repo_path in $(jq --raw-output 'keys | .[]' < repo.json); do
-            repo=$(jq --raw-output '.["'${repo_path}'"]' < repo.json)
+          for repo_path in $(jq --raw-output 'keys | .[]' repo.json); do
+            repo=$(jq --raw-output '.["'${repo_path}'"].name' repo.json)
             # Parse changed files and identify new packages and deleted packages.
             # Create lists of those packages that will be passed to upload job for
             # further processing.
@@ -113,10 +113,10 @@ jobs:
           done
         else
           for pkg in ${{ github.event.inputs.packages }}; do
-            repo_paths=$(jq --raw-output 'keys | .[]' < repo.json)
+            repo_paths=$(jq --raw-output 'keys | .[]' repo.json)
             found=false
             for repo_path in $repo_paths; do
-              repo=$(jq --raw-output '.["'${repo_path}'"]' < repo.json)
+              repo=$(jq --raw-output '.["'${repo_path}'"].name' repo.json)
               if [ -d "${repo_path}/${pkg}" ]; then
                 found=true
                 echo "$pkg" >> ./built_${repo}_packages.txt
@@ -132,7 +132,7 @@ jobs:
           done
         fi
 
-        for repo in $(jq --raw-output '.[]' < repo.json); do
+        for repo in $(jq --raw-output '.[]' repo.json); do
           # Fix so that lists do not contain duplicates
           if [ -f ./built_${repo}_packages.txt ]; then
             uniq ./built_${repo}_packages.txt > ./built_${repo}_packages.txt.tmp
@@ -161,8 +161,8 @@ jobs:
     - name: Lint packages
       run: |
         declare -a package_recipes
-        for repo_path in $(jq --raw-output 'keys | .[]' < repo.json); do
-          repo=$(jq --raw-output '.["'${repo_path}'"]' < repo.json)
+        for repo_path in $(jq --raw-output 'keys | .[]' repo.json); do
+          repo=$(jq --raw-output '.["'${repo_path}'"].name' repo.json)
           if [ -f ./built_${repo}_packages.txt ]; then
             package_recipes="$package_recipes $(cat ./built_${repo}_packages.txt | repo_path=${repo_path} awk '{print ENVIRON["repo_path"]"/"$1"/build.sh"}')"
           fi
@@ -175,8 +175,8 @@ jobs:
     - name: Build packages
       run: |
         declare -a packages
-        for repo_path in $(jq --raw-output 'keys | .[]' < repo.json); do
-          repo=$(jq --raw-output '.["'${repo_path}'"]' < repo.json)
+        for repo_path in $(jq --raw-output 'keys | .[]' repo.json); do
+          repo=$(jq --raw-output '.["'${repo_path}'"].name' repo.json)
 
           if [ -f ./built_${repo}_packages.txt ]; then
             packages="$packages $(cat ./built_${repo}_packages.txt)"
@@ -192,7 +192,7 @@ jobs:
       run: |
         test -d termux-packages/output && mv termux-packages/output/* ./output/
 
-        for repo in $(jq --raw-output '.[]' < repo.json); do
+        for repo in $(jq --raw-output '.[].name' repo.json); do
           # Put package lists into directory with *.pkg.* files so they will be transferred to
           # upload job.
           test -f ./built_${repo}_packages.txt && mv ./built_${repo}_packages.txt ./pkgs/
@@ -258,7 +258,7 @@ jobs:
           dir_sp=(${archive//// })
           file_sp=(${dir_sp[-1]//-/ })
           tar xf "$archive"
-          for repo in $(jq --raw-output '.[]' < repo.json); do
+          for repo in $(jq --raw-output '.[].name' repo.json); do
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
               for list_pkg in pkgs/*.pkg.*; do
                 dir_pkg_sp=(${list_pkg//// })
