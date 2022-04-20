@@ -222,103 +222,55 @@ jobs:
         name: pkgs-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
 
-#  upload:
-#    if: github.event_name != 'pull_request'
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#    - name: Clone repository
-#      uses: actions/checkout@v3
-#    - name: Get *.deb files
-#      uses: actions/download-artifact@v3
-#      with:
-#        path: ./
-#    - name: Upload to packages.termux.org
-#      env:
-#        REPOSITORY_DISTRIBUTION: stable
-#        REPOSITORY_URL: https://packages.termux.org/aptly-api
-#      run: |
-#        GITHUB_SHA=${{ github.sha }}
-#        APTLY_API_AUTH=${{ secrets.APTLY_API_AUTH }}
-#        GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }}
-#
-#        source scripts/aptly_api.sh
-#
-#        for archive in debs-*/debs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
-#          tar xf "$archive"
-#        done
-#
-#        for repo in $(jq --raw-output '.[]' < repo.json); do
-#          export REPOSITORY_NAME=$repo
-#
-#          # Upload file to temporary directory.
-#          uploaded_files=false
-#          shopt -s nullglob
-#          for filename in $(cat debs/built_${repo}_packages.txt | sed -E 's/(..*)/debs\/\1_\*.deb debs\/\1-static_\*.deb/g'); do
-#            if ! aptly_upload_file "$filename"; then
-#              exit 1
-#            fi
-#
-#            uploaded_files=true
-#          done
-#          shopt -u nullglob
-#  
-#          # Publishing repository changes.
-#          if [ "$uploaded_files" = "true" ]; then
-#            if ! aptly_add_to_repo; then
-#              exit 1
-#            fi
-#
-#            # Usually temporary directory is deleted automatically, but in certain cases it is left.
-#            aptly_delete_dir
-#
-#            # Final part to make changes appear in web root.
-#            if ! aptly_publish_repo; then
-#              exit 1
-#            fi
-#          fi
-#        done
-#    - name: Upload to grimler.se
-#      # Run even if upload to packages.termux.org failed:
-#      if: always()
-#      env:
-#        REPOSITORY_DISTRIBUTION: stable
-#        REPOSITORY_URL: https://aptly-api.grimler.se
-#      run: |
-#        GITHUB_SHA=${{ github.sha }}
-#        APTLY_API_AUTH=${{ secrets.APTLY_API_AUTH }}
-#
-#        source scripts/aptly_api.sh
-#
-#
-#        for repo in $(jq --raw-output '.[]' < repo.json); do
-#          export REPOSITORY_NAME=$repo
-#
-#          # Upload file to temporary directory.
-#          uploaded_files=false
-#          shopt -s nullglob
-#          for filename in $(cat debs/built_${repo}_packages.txt | sed -E 's/(..*)/debs\/\1_\*.deb debs\/\1-static_\*.deb/g'); do
-#            if ! aptly_upload_file "$filename"; then
-#              exit 1
-#            fi
-#
-#            uploaded_files=true
-#          done
-#          shopt -u nullglob
-#
-#          # Publishing repository changes.
-#          if [ "$uploaded_files" = "true" ]; then
-#            if ! aptly_add_to_repo; then
-#              exit 1
-#            fi
-#
-#            # Usually temporary directory is deleted automatically, but in certain cases it is left.
-#            aptly_delete_dir
-#
-#            # grimler.se mirror is signed manually, can't publish
-#            # through CI
-#            # if ! aptly_publish_repo; then
-#            #   exit 1
-#            # fi
-#          fi
-#        done
+  upload:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-18.04
+    continue-on-error: true
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Install aws
+      uses: chrislennon/action-aws-cli@v1.1
+    - name: Get *.pkg.* files
+      uses: actions/download-artifact@v3
+      with:
+        path: ./
+    - name: Uploading packages to aws
+      run: |
+        get_name() {
+          local name=""
+          local file_sp=(${1//-/ })
+          for k in $(seq 0 $((${#file_sp[*]}-4))); do
+            if [ -z $name ]; then
+              name="${file_sp[k]}"
+            else
+              name+="-${file_sp[k]}"
+            fi
+          done
+          echo $name
+        }
+
+        for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
+          dir_sp=(${archive//// })
+          file_sp=(${dir_sp[-1]//-/ })
+          tar xf "$archive"
+          for repo in $(jq --raw-output '.[]' < repo.json); do
+            for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
+              for list_pkg in pkgs/*.pkg.*; do
+                dir_pkg_sp=(${list_pkg//// })
+                if [[ $name_pkg = $(get_name ${dir_pkg_sp[-1]}) ]]; then
+                  aws s3 cp $list_pkg s3://${repo}.pacman/${file_sp[1]}/$list_pkg
+                  break
+                fi
+              done
+            done
+          done
+          rm -fr ./pkgs
+        done
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
