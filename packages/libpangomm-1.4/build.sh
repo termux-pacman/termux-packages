@@ -14,3 +14,4 @@ termux_step_post_massage() {
 		termux_error_exit "Error: file ${_GUARD_FILE} not found."
 	fi
 }
+
