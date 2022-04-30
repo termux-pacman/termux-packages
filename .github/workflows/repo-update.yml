@@ -22,12 +22,14 @@ jobs:
         commet() {
           echo "-> $1"
         }
+        
         # Edit
         info "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
         cp -r * ../termux-packages-pacman
+        
         # Get list pkg
         info "Get list pkg"
         cd ../termux-packages-pacman
@@ -39,12 +41,16 @@ jobs:
           fi
         done
         list_files=($list_files)
+        
         # Sort list pkg
         info "Sort list pkg"
         cd ../termux-packages
+        declare -A list_values
         list_sort=""
         for i in ${list_files[@]}; do
-          list_sort+="$(git rev-list --count "$(git log -n 1 --pretty=format:%H -- $i)") "
+          value="$(git rev-list --count "$(git log -n 1 --pretty=format:%H -- $i)")"
+          list_values[${value}]=$((${list_values[${value}]}+1))
+          list_sort+="${value}-${list_values[${value}]} "
         done
         list_sort=($list_sort)
         copy_list_sort=($(sort -n <(printf "%s\n" "${list_sort[@]}")))
@@ -57,22 +63,17 @@ jobs:
         }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          e=1
-          while :; do
-            index=$(search_index "$i" | sed -n "${e}p")
-            if [[ $(echo "$sort_list_files " | grep "${list_files[$index]} ") ]]; then
-              e=$(($e+1))
-            else
-              break
-            fi
-          done
-          if (( $e == 1 )); then
-            sort_list_files+=" "
-          else
+          e=$(echo " ${copy_list_sort[@]}" | grep -o " ${i//-*/}-" | wc -l)
+          index=$(search_index "$i")
+          if [[ "$e" != "1" && "$e_old" != "1" ]]; then
             sort_list_files+="&&"
+          else
+            sort_list_files+=""
           fi
+          e_old=${e}
           sort_list_files+="${list_files[$index]}"
         done
+        
         # Start upload
         info "Start upload"
         cd ../termux-packages-pacman
