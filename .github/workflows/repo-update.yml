@@ -68,7 +68,7 @@ jobs:
           if [[ "$e" != "1" && "$e_old" != "1" ]]; then
             sort_list_files+="&&"
           else
-            sort_list_files+=""
+            sort_list_files+=" "
           fi
           e_old=${e}
           sort_list_files+="${list_files[$index]}"
