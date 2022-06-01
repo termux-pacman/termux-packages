@@ -19,7 +19,7 @@ jobs:
       - name: Git clone
         uses: actions/checkout@v2
       - name: Create bootstrap archive
-        run: ./scripts/generate-bootstraps.sh --architectures ${{ matrix.arch }}
+        run: ./scripts/generate-bootstraps.sh --pm pacman --architectures ${{ matrix.arch }}
       - name: Store artifacts
         uses: actions/upload-artifact@v2
         with:
