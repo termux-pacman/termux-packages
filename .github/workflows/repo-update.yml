@@ -77,9 +77,9 @@ jobs:
         # Start upload
         info "Start upload"
         cd ../termux-packages-pacman
-        git config --global user.name "termux-actions[bot]"
-        git config --global user.email "termux-actions[bot]@users.noreply.github.com"
-        git remote set-url origin "https://Maxython:${{ secrets.TOKEN }}@github.com/Maxython/termux-packages-pacman.git"
+        git config --global user.name "termux-pacman-bot"
+        git config --global user.email "termux-pacman-bot@outlook.com"
+        git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages-pacman.git"
         commet "Update system repo"
         git add .
         git reset packages root-packages x11-packages
