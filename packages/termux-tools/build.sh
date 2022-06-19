@@ -2,7 +2,7 @@ TERMUX_PKG_HOMEPAGE=https://termux.org/
 TERMUX_PKG_DESCRIPTION="Basic system tools for Termux"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.188
+TERMUX_PKG_VERSION=1.0
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_ESSENTIAL=true
@@ -103,4 +103,9 @@ termux_step_make_install() {
 	## This script is sourced by $PREFIX/bin/login before executing shell.
 	##
 	EOF
+
+	mkdir -p $TERMUX_PREFIX/etc/termux
+	cp -r $TERMUX_PKG_BUILDER_DIR/mirrors $TERMUX_PREFIX/etc/termux/
+	cd $TERMUX_PREFIX
+	TERMUX_PKG_CONFFILES+=" $(find etc/termux/mirrors -type f)"
 }
