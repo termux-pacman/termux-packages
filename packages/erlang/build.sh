@@ -46,4 +46,3 @@ termux_step_pre_configure() {
 	# Add --build flag for erlang cross build
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --build=$(./erts/autoconf/config.guess)"
 }
-
