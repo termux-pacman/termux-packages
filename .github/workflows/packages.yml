@@ -225,7 +225,7 @@ jobs:
   upload:
     if: github.event_name != 'pull_request'
     needs: build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     continue-on-error: true
     steps:
     - name: Clone repository
