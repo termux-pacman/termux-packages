@@ -166,3 +166,4 @@ termux_step_make_install() {
 			$TERMUX_PREFIX/lib/swift/android/$SWIFT_ARCH/glibc.modulemap
 	fi
 }
+
