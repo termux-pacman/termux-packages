@@ -20,4 +20,3 @@ termux_step_post_configure() {
 	export MAN_DIR=${PREFIX}/share/man/man1
 	export ETC_DIR=${PREFIX}/etc
 }
-
