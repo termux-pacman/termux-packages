@@ -15,4 +15,3 @@ termux_step_pre_configure() {
 	export PYTHON=python$PYTHON_VERSION
 	TERMUX_PKG_RM_AFTER_INSTALL="lib/${PYTHON}/site-packages/xcbgen/__pycache__"
 }
-
