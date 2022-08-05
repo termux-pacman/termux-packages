@@ -24,4 +24,3 @@ termux_step_post_get_source() {
 termux_step_make_install() {
 	install -D release/bash/* -t "$TERMUX_PREFIX/bin"
 }
-
