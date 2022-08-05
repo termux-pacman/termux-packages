@@ -28,3 +28,4 @@ termux_step_make_install() {
 	export PYTHONPATH=$TERMUX_PREFIX/lib/python${_PYTHON_VERSION}/site-packages/
 	python${_PYTHON_VERSION} -m pip install . --prefix="${TERMUX_PREFIX}" --force
 }
+

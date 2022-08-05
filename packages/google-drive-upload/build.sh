@@ -13,3 +13,4 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_make_install() {
 	install -D release/bash/* -t "$TERMUX_PREFIX/bin"
 }
+

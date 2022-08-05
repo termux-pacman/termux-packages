@@ -26,3 +26,4 @@ termux_step_make_install() {
 	install -Dm600 build/jar/pdftk.jar $TERMUX_PREFIX/share/java/
 	install -Dm700 pdftk $TERMUX_PREFIX/bin/
 }
+

@@ -32,3 +32,4 @@ termux_step_create_debscripts() {
 		rm -f ${TERMUX_PREFIX}/share/bash-completion/completions/parallel
 	EOF
 }
+

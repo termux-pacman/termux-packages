@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="PREFIX=$TERMUX_PREFIX"
 termux_step_make() {
 	:
 }
+

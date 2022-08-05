@@ -15,3 +15,4 @@ termux_step_make_install() {
     install screenfetch-dev ${TERMUX_PREFIX}/bin/screenfetch
     install screenfetch.1 ${TERMUX_PREFIX}/share/man/man1/
 }
+

@@ -15,3 +15,4 @@ termux_step_make_install() {
 	local bin="$(basename $TERMUX_PKG_HOMEPAGE)"
 	install -D "$bin" -t "$TERMUX_PREFIX/bin"
 }
+

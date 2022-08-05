@@ -19,3 +19,4 @@ termux_step_make_install() {
 	cp -r ./* $TERMUX_PREFIX/opt/ant
 	ln -sfr $TERMUX_PREFIX/opt/ant/bin/ant $TERMUX_PREFIX/bin/ant
 }
+

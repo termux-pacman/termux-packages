@@ -12,3 +12,4 @@ termux_step_make_install() {
 	cd src
 	install -Dm600 -t $TERMUX_PREFIX/include *.h
 }
+

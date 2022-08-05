@@ -22,3 +22,4 @@ termux_step_post_make_install() {
 	echo "export LESSOPEN='|$TERMUX_PREFIX/bin/lesspipe.sh %s'" \
 		> "$TERMUX_PREFIX"/etc/profile.d/lesspipe.sh
 }
+

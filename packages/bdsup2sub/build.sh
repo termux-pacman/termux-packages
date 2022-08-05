@@ -37,3 +37,4 @@ termux_step_make_install() {
 	EOF
 	chmod 0700 ${exe}
 }
+

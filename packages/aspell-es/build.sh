@@ -21,3 +21,4 @@ termux_step_configure() {
 	EOF
 	cat $TERMUX_PKG_SRCDIR/Makefile.pre >> $TERMUX_PKG_SRCDIR/Makefile
 }
+

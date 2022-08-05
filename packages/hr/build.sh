@@ -19,3 +19,4 @@ termux_step_make_install() {
 	install -D "$bin" -t "$TERMUX_PREFIX/bin"
 	install -D "$bin.1" -t "$TERMUX_PREFIX/share/man/man1"
 }
+

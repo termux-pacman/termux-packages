@@ -23,3 +23,4 @@ termux_step_make_install() {
 		ln -sfr $TERMUX_PREFIX/opt/maven/bin/$i $TERMUX_PREFIX/bin/$i
 	done
 }
+

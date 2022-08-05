@@ -32,3 +32,4 @@ termux_step_make_install() {
 		$TERMUX_PKG_BUILDER_DIR/tenki-php.conf \
 		> ${_APACHE_CONF_DIR}/tenki-php.conf
 }
+

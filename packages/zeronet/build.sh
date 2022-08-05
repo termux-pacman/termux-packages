@@ -57,3 +57,4 @@ termux_step_create_debscripts() {
 	} > ./postrm
 	chmod 755 ./postrm
 }
+

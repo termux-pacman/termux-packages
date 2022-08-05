@@ -18,3 +18,4 @@ termux_step_make_install() {
 		-t "$TERMUX_PREFIX"/share/GeoIP/ \
 		"${TERMUX_PKG_SRCDIR}"/GeoLite2-{ASN,Country,City}.mmdb
 }
+

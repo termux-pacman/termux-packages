@@ -32,3 +32,4 @@ termux_step_make_install() {
 
 	chmod 700 $TERMUX_PREFIX/bin/d8 $TERMUX_PREFIX/bin/r8
 }
+

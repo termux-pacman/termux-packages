@@ -18,3 +18,4 @@ termux_step_post_get_source() {
 termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/fonts/tex-gyre *.otf
 }
+

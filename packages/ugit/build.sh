@@ -16,3 +16,4 @@ termux_step_make_install() {
 	install -D "$bin" -t "$TERMUX_PREFIX/bin"
 	ln -sf "$TERMUX_PREFIX/bin/$bin"  "$TERMUX_PREFIX/bin/gitundo"
 }
+

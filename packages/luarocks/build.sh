@@ -42,3 +42,4 @@ termux_step_post_massage() {
 	# thinks it is a newly compiled program
 	rm bin/lua5.3
 }
+

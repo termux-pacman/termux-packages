@@ -13,3 +13,4 @@ termux_step_post_make_install() {
     mkdir -p ${TERMUX_PREFIX}/share/man/man8/
     install ${TERMUX_PKG_SRCDIR}/debootstrap.8 ${TERMUX_PREFIX}/share/man/man8/
 }
+

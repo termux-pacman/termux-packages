@@ -23,3 +23,4 @@ termux_step_create_debscripts() {
 	pip3 install chardet srt wand
 	EOF
 }
+

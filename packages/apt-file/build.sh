@@ -19,3 +19,4 @@ termux_step_post_make_install() {
 	cp $TERMUX_PKG_SRCDIR/debian/bash-completion \
 	   $TERMUX_PREFIX/etc/bash_completion.d/apt-file
 }
+

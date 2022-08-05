@@ -14,3 +14,4 @@ TERMUX_PKG_CONFLICTS="mutt (<< 1.8.3-1)"
 termux_step_make_install() {
 	install -Dm600 $TERMUX_PKG_SRCDIR/mime.types $TERMUX_PREFIX/etc/mime.types
 }
+
