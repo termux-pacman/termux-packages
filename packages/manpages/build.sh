@@ -58,4 +58,3 @@ termux_step_post_massage() {
 		popd
 	done
 }
-
