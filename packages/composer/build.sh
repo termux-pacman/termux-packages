@@ -15,4 +15,3 @@ termux_step_make_install() {
 	php -d phar.readonly=Off bin/compile
 	install -Dm700 composer.phar $TERMUX_PREFIX/bin/composer
 }
-
