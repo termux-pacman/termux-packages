@@ -25,4 +25,3 @@ termux_step_make_install() {
 	cp $TERMUX_PKG_SRCDIR/lib/Regexp/Assemble.pm \
 		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/perl5/site_perl/$perl_version/Regexp/
 }
-
