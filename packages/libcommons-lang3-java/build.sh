@@ -21,4 +21,3 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/java
 	install -Dm600 "$_BUILD_JARFILE" $TERMUX_PREFIX/share/java/
 }
-
