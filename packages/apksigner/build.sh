@@ -25,4 +25,3 @@ termux_step_make_install() {
 	EOF
 	chmod 700 $TERMUX_PREFIX/bin/apksigner
 }
-
