@@ -9,4 +9,3 @@ TERMUX_PKG_SUGGESTS="git, golang, nodejs, patchelf, proot, python, ruby, rust, s
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_METAPACKAGE=true
-
