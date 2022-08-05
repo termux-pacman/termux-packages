@@ -17,4 +17,3 @@ termux_step_make_install() {
 	touch $TERMUX_PREFIX/bin/ack
 	chmod +x $TERMUX_PREFIX/bin/ack
 }
-
