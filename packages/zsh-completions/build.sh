@@ -14,4 +14,3 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_make_install() {
 	install -Dm644 src/* -t "$TERMUX_PREFIX/share/zsh/site-functions"
 }
-
