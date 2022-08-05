@@ -113,4 +113,3 @@ termux_step_make_install() {
 	cd $TERMUX_PREFIX
 	TERMUX_PKG_CONFFILES+=" $(find etc/termux/mirrors -type f)"
 }
-
