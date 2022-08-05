@@ -20,4 +20,3 @@ termux_step_make_install() {
 		        f0b1a234bd178bdd01875b2a392a9647f888b8fe879f79c52aae62c2759b3647
 	touch $TERMUX_PREFIX/share/hunspell/en_US.{aff,dic}
 }
-
