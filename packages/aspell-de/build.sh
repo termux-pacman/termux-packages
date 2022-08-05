@@ -29,4 +29,3 @@ termux_step_make_install() {
 	echo "add de_DE.multi" > "${TERMUX_PREFIX}/lib/aspell-0.60/german.alias"
 	echo "add de_CH.multi" > "${TERMUX_PREFIX}/lib/aspell-0.60/swiss.alias"
 }
-
