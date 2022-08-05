@@ -12,4 +12,3 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/include include/clipp.h
 }
-
