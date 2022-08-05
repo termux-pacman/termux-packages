@@ -74,4 +74,3 @@ termux_step_create_debscripts () {
 	echo "#!$TERMUX_PREFIX/bin/sh" > postinst
 	echo "pip3 install 'ecdsa>=0.14' 'qrcode' 'protobuf>=3.12' 'dnspython<2.0' 'qdarkstyle<2.9' 'aiorpcx>=0.18,<0.19' 'aiohttp>=3.3.0,<4.0.0' 'aiohttp_socks>=0.3' 'certifi' 'bitstring' 'attrs>=19.2.0' 'pycryptodomex'" >> postinst
 }
-

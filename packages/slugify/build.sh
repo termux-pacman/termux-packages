@@ -26,4 +26,3 @@ termux_step_make_install() {
 	install -D slugify -t "$TERMUX_PREFIX/bin"
 	install -D slugify.1 -t "$TERMUX_PREFIX/share/man/man1"
 }
-
