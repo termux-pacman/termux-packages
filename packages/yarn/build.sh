@@ -13,4 +13,3 @@ termux_step_make_install() {
 	cp -r . ${TERMUX_PREFIX}/share/yarn/
 	ln -f -s ../share/yarn/bin/yarn ${TERMUX_PREFIX}/bin/yarn
 }
-
