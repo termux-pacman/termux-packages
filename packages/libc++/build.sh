@@ -9,3 +9,4 @@ TERMUX_PKG_ESSENTIAL=true
 termux_step_post_make_install() {
 	cp "$TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/${TERMUX_HOST_PLATFORM}/libc++_shared.so" $TERMUX_PREFIX/lib
 }
+
