@@ -7,4 +7,3 @@ TERMUX_PKG_REVISION=5
 TERMUX_PKG_SRCURL=https://gitlab.gnome.org/GNOME/at-spi2-atk.git
 TERMUX_PKG_GIT_BRANCH=AT_SPI2_ATK_${TERMUX_PKG_VERSION//./_}
 TERMUX_PKG_DEPENDS="dbus, glib, atk, libxtst"
-
