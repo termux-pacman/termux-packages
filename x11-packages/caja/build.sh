@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	NOCONFIGURE=1 ACLOCAL_FLAGS="-I $TERMUX_PREFIX/share/aclocal" \
 		sh $TERMUX_PREFIX/bin/mate-autogen
 }
-
