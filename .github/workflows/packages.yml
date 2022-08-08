@@ -252,7 +252,7 @@ jobs:
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
               for list_pkg in pkgs/*.pkg.*; do
                 dir_pkg_sp=(${list_pkg//// })
-                if [[ $name_pkg = $(get_name ${dir_pkg_sp[-1]}) ]]; then
+                if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
                   aws s3 cp $list_pkg s3://${repo}.pacman/${file_sp[1]}/$list_pkg
                   break
                 fi
