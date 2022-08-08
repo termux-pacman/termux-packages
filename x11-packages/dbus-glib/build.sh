@@ -22,4 +22,3 @@ termux_step_pre_configure() {
 	autoconf -i
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --with-dbus-binding-tool=$TERMUX_PKG_HOSTBUILD_DIR/dbus/dbus-binding-tool"
 }
-
