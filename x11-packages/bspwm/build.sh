@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL="https://github.com/baskerville/bspwm/archive/refs/tags/$TERMU
 TERMUX_PKG_SHA256="0d0f5e465b9c27a5c2143c86189392fa297fad55253b9ed8f6854473d3928f8f"
 TERMUX_PKG_DEPENDS="libx11, libxcb, libxkbcommon, sxhkd, xcb-util, xcb-util-cursor, xcb-util-keysyms, xcb-util-wm, xcb-util-xrm"
 TERMUX_PKG_BUILD_IN_SRC=true
-
