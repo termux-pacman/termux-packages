@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/CDrummond/cantata/releases/download/v${TERM
 TERMUX_PKG_SHA256=eb7e00ab3f567afaa02ea2c86e2fe811a475afab93182b95922c6eb126821724
 TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtmultimedia, qt5-qtsvg, qt5-qtxmlpatterns, zlib, taglib, ffmpeg, mpg123, avahi, libcddb, libmusicbrainz, mpd"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
-
