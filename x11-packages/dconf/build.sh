@@ -9,4 +9,3 @@ TERMUX_PKG_GIT_BRANCH=$TERMUX_PKG_VERSION
 TERMUX_PKG_DEPENDS="dbus, glib-bin"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+="-Dbash_completion=false -Dvapi=false"
 
-
