@@ -42,3 +42,4 @@ termux_step_make_install() {
 	cd build
 	ninja install
 }
+

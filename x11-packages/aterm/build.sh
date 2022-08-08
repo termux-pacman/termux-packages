@@ -28,3 +28,4 @@ termux_step_post_make_install() {
 	EOF
 	chmod 700 $TERMUX_PREFIX/bin/xterm
 }
+

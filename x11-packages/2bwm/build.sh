@@ -16,3 +16,4 @@ X11_INCLUDE=$TERMUX_PREFIX/include
 termux_step_post_get_source() {
 	cp $TERMUX_PKG_BUILDER_DIR/LICENSE.{2bwm,hidden} ./
 }
+

@@ -28,3 +28,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-clgd54xx
 --enable-voodoo
 "
+

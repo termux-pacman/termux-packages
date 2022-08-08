@@ -11,3 +11,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-update-databases
 --disable-python
 "
+
