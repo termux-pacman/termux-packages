@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://github.com/tsujan/Arqiver/releases/download/V${TERMUX_
 TERMUX_PKG_SHA256=bf3b4be44524b4d6b4096846c304d381e6707681fbb1e69b2847f6876b950593
 TERMUX_PKG_DEPENDS="hicolor-icon-theme, qt5-qtbase, qt5-qtsvg, qt5-qtx11extras, libarchive, bsdtar, zip"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
-
