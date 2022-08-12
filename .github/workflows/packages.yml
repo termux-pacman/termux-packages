@@ -241,19 +241,34 @@ jobs:
       run: |
         git clone https://github.com/termux-pacman/aws-cli-action.git
         ./aws-cli-action/setup.sh '${{ secrets.AWS_ACCESS_KEY_ID }}' '${{ secrets.AWS_ACCESS_KEY }}' '${{ secrets.AWS_REGION }}'
+    - name: Import GPG key
+      run: |
+        echo '${{ secrets.SF_GPG_BOT }}' > key.gpg
+        gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --import key.gpg > /dev/null
     - name: Uploading packages to aws
       run: |
         source ./aws-cli-action/func.sh
+        sfuf() {
+          local go_to_file="$1"
+          gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$go_to_file"
+          for upl_file in "$go_to_file" "$go_to_file.sig"; do
+            aws s3 cp $upl_file s3://${repo}.pacman/${file_sp[1]}/$upl_file
+          done
+        }
         for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
           dir_sp=(${archive//// })
           file_sp=(${dir_sp[-1]//-/ })
           tar xf "$archive"
           for repo in $(jq --raw-output '.[].name' repo.json); do
+            dp_file="./pkgs/deleted_${repo}_packages.txt"
+            if [[ -f $dp_file ]]; then
+              sfuf "$dp_file"
+            fi
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
               for list_pkg in pkgs/*.pkg.*; do
                 dir_pkg_sp=(${list_pkg//// })
                 if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
-                  aws s3 cp $list_pkg s3://${repo}.pacman/${file_sp[1]}/$list_pkg
+                  sfuf "$list_pkg"
                   break
                 fi
               done
