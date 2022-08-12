@@ -250,7 +250,7 @@ jobs:
         source ./aws-cli-action/func.sh
         sfuf() {
           local go_to_file="$1"
-          gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$go_to_file"
+          gpg --no-tty --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$go_to_file"
           for upl_file in "$go_to_file" "$go_to_file.sig"; do
             aws s3 cp $upl_file s3://${repo}.pacman/${file_sp[1]}/$upl_file
           done
