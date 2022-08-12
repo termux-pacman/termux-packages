@@ -25,4 +25,3 @@ termux_step_pre_configure() {
 	export CFLAGS+=" -I$TERMUX_PREFIX/include/ndk_compat"
 	export LDFLAGS+=" -l:libndk_compat.a"
 }
-
