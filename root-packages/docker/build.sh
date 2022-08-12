@@ -142,4 +142,3 @@ termux_step_create_debscripts() {
 		echo 'https://github.com/moby/moby/blob/master/contrib/check-config.sh'
 	EOF
 }
-
