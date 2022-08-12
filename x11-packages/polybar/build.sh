@@ -13,3 +13,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DENABLE_I3=ON"
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob -landroid-shmem"
 }
+
