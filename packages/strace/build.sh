@@ -25,3 +25,4 @@ termux_step_pre_configure() {
 	autoreconf # for configure.ac in configure-find-armv7-cc.patch
 	CPPFLAGS+=" -Dfputs_unlocked=fputs"
 }
+
