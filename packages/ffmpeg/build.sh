@@ -76,4 +76,3 @@ termux_step_configure() {
 		--disable-vulkan \
 		$_EXTRA_CONFIGURE_FLAGS
 }
-
