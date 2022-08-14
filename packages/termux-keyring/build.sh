@@ -33,4 +33,3 @@ termux_step_make_install() {
 		echo "998DE27318E867EA976BA877389CEED64573DFCA:4:" > $GPG_DIR/termux-pacman-trusted
 	fi
 }
-
