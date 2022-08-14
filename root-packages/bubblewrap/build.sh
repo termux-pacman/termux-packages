@@ -12,4 +12,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS='
 '
 # patch was based on v0.6.2
 TERMUX_PKG_AUTO_UPDATE=false
-
