@@ -265,7 +265,9 @@ jobs:
             if [[ -f $dp_file ]]; then
               sfuf "$dp_file"
             fi
+            echo "=cat=> $(cat ./pkgs/built_${repo}_packages.txt)"
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
+              echo "-> ${name_pkg}"
               for list_pkg in pkgs/*.pkg.*; do
                 dir_pkg_sp=(${list_pkg//// })
                 if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
