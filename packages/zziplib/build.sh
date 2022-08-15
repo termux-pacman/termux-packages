@@ -15,3 +15,4 @@ termux_step_post_make_install() {
 		ln -sf lib${lib}-0.so lib${lib}.so
 	done
 }
+
