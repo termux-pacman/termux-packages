@@ -13,4 +13,3 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_post_configure() {
 	sed -i '/^LN_S/s/s/sfvn/' */Makefile
 }
-
