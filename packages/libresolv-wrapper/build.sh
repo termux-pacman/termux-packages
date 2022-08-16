@@ -10,4 +10,3 @@ TERMUX_PKG_SHA256=460ae7fd5e53485be7dd99a55c5922f1cb1636b9e8821981d49ad16507c8a0
 termux_step_pre_configure() {
 	CFLAGS+=" -DANDROID_CHANGES -DLIBC_SO=\\\"libc.so\\\""
 }
-
