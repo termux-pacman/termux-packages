@@ -30,3 +30,4 @@ termux_step_pre_configure() {
 		patch -p1 <"${TERMUX_PKG_BUILDER_DIR}/disable-mmx-sse2"
 	fi
 }
+
