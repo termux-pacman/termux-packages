@@ -249,7 +249,6 @@ jobs:
           for upl_file in "$1" "$1.sig"; do
             aws s3 cp $upl_file s3://${repo}.pacman/${file_sp[1]}/$upl_file
           done
-          rm "${1}.sig"
         }
         for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
           dir_sp=(${archive//// })
@@ -262,10 +261,12 @@ jobs:
             fi
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
               for list_pkg in pkgs/*.pkg.*; do
-                dir_pkg_sp=(${list_pkg//// })
-                if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
-                  sfuf "$list_pkg"
-                  break
+                if [[ ! -f "$list_pkg.sig" ]]; then
+                  dir_pkg_sp=(${list_pkg//// })
+                  if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
+                    sfuf "$list_pkg"
+                    break
+                  fi
                 fi
               done
             done
