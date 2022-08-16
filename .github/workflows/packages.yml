@@ -74,7 +74,7 @@ jobs:
           if grep -qP '^scripts/(Dockerfile|setup-android-sdk\.sh|setup-ubuntu\.sh)$' <<< "$CHANGED_FILES"; then
             echo "Detected changes for environment setup scripts. Building custom Docker image now."
             cd ./scripts
-            docker build -t termux/package-builder:latest .
+            docker build -t ghcr.io/termux/package-builder:latest .
             cd ..
           fi
 
@@ -132,7 +132,7 @@ jobs:
           done
         fi
 
-        for repo in $(jq --raw-output '.[]' repo.json); do
+        for repo in $(jq --raw-output '.[].name' repo.json); do
           # Fix so that lists do not contain duplicates
           if [ -f ./built_${repo}_packages.txt ]; then
             uniq ./built_${repo}_packages.txt > ./built_${repo}_packages.txt.tmp
@@ -150,7 +150,7 @@ jobs:
 
     - name: Free additional disk space (if necessary)
       run: |
-        if grep -qP '^rust$' ./built_packages.txt ; then
+        if grep -q '^clvk$\|^dart$\|^rust$\|^rustc-nightly$\|^swift$' ./built_termux-main_packages.txt; then
           echo "Free additional disk space on host"
           sudo apt purge -yq $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(cabal-|dotnet-|ghc-|libmono|php)') \
             liblldb-6.0 libllvm6.0:amd64 mono-runtime-common monodoc-manual powershell ruby
@@ -226,13 +226,9 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        fetch-depth: 0
     - name: Get *.pkg.* files
       uses: actions/download-artifact@v3
       with:
@@ -249,12 +245,11 @@ jobs:
       run: |
         source ./aws-cli-action/func.sh
         sfuf() {
-          echo "==> $1"
-          ls ./pkgs
           gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$1"
           for upl_file in "$1" "$1.sig"; do
             aws s3 cp $upl_file s3://${repo}.pacman/${file_sp[1]}/$upl_file
           done
+          rm "${1}.sig"
         }
         for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
           dir_sp=(${archive//// })
@@ -265,9 +260,7 @@ jobs:
             if [[ -f $dp_file ]]; then
               sfuf "$dp_file"
             fi
-            echo "=cat=> $(cat ./pkgs/built_${repo}_packages.txt)"
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
-              echo "-> ${name_pkg}"
               for list_pkg in pkgs/*.pkg.*; do
                 dir_pkg_sp=(${list_pkg//// })
                 if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
