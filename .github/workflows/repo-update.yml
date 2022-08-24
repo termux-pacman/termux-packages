@@ -67,14 +67,12 @@ jobs:
         }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          e=$(echo " ${copy_list_sort[@]}" | grep -o " ${i//-*/}-" | wc -l)
           index=$(search_index "$i")
-          if [[ "$e" != "1" && "$e_old" != "1" ]]; then
-            sort_list_files+="&&"
-          else
+          if [[ "${i#*-}" = "1" ]]; then
             sort_list_files+=" ${list_sha[$index]}###"
+          else
+            sort_list_files+="&&"
           fi
-          e_old=${e}
           sort_list_files+="${list_files[$index]}"
         done
         
