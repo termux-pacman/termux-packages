@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/termux/termux-api-package/archive/v${TERMUX
 TERMUX_PKG_SHA256=229c354f56a2dae66ee32ea71d5f89acf69a127aacb1194adfd8b3709c9c93f0
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="bash, util-linux"
-
