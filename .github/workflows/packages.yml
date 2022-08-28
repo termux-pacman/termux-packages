@@ -247,7 +247,7 @@ jobs:
         sfuf() {
           gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$1"
           for upl_file in "$1" "$1.sig"; do
-            aws s3 cp $upl_file s3://${repo}.pacman/${file_sp[1]}/$upl_file
+            aws s3 cp $upl_file s3://termux-pacman.us/${repo#*-}/${file_sp[1]}/$upl_file
           done
         }
         for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
