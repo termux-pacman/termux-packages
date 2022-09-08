@@ -19,8 +19,12 @@ on:
         description: "A space-separated names of packages selected for rebuilding"
         required: true
 
+permissions: {} # none
+
 jobs:
   build:
+    permissions:
+      contents: read # actions/upload-artifact doesn't need contents: write
     runs-on: ubuntu-latest
     env:
       ANDROID_HOME: "/opt/termux/android-sdk"
@@ -150,7 +154,7 @@ jobs:
 
     - name: Free additional disk space (if necessary)
       run: |
-        if grep -q '^clvk$\|^dart$\|^rust$\|^rustc-nightly$\|^swift$' ./built_termux-main_packages.txt; then
+        if grep -q '^clvk$\|^dart$\|^rust$\|^rustc-nightly$' ./built_termux-main_packages.txt; then
           echo "Free additional disk space on host"
           sudo apt purge -yq $(dpkg -l | grep '^ii' | awk '{ print $2 }' | grep -P '(cabal-|dotnet-|ghc-|libmono|php)') \
             liblldb-6.0 libllvm6.0:amd64 mono-runtime-common monodoc-manual powershell ruby
@@ -223,6 +227,8 @@ jobs:
         path: ./artifacts
 
   upload:
+    permissions:
+      contents: read
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
