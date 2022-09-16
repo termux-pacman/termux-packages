@@ -5,8 +5,16 @@ on:
     - cron: "0 0 * * 0"
   workflow_dispatch:
 
+permissions: {} # none
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    permissions:
+      contents: read # actions/upload-artifact doesn't need contents: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,30 +25,33 @@ jobs:
           - x86_64
     steps:
       - name: Git clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Create bootstrap archive
         run: ./scripts/generate-bootstraps.sh --pm pacman --architectures ${{ matrix.arch }}
       - name: Store artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: bootstrap-archives-${{ github.sha }}
           path: "*.zip"
   publish:
+    permissions:
+      contents: write # for git push
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Git clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Fetch bootstrap archives
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: bootstrap-archives-${{ github.sha }}
           path: ./
       - name: Get checksums
         id: get_checksums
         run: |
+          find . -maxdepth 1 -type f -name "bootstrap-*.zip" -exec sha256sum {} \; | sed "s| ./| |g" | sort -nk2 > bootstraps.sha256sum
           checksums=$(printf 'SHA-256:\n```\n%s\n```\n' "$(sha256sum *.zip)")
           checksums="${checksums//'%'/'%25'}"
           checksums="${checksums//$'\n'/'%0A'}"
@@ -56,15 +67,15 @@ jobs:
           else
             tag_rev=1
           fi
-          new_tag="${new_tag}-r${tag_rev}"
+          new_tag="${new_tag}-r${tag_rev}+pacman-android-7"
           git tag "$new_tag"
           git push --tags
           echo "::set-output name=tag_name::$new_tag"
       - name: Publish GitHub release
-        uses: svenstaro/upload-release-action@v2
+        uses: termux/upload-release-action@v3.0.3
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "*.zip"
+          file: "*.zip *.sha256sum"
           file_glob: true
           release_name: "Bootstrap archives for Termux application"
           tag: ${{ steps.get_tag.outputs.tag_name }}
