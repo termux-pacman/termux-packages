@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/bifunctors-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="2b6b9672faab649995cf4c885f353b6638b6daee467a9ace40a7fc773831091c"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-base-orphans, haskell-comonad, haskell-th-abstraction, haskell-tagged"
-

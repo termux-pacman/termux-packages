@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/Cabal-syntax-${TERMUX_PKG
 TERMUX_PKG_SHA256="ca25e5fc601397565fa857f1aa477740fac7f43d659e77c4d9b1485dca239251"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-cabal"
-

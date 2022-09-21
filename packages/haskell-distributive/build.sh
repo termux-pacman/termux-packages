@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/distributive-${TERMUX_PKG
 TERMUX_PKG_SHA256="d7351392e078f58caa46630a4b9c643e1e2e9dddee45848c5c8358e7b1316b91"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-base-orphans, haskell-tagged"
-
