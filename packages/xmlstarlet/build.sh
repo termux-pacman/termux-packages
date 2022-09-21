@@ -13,4 +13,3 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_post_make_install() {
 	ln -sfr $TERMUX_PREFIX/bin/xml $TERMUX_PREFIX/bin/xmlstarlet
 }
-
