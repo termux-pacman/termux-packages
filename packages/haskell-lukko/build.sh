@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/lukko-${TERMUX_PKG_VERSIO
 TERMUX_PKG_SHA256="a80efb60cfa3dae18682c01980d76d5f7e413e191cd186992e1bf7388d48ab1f"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs"
+

@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/QuickCheck-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="d87b6c85696b601175274361fa62217894401e401e150c3c5d4013ac53cd36f3"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-splitmix, haskell-random"
+

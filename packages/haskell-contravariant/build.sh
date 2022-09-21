@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/contravariant-${TERMUX_PK
 TERMUX_PKG_SHA256="062fd66580d7aad0b5ba93e644ffa7feee69276ef50f20d4ed9f1deb7642dffa"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-statevar"
+

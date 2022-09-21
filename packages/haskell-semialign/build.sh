@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/semialign-${TERMUX_PKG_VE
 TERMUX_PKG_SHA256="d900697041ae4b0cca3243273a2b3e80bcf74d937405d6a5ff34dc33ee952132"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-vector, haskell-semigroupoids, haskell-tagged, haskell-hashable, haskell-these, haskell-indexed-traversable-instances, haskell-indexed-traversable, haskell-unordered-containers"
+

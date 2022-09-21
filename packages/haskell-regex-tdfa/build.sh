@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/regex-tdfa-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="c47a78c9da532ba0883868a1e34427318cba3cccc8e42f995834c74eea286a62"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-regex-base"
+

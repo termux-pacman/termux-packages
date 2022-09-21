@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/comonad-${TERMUX_PKG_VERS
 TERMUX_PKG_SHA256="ef6cdf2cc292cc43ee6aa96c581b235fdea8ab44a0bffb24dc79ae2b2ef33d13"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-tagged, haskell-distributive, haskell-transformers-compat, haskell-indexed-traversable"
+
