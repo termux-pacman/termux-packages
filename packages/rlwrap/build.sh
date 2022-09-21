@@ -17,4 +17,3 @@ ptyttylib_cv_ptys=STREAMS
 termux_step_pre_configure() {
 	autoreconf -vfi
 }
-
