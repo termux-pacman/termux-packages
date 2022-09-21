@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/hackage-security-${TERMUX
 TERMUX_PKG_SHA256="bf22cd16dde7d6b7130463f4d7324b64a2964d9ef3f523df97d7cb98544d64a8"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-zlib, haskell-ed25519, haskell-network-uri, haskell-lukko, haskell-network, haskell-cabal, haskell-base64-bytestring, haskell-tar, haskell-cryptohash-sha256, haskell-base16-bytestring, haskell-cabal-syntax"
-

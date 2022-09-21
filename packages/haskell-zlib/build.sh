@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/zlib-${TERMUX_PKG_VERSION
 TERMUX_PKG_SHA256="807f6bddf9cb3c517ce5757d991dde3c7e319953a22c86ee03d74534bd5abc88"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs"
-

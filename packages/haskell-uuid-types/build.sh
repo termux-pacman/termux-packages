@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/uuid-types-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="ad68b89b7a64c07dd5c250a11be2033ee929318ff51ec7b4e4b54e1b4deba7dd"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-random, haskell-hashable"
-

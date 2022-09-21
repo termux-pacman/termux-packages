@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/unordered-containers-${TE
 TERMUX_PKG_SHA256="c49e3a6e0b6aae68c035b163e54f3521d1d65d0a3543fa46eaeddc97b4375a17"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-hashable"
-

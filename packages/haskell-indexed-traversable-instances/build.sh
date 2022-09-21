@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/indexed-traversable-insta
 TERMUX_PKG_SHA256="100ed1023b541328b04bcec0964b9f9d5fc93285fc23a2ac6873bf8597439a44"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-vector, haskell-onetuple, haskell-tagged, haskell-indexed-traversable, haskell-unordered-containers"
-
