@@ -13,4 +13,3 @@ termux_step_make_install() {
 	ln -sfr $TERMUX_PREFIX/bin/pigz $TERMUX_PREFIX/bin/unpigz
 	install -Dm600 pigz.1 $TERMUX_PREFIX/share/man/man1/pigz.1
 }
-
