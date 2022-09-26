@@ -261,7 +261,7 @@ jobs:
           file_sp=(${dir_sp[-1]//-/ })
           tar xf "$archive"
           for repo in $(jq --raw-output '.[].name' repo.json); do
-            dp_file="./pkgs/deleted_${repo}_packages.txt"
+            dp_file="pkgs/deleted_${repo}_packages.txt"
             if [[ -f $dp_file ]]; then
               sfuf "$dp_file"
             fi
