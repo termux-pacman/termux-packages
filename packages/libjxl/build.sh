@@ -13,3 +13,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DJPEGXL_FORCE_SYSTEM_BROTLI=True"
 termux_step_post_get_source() {
 	./deps.sh
 }
+
