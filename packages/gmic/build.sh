@@ -27,4 +27,3 @@ termux_step_make_install() {
 	cp man/gmic.1.gz $TERMUX_PREFIX/share/man/man1/gmic-gm.1.gz
 }
 
-
