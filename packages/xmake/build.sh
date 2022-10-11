@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/xmake-io/xmake/releases/download/v${TERMUX_
 TERMUX_PKG_SHA256=2d1159fd8910cd532b09315cbf7e3c8943df57f2b22952174c8cd04ba0358a14
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
-
