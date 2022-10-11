@@ -10,4 +10,3 @@ termux_step_make_install() {
 	install -Dm700 -t ${TERMUX_PREFIX}/bin dtach
 	install -Dm600 -t ${TERMUX_PREFIX}/share/man/man1 ${TERMUX_PKG_SRCDIR}/dtach.1
 }
-
