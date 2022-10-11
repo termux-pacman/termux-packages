@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=b745a5dfc68f86a483d7f96dc1cda7aafd1e78ecba3c7d8ad304709e91e1de
 TERMUX_PKG_DEPENDS="libandroid-support"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_func_setlocale=no"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/texinfo2man"
+
