@@ -19,4 +19,3 @@ termux_step_post_make_install() {
 	find "$TERMUX_PREFIX"/share/dirb/wordlists -type f | xargs chmod 600
 	mv -f "$TERMUX_PREFIX"/bin/gendict "$TERMUX_PREFIX"/bin/dirb-gendict
 }
-
