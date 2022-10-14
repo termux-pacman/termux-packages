@@ -15,3 +15,4 @@ termux_step_make_install() {
 	install sl $TERMUX_PREFIX/bin/
 	cp sl.1 $TERMUX_PREFIX/share/man/man1
 }
+
