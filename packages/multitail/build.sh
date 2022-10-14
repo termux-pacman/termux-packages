@@ -12,3 +12,4 @@ termux_step_pre_configure() {
 	CFLAGS+=" -DNCURSES_WIDECHAR"
 	LDFLAGS+=" -landroid-glob"
 }
+
