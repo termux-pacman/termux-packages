@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="pcre, liblzma, zlib"
 termux_step_pre_configure() {
 	export CFLAGS+=" -fcommon"
 }
-
