@@ -68,3 +68,4 @@ termux_step_post_make_install() {
 	# of a different word size (e.g. 32bit or 64bit)
 	rm -rf "$TERMUX_PKG_HOSTBUILD_DIR"
 }
+
