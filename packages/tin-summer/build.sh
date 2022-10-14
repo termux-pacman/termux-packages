@@ -11,3 +11,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	sed -i 's/linux/android/g' src/utils.rs
 }
+
