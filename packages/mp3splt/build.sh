@@ -14,4 +14,3 @@ termux_step_post_configure() {
 	sed -i -e 's/BEOS/ANDROID/g' freedb.c
 	touch langinfo.h
 }
-
