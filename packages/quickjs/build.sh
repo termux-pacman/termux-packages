@@ -19,3 +19,4 @@ CONFIG_DEFAULT_AR=y
 -W run-test262-bn
 prefix=$TERMUX_PREFIX
 "
+
