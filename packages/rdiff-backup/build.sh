@@ -22,3 +22,4 @@ termux_step_make_install() {
 	export LDSHARED="$CC -shared"
 	python${_PYTHON_VERSION} setup.py install --prefix=$TERMUX_PREFIX --force
 }
+
