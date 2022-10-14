@@ -13,3 +13,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	export MANDIR=$TERMUX_PREFIX/share/man
 }
+
