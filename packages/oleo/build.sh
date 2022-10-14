@@ -17,3 +17,4 @@ share/oleo/oleo.html"
 termux_step_pre_configure() {
 	export CFLAGS+=" -fcommon"
 }
+
