@@ -23,4 +23,3 @@ termux_step_post_make_install() {
 	cd "$TERMUX_PKG_SRCDIR"/obfs4proxy
 	install -Dm700 obfs4proxy "${TERMUX_PREFIX}"/bin/
 }
-
