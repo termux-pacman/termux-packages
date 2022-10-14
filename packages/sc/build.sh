@@ -13,3 +13,4 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="SIMPLE=-DSIMPLE"
 termux_step_post_configure () {
 	CFLAGS+=" -I$TERMUX_PREFIX/include"
 }
+
