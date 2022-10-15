@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/data-fix-${TERMUX_PKG_VER
 TERMUX_PKG_SHA256="3a172d3bc0639c327345e965f9d9023e099425814b28dcdb7b60ff66d66219cc"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-hashable"
+
