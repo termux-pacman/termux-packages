@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/semigroupoids-${TERMUX_PK
 TERMUX_PKG_SHA256="6d45cdb6c58c75ca588859b80b2c92b6f48590a03e065c24ce5d767a6a963799"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-distributive, haskell-tagged, haskell-hashable, haskell-contravariant, haskell-transformers-compat, haskell-bifunctors, haskell-base-orphans, haskell-comonad, haskell-unordered-containers"
-
