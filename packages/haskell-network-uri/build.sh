@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/network-uri-${TERMUX_PKG_
 TERMUX_PKG_SHA256="57856db93608a4d419f681b881c9b8d4448800d5a687587dc37e8a9e0b223584"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-th-compat"
+
