@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/attoparsec-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="3f337fe58624565de12426f607c23e60c7b09c86b4e3adfc827ca188c9979e6c"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-scientific"
+
