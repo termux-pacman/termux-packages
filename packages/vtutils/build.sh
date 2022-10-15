@@ -8,3 +8,4 @@ TERMUX_PKG_SRCURL=https://github.com/fornwall/vtutils/releases/download/v$TERMUX
 TERMUX_PKG_SHA256=ef0b11f9570697f53bcda7a61093f8d472afee2c8551b5b35e9b5b7c1539c2c6
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++"
+
