@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/scientific-${TERMUX_PKG_V
 TERMUX_PKG_SHA256="a3a121c4b3d68fb8b9f8c709ab012e48f090ed553609247a805ad070d6b343a9"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-hashable, haskell-integer-logarithms, haskell-primitive"
-

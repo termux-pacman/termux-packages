@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/th-abstraction-${TERMUX_P
 TERMUX_PKG_SHA256="c8bb13e31d1d22a99168536a35c66e1091a6e4274b9841a023eac52c2bd3de06"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs"
-

@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/OneTuple-${TERMUX_PKG_VER
 TERMUX_PKG_SHA256="98853682d52fb4cc37a45cd186fbd77cf2565d3df5171acc4cf026427e103eef"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ghc-libs, haskell-base-orphans, haskell-hashable"
-
