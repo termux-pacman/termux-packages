@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://mirrors.kernel.org/gnu/units/units-${TERMUX_PKG_VERSIO
 TERMUX_PKG_SHA256=6c3e80a9f980589fd962a5852a2674642257db1c5fd5b27c4d9e664f3486cbaf
 TERMUX_PKG_DEPENDS="readline, libandroid-support"
 TERMUX_PKG_BUILD_IN_SRC=true
+
