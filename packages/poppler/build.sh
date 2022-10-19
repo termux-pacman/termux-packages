@@ -22,4 +22,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_pre_configure() {
 	CPPFLAGS+=" -DCMS_NO_REGISTER_KEYWORD"
 }
-
