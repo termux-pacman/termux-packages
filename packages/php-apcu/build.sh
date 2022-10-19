@@ -13,3 +13,4 @@ termux_step_pre_configure() {
 	$TERMUX_PREFIX/bin/phpize
 	LDFLAGS+=" -landroid-shmem"
 }
+
