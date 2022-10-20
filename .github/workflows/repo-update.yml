@@ -84,7 +84,7 @@ jobs:
         git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages-pacman.git"
         commit "Update system repo"
         git add .
-        git reset packages root-packages x11-packages
+        git reset packages root-packages x11-packages README.md
         {
           git commit -m "Update repo"
           git push origin master
