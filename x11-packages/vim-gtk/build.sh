@@ -62,4 +62,3 @@ termux_step_post_make_install() {
 	sed -i "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" $TERMUX_PREFIX/share/vim/vimrc
 	ln -sfr $TERMUX_PREFIX/bin/vim $TERMUX_PREFIX/bin/vi
 }
-
