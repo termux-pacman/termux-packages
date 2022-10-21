@@ -14,4 +14,3 @@ termux_step_make_install() {
 	install -m600 openmsx.obm "$TERMUX_PREFIX"/share/openttd/data
 	install -m600 *.mid "$TERMUX_PREFIX"/share/openttd/data
 }
-

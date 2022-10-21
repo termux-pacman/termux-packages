@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/app/twm-${TER
 TERMUX_PKG_SHA256=f4e8a842dec410e79741f25ed4dfac09df080835d0bba2e3983b5914569b68c7
 TERMUX_PKG_DEPENDS="libice, libsm, libx11, libxext, libxmu, libxrandr, libxt"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
-

@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="libx11, libxaw, libxft, libxkbfile, libxmu, libxrender, libx
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
 TERMUX_PKG_CONFLICTS="xclock"
 TERMUX_PKG_REPLACES="xclock"
-

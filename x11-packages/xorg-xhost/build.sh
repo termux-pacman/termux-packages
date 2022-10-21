@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/archive/individual/app/xhost-$TER
 TERMUX_PKG_SHA256=a2dc3c579e13674947395ef8ccc1b3763f89012a216c2cc6277096489aadc396
 TERMUX_PKG_DEPENDS="libx11, libxmu"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
-

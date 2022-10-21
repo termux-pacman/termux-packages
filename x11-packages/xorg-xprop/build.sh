@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/app/xprop-${T
 TERMUX_PKG_SHA256=9b92ed0316bf2486121d8bac88bd1878f16b43bd335f18009b1f941f1eca93a1
 TERMUX_PKG_DEPENDS="libx11"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
-

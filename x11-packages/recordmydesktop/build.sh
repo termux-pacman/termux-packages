@@ -16,4 +16,3 @@ ac_cv_lib_pthread_pthread_mutex_lock=yes
 termux_step_pre_configure() {
 	export LIBS="-landroid-shmem"
 }
-
