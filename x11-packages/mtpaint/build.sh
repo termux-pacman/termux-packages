@@ -15,4 +15,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--mandir=${TERMUX_PREFIX}/share/man man GIF jpe
 termux_step_pre_configure() {
 	export LDFLAGS="${LDFLAGS} -Wl,--no-as-needed -landroid-glob -landroid-shmem"
 }
-
