@@ -11,3 +11,4 @@ TERMUX_PKG_DEPENDS="freetype, sdl"
 termux_step_pre_configure() {
 	LDFLAGS="${LDFLAGS/-Wl,--as-needed/} -lm"
 }
+
