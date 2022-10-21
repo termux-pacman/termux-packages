@@ -13,3 +13,4 @@ TERMUX_PKG_BUILD_DEPENDS="libxt"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
+
