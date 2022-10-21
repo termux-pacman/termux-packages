@@ -16,3 +16,4 @@ termux_step_post_make_install() {
 		mv -f "${TERMUX_PREFIX}/share/pkgconfig/xbitmaps.pc" "${TERMUX_PREFIX}/lib/pkgconfig/xbitmaps.pc" || exit 1
 	fi
 }
+
