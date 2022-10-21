@@ -12,3 +12,4 @@ TERMUX_PKG_DEPENDS="libxtst"
 termux_step_pre_configure() {
 	./bootstrap.sh
 }
+
