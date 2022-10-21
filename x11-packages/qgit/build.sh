@@ -14,4 +14,3 @@ termux_step_configure() {
     "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" \
         -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
 }
-
