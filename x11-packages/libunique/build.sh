@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="glib, gtk2"
 termux_step_pre_configure() {
 	export CFLAGS="$CFLAGS -DG_CONST_RETURN=const"
 }
-
