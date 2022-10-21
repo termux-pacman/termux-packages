@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="atk, fontconfig, freetype, gdk-pixbuf, glib, gtk2, imlib2, l
 termux_step_pre_configure() {
 	export LIBS="-lgmodule-2.0 -landroid-shmem"
 }
-
