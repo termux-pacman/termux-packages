@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="AM_LDFLAGS=-lX11"
 termux_step_pre_configure() {
 	autoreconf -i
 }
+
