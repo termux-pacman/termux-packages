@@ -8,3 +8,4 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/archive/individual/app/xsetroot-$
 TERMUX_PKG_SHA256=10c442ba23591fb5470cea477a0aa5f679371f4f879c8387a1d9d05637ae417c
 TERMUX_PKG_DEPENDS="libx11, libxcursor, libxmu"
 TERMUX_PKG_BUILD_DEPENDS="xbitmaps, xorg-util-macros"
+
