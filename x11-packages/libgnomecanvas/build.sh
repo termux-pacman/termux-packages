@@ -13,3 +13,4 @@ TERMUX_PKG_RM_AFTER_INSTALL="lib/locale"
 termux_step_post_configure() {
 	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 }
+
