@@ -12,4 +12,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/icons/hicolor/icon-theme.cache"
 termux_step_pre_configure() {
 	export LIBS="-landroid-shmem"
 }
-
