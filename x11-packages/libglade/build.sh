@@ -21,3 +21,4 @@ termux_step_post_make_install() {
 		-i "s|#!/usr/bin/python|#!${TERMUX_PREFIX}/bin/python2|g" \
 		"${TERMUX_PREFIX}/bin/libglade-convert"
 }
+
