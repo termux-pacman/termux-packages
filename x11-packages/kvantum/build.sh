@@ -12,3 +12,4 @@ TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
 termux_step_post_get_source() {
 	TERMUX_PKG_SRCDIR+="/Kvantum"
 }
+
