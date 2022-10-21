@@ -14,3 +14,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DCMAKE_INSTALL_DATADIR=share -DTSMUXER_GUI=ON"
 termux_step_post_make_install() {
 	mv ${TERMUX_PREFIX}/bin/tsMuxerGUI ${TERMUX_PREFIX}/bin/tsmuxergui
 }
+
