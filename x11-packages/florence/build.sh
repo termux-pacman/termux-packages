@@ -26,4 +26,3 @@ share/glib-2.0/schemas/gschemas.compiled
 termux_step_pre_configure() {
 	export LIBS="-lglib-2.0 -lgio-2.0"
 }
-
