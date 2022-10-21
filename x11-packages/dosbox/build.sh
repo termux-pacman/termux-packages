@@ -13,3 +13,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-fpu-x86
 --disable-opengl
 "
+
