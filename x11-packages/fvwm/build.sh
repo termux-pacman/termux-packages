@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="ac_cv_func_setpgrp_void=yes ac_cv_func_mkstemp=
 termux_step_pre_configure() {
 	export LIBS="-landroid-shmem"
 }
+
