@@ -26,3 +26,4 @@ termux_step_make_install() {
 	install -m600 *.grf "$TERMUX_PREFIX"/share/openttd/data
 	install -m600 *.obg "$TERMUX_PREFIX"/share/openttd/data
 }
+
