@@ -14,3 +14,4 @@ termux_step_pre_configure() {
 	export CFLAGS="${CFLAGS} -Wno-return-type"
 	export LIBS="-landroid-shmem"
 }
+
