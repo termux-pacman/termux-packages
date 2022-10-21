@@ -20,3 +20,4 @@ termux_step_configure() {
 		--doc-dir=share/doc/openttd \
 		--menu-name=OpenTTD
 }
+
