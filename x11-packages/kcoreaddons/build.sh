@@ -22,4 +22,3 @@ share/mime/v*
 share/mime/x*
 share/mime/XMLnamespaces
 "
-

@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL="https://download.kde.org/stable/frameworks/${TERMUX_PKG_VERSI
 TERMUX_PKG_SHA256=f323efb96a809dc9e572a0e68e04c4f485fc27f9ae65ffa3988830e348151356
 TERMUX_PKG_DEPENDS="qt5-qtbase, qt5-qtdeclarative, qt5-qtquickcontrols2, qt5-qtsvg"
 TERMUX_PKG_BUILD_DEPENDS="extra-cmake-modules, qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
-

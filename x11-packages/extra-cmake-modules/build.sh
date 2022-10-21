@@ -11,4 +11,3 @@ termux_step_install_license() {
     install -Dm644 "${TERMUX_PKG_SRCDIR}/LICENSES/BSD-3-Clause.txt" "${TERMUX_PREFIX}/share/doc/${TERMUX_PKG_NAME}/LICENSE"
 }
 
-
