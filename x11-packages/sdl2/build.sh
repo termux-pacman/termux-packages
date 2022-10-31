@@ -59,11 +59,10 @@ termux_step_pre_configure() {
 }
 
 termux_step_post_massage() {
+	# ld(1)ing with `-lSDL2` won't work without this:
+	# https://github.com/termux/x11-packages/issues/633
 	cd ${TERMUX_PKG_MASSAGEDIR}/${TERMUX_PREFIX}/lib || exit 1
 	if [ ! -e "./libSDL2.so" ]; then
 		ln -sf libSDL2-2.0.so libSDL2.so
-	fi
-	if [ ! -e "./libSDL2-2.0.so.0" ]; then
-		ln -sf libSDL2-2.0.so libSDL2-2.0.so.0
 	fi
 }
