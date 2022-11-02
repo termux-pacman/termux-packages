@@ -20,4 +20,3 @@ termux_step_post_make_install() {
 	install -m600 wpa_supplicant/doc/docbook/wpa_supplicant.conf.5 $TERMUX_PREFIX/share/man/man5/
 	install -m600 wpa_supplicant/doc/docbook/{wpa_cli,wpa_supplicant}.8 $TERMUX_PREFIX/share/man/man8/
 }
-
