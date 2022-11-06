@@ -110,7 +110,7 @@ jobs:
                     echo "$(basename "${file%%.subpackage.sh}")" >> ./built_${repo}_subpackages.txt
                   done
                 else
-                  echo "$pkg" >> ./deleted_${repo}_packages
+                  echo "$pkg" >> ./deleted_${repo}_packages.txt
                 fi
               fi
             done<<<${CHANGED_FILES}
