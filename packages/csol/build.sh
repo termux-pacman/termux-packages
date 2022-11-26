@@ -9,3 +9,4 @@ TERMUX_PKG_DEPENDS="libandroid-support, ncurses"
 TERMUX_CMAKE_BUILD="Unix Makefiles"
 TERMUX_PKG_GROUPS="games"
 TERMUX_PKG_BUILD_IN_SRC=true
+
