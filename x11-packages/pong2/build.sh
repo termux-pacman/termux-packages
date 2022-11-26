@@ -16,3 +16,4 @@ termux_step_pre_configure() {
 
 	CPPFLAGS+=" -I$TERMUX_PREFIX/include/SDL"
 }
+
