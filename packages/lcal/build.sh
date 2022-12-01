@@ -22,4 +22,3 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin ./lcal
 	install -Dm700 -T ./lcal.man $TERMUX_PREFIX/share/man/man1/lcal.1
 }
-
