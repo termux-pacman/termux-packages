@@ -12,4 +12,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --without-python
 --without-tcl
 "
-
