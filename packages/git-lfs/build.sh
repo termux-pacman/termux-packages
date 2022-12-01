@@ -30,4 +30,3 @@ termux_step_post_make_install() {
 	chmod -R 700 "$TERMUX_PKG_BUILDDIR"/pkg
 	rm -rf "$TERMUX_PKG_BUILDDIR"/pkg
 }
-
