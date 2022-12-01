@@ -17,4 +17,3 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 mp3cat $TERMUX_PREFIX/bin/
 }
-
