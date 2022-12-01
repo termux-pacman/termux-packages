@@ -155,3 +155,4 @@ termux_step_make_install() {
 	echo "${TERMUX_PREFIX}/lib/clvk/libOpenCL.so" > "${TERMUX_PKG_TMPDIR}/clvk.icd"
 	install -Dm644 "${TERMUX_PKG_TMPDIR}/clvk.icd" "${TERMUX_PREFIX}/etc/OpenCL/vendors/clvk.icd"
 }
+

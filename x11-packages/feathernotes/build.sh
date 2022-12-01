@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=dda68fd112e452c67a9a79c8bd10911f4dcb32bafe4ceb9b752c3f7bbf2547
 TERMUX_PKG_DEPENDS="hunspell, libc++, libx11, qt5-qtbase, qt5-qtsvg, qt5-qtx11extras"
 TERMUX_PKG_RECOMMENDS="hicolor-icon-theme"
 TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qttools-cross-tools"
+

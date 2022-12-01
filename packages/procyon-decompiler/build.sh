@@ -19,3 +19,4 @@ termux_step_make_install() {
 		$TERMUX_PREFIX/share/java/procyon-decompiler.jar
 	install -Dm700 -t $TERMUX_PREFIX/bin procyon-decompiler
 }
+

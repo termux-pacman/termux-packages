@@ -36,3 +36,4 @@ termux_step_post_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/opt/nsis/Stubs *
 	popd
 }
+

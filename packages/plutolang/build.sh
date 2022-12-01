@@ -19,3 +19,4 @@ termux_step_pre_configure() {
 	export MYCFLAGS="$CXXFLAGS $CPPFLAGS"
 	export MYLDFLAGS="$LDFLAGS"
 }
+

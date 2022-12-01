@@ -87,3 +87,4 @@ termux_step_post_make_install() {
 	fi
 	install -Dm600 $TERMUX_PKG_BUILDER_DIR/firefox.desktop $TERMUX_PREFIX/share/applications/firefox.desktop
 }
+
