@@ -15,3 +15,4 @@ termux_step_pre_configure() {
 	# the cxx tests fail because it won't link properly without this
 	CXXFLAGS+=" -L$TERMUX_PREFIX/lib"
 }
+
