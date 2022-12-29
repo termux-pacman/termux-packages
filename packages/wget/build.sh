@@ -19,3 +19,4 @@ ac_cv_libunistring=no
 termux_step_pre_configure() {
 	export LDFLAGS+=" -landroid-spawn"
 }
+

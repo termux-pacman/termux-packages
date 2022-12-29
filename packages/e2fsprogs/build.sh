@@ -47,3 +47,4 @@ termux_step_make_install() {
 		"$TERMUX_PKG_SRCDIR"/misc/mke2fs.conf.in \
 		"$TERMUX_PREFIX"/etc/mke2fs.conf
 }
+

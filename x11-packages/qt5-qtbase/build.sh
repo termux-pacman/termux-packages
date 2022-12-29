@@ -208,3 +208,4 @@ termux_step_create_debscripts() {
     sed -i "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" ./postinst
 }
 
+
