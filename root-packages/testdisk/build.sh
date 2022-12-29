@@ -25,4 +25,3 @@ termux_step_pre_configure() {
 termux_step_make() {
 	make -j2 static
 }
-
