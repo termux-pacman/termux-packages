@@ -25,5 +25,3 @@ termux_step_configure() {
 	export HWINFO_VERSION="$TERMUX_PKG_VERSION"
 	export DESTDIR="$TERMUX_PREFIX"
 }
-
-

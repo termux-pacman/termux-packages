@@ -39,4 +39,3 @@ ac_cv_sizeof_off_t=$(( TERMUX_ARCH_BITS==32 ? 4 : 8 ))
 ac_cv_sizeof_struct_iovec=$(( TERMUX_ARCH_BITS==32 ? 8 : 16 ))
 ac_cv_search_crypt="
 TERMUX_PKG_RM_AFTER_INSTALL="lib/apr.exp"
-
