@@ -1,7 +1,9 @@
 name: Update repo
 on:
   push:
-    patch:
+    branches:
+    - master
+    paths:
     - '.github/workflows/repo-update.yml'
   schedule:
     - cron:  '0,30 0-23 * * *'
