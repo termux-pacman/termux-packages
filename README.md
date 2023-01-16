@@ -5,17 +5,17 @@
 main:
 ```
 [main]
-Server = https://s3.amazonaws.com/termux-pacman.us/main/$arch
+Server = https://service.termux-pacman.dev/main/$arch
 ```
 x11:
 ```
 [main]
-Server = https://s3.amazonaws.com/termux-pacman.us/x11/$arch
+Server = https://service.termux-pacman.dev/x11/$arch
 ```
 root:
 ```
 [main]
-Server = https://s3.amazonaws.com/termux-pacman.us/root/$arch
+Server = https://service.termux-pacman.dev/root/$arch
 ```
 
 ### Other information:
