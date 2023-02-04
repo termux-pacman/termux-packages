@@ -23,3 +23,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin $GOPATH/src/github.com/caddyserver/caddy/cmd/caddy/caddy
 }
+
