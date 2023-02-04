@@ -48,15 +48,6 @@ jobs:
         with:
           name: bootstrap-archives-${{ github.sha }}
           path: ./
-      - name: Get checksums
-        id: get_checksums
-        run: |
-          find . -maxdepth 1 -type f -name "bootstrap-*.zip" -exec sha256sum {} \; | sed "s| ./| |g" | sort -k2 > bootstraps.sha256sum
-          checksums=$(printf 'SHA-256:\n```\n%s\n```\n' "$(sha256sum *.zip)")
-          checksums="${checksums//'%'/'%25'}"
-          checksums="${checksums//$'\n'/'%0A'}"
-          checksums="${checksums//$'\r'/'%0D'}"
-          echo "::set-output name=checksums::$checksums"
       - name: Create new tag
         id: get_tag
         run: |
@@ -70,19 +61,13 @@ jobs:
           new_tag="${new_tag}-r${tag_rev}+pacman-android-7"
           git tag "$new_tag"
           git push --tags
-          echo "::set-output name=tag_name::$new_tag"
+          echo "tag_name=$new_tag" >> $GITHUB_OUTPUT
       - name: Publish bootstrap zips to GitHub release
-        uses: termux/upload-release-action@v3.0.3
+        uses: termux/upload-release-action@v4.1.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "*.zip"
           file_glob: true
           release_name: "Bootstrap archives for Termux application"
           tag: ${{ steps.get_tag.outputs.tag_name }}
-          body: ${{ steps.get_checksums.outputs.checksums }}
-      - name: Publish bootstraps sha256sum to GitHub release
-        uses: termux/upload-release-action@v3.0.3
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "bootstraps.sha256sum"
-          tag: ${{ steps.get_tag.outputs.tag_name }}
+          checksums: sha256,sha512,md5
