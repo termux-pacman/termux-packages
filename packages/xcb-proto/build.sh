@@ -17,4 +17,3 @@ am_cv_python_pythondir=$TERMUX_PYTHON_HOME/site-packages
 
 # Without this python-xcbgen cannot depend on python due to circular dependency.
 TERMUX_PKG_ANTI_BUILD_DEPENDS="python"
-
