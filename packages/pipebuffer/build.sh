@@ -17,3 +17,4 @@ termux_step_make_install() {
 	mkdir -vp $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME
 	install -vpm600 -t $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME README.*
 }
+
