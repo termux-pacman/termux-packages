@@ -33,4 +33,3 @@ termux_step_post_massage() {
 		termux_error_exit "SONAME for libheif.so is not properly set."
 	fi
 }
-
