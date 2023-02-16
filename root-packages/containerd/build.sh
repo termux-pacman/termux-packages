@@ -37,4 +37,3 @@ termux_step_make_install() {
 	DESTDIR= make install-man
 	install -Dm 600 ${TERMUX_PKG_BUILDER_DIR}/config.toml ${TERMUX_PREFIX}/etc/containerd/config.toml
 }
-
