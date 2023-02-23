@@ -40,4 +40,3 @@ termux_step_pre_configure() {
 
 	CPPFLAGS+=" -DCMS_NO_REGISTER_KEYWORD"
 }
-
