@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="gdk-pixbuf, glib, gtk3, libandroid-execinfo, libc++, libcair
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DHELP2MAN=NO
 "
-

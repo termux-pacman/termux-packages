@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="libc++, libgcrypt, libgpg-error, pcre, poppler"
 termux_step_pre_configure() {
 	CXXFLAGS+=" -std=c++17"
 }
-
