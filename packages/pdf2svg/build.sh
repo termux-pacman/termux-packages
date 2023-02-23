@@ -12,3 +12,4 @@ TERMUX_PKG_DEPENDS="glib, libcairo, poppler"
 termux_step_pre_configure() {
 	CXXFLAGS+=" -std=c++17"
 }
+

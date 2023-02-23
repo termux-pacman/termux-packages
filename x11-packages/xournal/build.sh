@@ -13,3 +13,4 @@ termux_step_pre_configure() {
 	CXXFLAGS+=" -std=c++17"
 	export LIBS="-Wl,--no-as-needed -landroid-shmem"
 }
+

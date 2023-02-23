@@ -32,3 +32,4 @@ termux_step_install_license() {
 	mkdir -p "$doc_dir"
 	ln -sf "$license_file" "$doc_dir"/
 }
+
