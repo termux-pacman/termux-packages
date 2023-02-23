@@ -21,4 +21,3 @@ termux_step_pre_configure() {
 
 	sed -i 's/\(mypaint-brushes-\)1/\12/g' configure
 }
-
