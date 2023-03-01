@@ -35,4 +35,3 @@ termux_step_host_build() {
 termux_step_pre_configure() {
 	export PATH="$TERMUX_PREFIX/opt/$TERMUX_PKG_NAME/cross/bin:$PATH"
 }
-
