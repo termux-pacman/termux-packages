@@ -39,4 +39,3 @@ termux_step_post_make_install() {
 	install -Dm600 completions/_atuin $TERMUX_PREFIX/share/zsh/site-functions/_atuin
 	install -Dm600 completions/atuin.fish $TERMUX_PREFIX/share/fish/vendor_completions.d/atuin.fish
 }
-
