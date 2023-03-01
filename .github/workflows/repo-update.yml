@@ -37,10 +37,10 @@ jobs:
         # Get list pkg
         info "Get list pkg"
         cd ../termux-packages-pacman
-        list_files=""
+        list_files=" "
         for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
           dir_sp=(${i//// })
-          if [[ ! $(echo "$list_files" | grep "${dir_sp[0]}/${dir_sp[1]} ") ]]; then
+          if [[ ! $(echo "$list_files" | grep " ${dir_sp[0]}/${dir_sp[1]} ") ]]; then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
           fi
         done
