@@ -255,24 +255,25 @@ jobs:
           for format_file in "" ".sig"; do
             aws s3 cp "${1}${format_file}" s3://'${{ secrets.SFPU }}'/${repo#*-}/${file_sp[1]}/"${1##*/}${format_file}"
           done
+          rm "$1.sig"
         }
         for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
           dir_sp=(${archive//// })
           file_sp=(${dir_sp[-1]//-/ })
           tar xf "$archive"
           for repo in $(jq --raw-output '.[].name' repo.json); do
-            dp_file="pkgs/deleted_${repo}_packages.txt"
-            if [[ -f $dp_file ]]; then
-              sfuf "$dp_file"
+            dp_file="deleted_${repo}_packages.txt"
+            if [[ -f pkgs/$dp_file ]]; then
+              path_dp_file=pkgs/${{ github.sha }}_${dp_file}
+              mv pkgs/${dp_file} ${path_dp_file}
+              sfuf "${path_dp_file}"
             fi
             for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
               for list_pkg in pkgs/*.pkg.*; do
-                if [[ ! -f "$list_pkg.sig" ]]; then
-                  dir_pkg_sp=(${list_pkg//// })
-                  if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
-                    sfuf "$list_pkg"
-                    break
-                  fi
+                dir_pkg_sp=(${list_pkg//// })
+                if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
+                  sfuf "$list_pkg"
+                  break
                 fi
               done
             done
