@@ -85,3 +85,4 @@ termux_step_post_make_install() {
 	rm -fr "${TERMUX_PREFIX}/lib/gl4es/libGL.so"
 	ln -fs "libGL.so.1" "${TERMUX_PREFIX}/lib/gl4es/libGL.so"
 }
+
