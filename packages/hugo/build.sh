@@ -42,3 +42,4 @@ termux_step_make_install() {
 	$TERMUX_PKG_BUILDDIR/hugo gen man \
 		--dir=$TERMUX_PREFIX/share/man/man1/
 }
+

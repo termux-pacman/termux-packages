@@ -12,3 +12,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	export LDLIBS="-landroid-support -landroid-glob -liconv"
 }
+
