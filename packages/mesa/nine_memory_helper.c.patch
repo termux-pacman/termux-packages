@@ -1,0 +1,10 @@
+--- mesa-23.0.0/src/gallium/frontends/nine/nine_memory_helper.c	2023-02-23 05:36:49.000000000 +0300
++++ mesa-23.0.0/src/gallium/frontends/nine/nine_memory_helper.c.patch	2023-03-11 20:15:13.458854375 +0300
+@@ -90,7 +90,6 @@
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <ulimit.h>
+ #include <unistd.h>
+ 
+ #include "util/list.h"

@@ -1,0 +1,186 @@
+diff --git a/lib/SPIRV/PreprocessMetadata.cpp b/lib/SPIRV/PreprocessMetadata.cpp
+index 830f158..42a7d1e 100644
+--- a/lib/SPIRV/PreprocessMetadata.cpp
++++ b/lib/SPIRV/PreprocessMetadata.cpp
+@@ -247,7 +247,9 @@ void PreprocessMetadataBase::visit(Module *M) {
+           InterfaceMode = 1;
+         EM.addOp()
+             .add(&Kernel)
++#if !defined(__ANDROID__)
+             .add(spv::ExecutionModeStreamingInterfaceINTEL)
++#endif
+             .add(InterfaceMode)
+             .done();
+       }
+diff --git a/lib/SPIRV/SPIRVReader.cpp b/lib/SPIRV/SPIRVReader.cpp
+index b4c6211..d3e640e 100644
+--- a/lib/SPIRV/SPIRVReader.cpp
++++ b/lib/SPIRV/SPIRVReader.cpp
+@@ -3999,6 +3999,7 @@ bool SPIRVToLLVM::transMetadata() {
+                      getMDNodeStringIntVec(Context, EM->getLiterals()));
+     }
+     // Generate metadata for Intel FPGA streaming interface
++#if !defined(__ANDROID__)
+     if (auto *EM = BF->getExecutionMode(ExecutionModeStreamingInterfaceINTEL)) {
+       std::vector<uint32_t> InterfaceVec = EM->getLiterals();
+       assert(InterfaceVec.size() == 1 &&
+@@ -4018,6 +4019,7 @@ bool SPIRVToLLVM::transMetadata() {
+       F->setMetadata(kSPIR2MD::IntelFPGAIPInterface,
+                      MDNode::get(*Context, InterfaceMDVec));
+     }
++#endif
+   }
+   NamedMDNode *MemoryModelMD =
+       M->getOrInsertNamedMetadata(kSPIRVMD::MemoryModel);
+diff --git a/lib/SPIRV/SPIRVWriter.cpp b/lib/SPIRV/SPIRVWriter.cpp
+index 3286731..060267b 100644
+--- a/lib/SPIRV/SPIRVWriter.cpp
++++ b/lib/SPIRV/SPIRVWriter.cpp
+@@ -2434,20 +2434,25 @@ static void transMetadataDecorations(Metadata *MD, SPIRVEntry *Target) {
+                               SPIRVWord);
+       TWO_INT_DECORATION_CASE(MathOpDSPModeINTEL, spv, SPIRVWord, SPIRVWord);
+ 
++#if !defined(__ANDROID__)
+     case DecorationConduitKernelArgumentINTEL:
+     case DecorationRegisterMapKernelArgumentINTEL:
+     case DecorationStableKernelArgumentINTEL:
++#endif
+     case DecorationRestrict: {
+       Target->addDecorate(new SPIRVDecorate(DecoKind, Target));
+       break;
+     }
+     case DecorationBufferLocationINTEL:
++#if !defined(__ANDROID__)
+     case DecorationMMHostInterfaceReadWriteModeINTEL:
+     case DecorationMMHostInterfaceAddressWidthINTEL:
+     case DecorationMMHostInterfaceDataWidthINTEL:
+     case DecorationMMHostInterfaceLatencyINTEL:
+     case DecorationMMHostInterfaceMaxBurstINTEL:
+-    case DecorationMMHostInterfaceWaitRequestINTEL: {
++    case DecorationMMHostInterfaceWaitRequestINTEL:
++#endif
++    {
+       ErrLog.checkError(NumOperands == 2, SPIRVEC_InvalidLlvmModule,
+                         "MMHost Kernel Argument Annotation requires exactly 2 "
+                         "extra operands");
+@@ -4916,7 +4921,10 @@ bool LLVMToSPIRVBase::transExecutionMode() {
+       case spv::ExecutionModeNumSIMDWorkitemsINTEL:
+       case spv::ExecutionModeSchedulerTargetFmaxMhzINTEL:
+       case spv::ExecutionModeMaxWorkDimINTEL:
+-      case spv::ExecutionModeStreamingInterfaceINTEL: {
++#if !defined(__ANDROID__)
++      case spv::ExecutionModeStreamingInterfaceINTEL:
++#endif
++      {
+         if (!BM->isAllowedToUseExtension(
+                 ExtensionID::SPV_INTEL_kernel_attributes))
+           break;
+diff --git a/lib/SPIRV/libSPIRV/SPIRVDecorate.h b/lib/SPIRV/libSPIRV/SPIRVDecorate.h
+index 3f50f61..e8a62dc 100644
+--- a/lib/SPIRV/libSPIRV/SPIRVDecorate.h
++++ b/lib/SPIRV/libSPIRV/SPIRVDecorate.h
+@@ -178,6 +178,7 @@ public:
+     case internal::DecorationInitModeINTEL:
+     case internal::DecorationImplementInCSRINTEL:
+       return ExtensionID::SPV_INTEL_global_variable_decorations;
++#if !defined(__ANDROID__)
+     case DecorationConduitKernelArgumentINTEL:
+     case DecorationRegisterMapKernelArgumentINTEL:
+     case DecorationStableKernelArgumentINTEL:
+@@ -188,6 +189,7 @@ public:
+     case DecorationMMHostInterfaceMaxBurstINTEL:
+     case DecorationMMHostInterfaceWaitRequestINTEL:
+       return ExtensionID::SPV_INTEL_fpga_argument_interfaces;
++#endif
+     default:
+       return {};
+     }
+diff --git a/lib/SPIRV/libSPIRV/SPIRVEntry.cpp b/lib/SPIRV/libSPIRV/SPIRVEntry.cpp
+index 54475a9..c5fa009 100644
+--- a/lib/SPIRV/libSPIRV/SPIRVEntry.cpp
++++ b/lib/SPIRV/libSPIRV/SPIRVEntry.cpp
+@@ -614,7 +614,9 @@ void SPIRVExecutionMode::decode(std::istream &I) {
+   case ExecutionModeMaxWorkDimINTEL:
+   case ExecutionModeNumSIMDWorkitemsINTEL:
+   case ExecutionModeSchedulerTargetFmaxMhzINTEL:
++#if !defined(__ANDROID__)
+   case ExecutionModeStreamingInterfaceINTEL:
++#endif
+     WordLiterals.resize(1);
+     break;
+   default:
+diff --git a/lib/SPIRV/libSPIRV/SPIRVEnum.h b/lib/SPIRV/libSPIRV/SPIRVEnum.h
+index 3b6bd15..1fc7b3a 100644
+--- a/lib/SPIRV/libSPIRV/SPIRVEnum.h
++++ b/lib/SPIRV/libSPIRV/SPIRVEnum.h
+@@ -261,8 +261,10 @@ template <> inline void SPIRVMap<SPIRVExecutionModeKind, SPIRVCapVec>::init() {
+                {CapabilityVectorComputeINTEL});
+   ADD_VEC_INIT(internal::ExecutionModeFastCompositeKernelINTEL,
+                {internal::CapabilityFastCompositeINTEL});
++#if !defined(__ANDROID__)
+   ADD_VEC_INIT(ExecutionModeStreamingInterfaceINTEL,
+                {CapabilityFPGAKernelAttributesINTEL});
++#endif
+   ADD_VEC_INIT(ExecutionModeNamedBarrierCountINTEL,
+                {CapabilityVectorComputeINTEL});
+ }
+@@ -451,6 +453,7 @@ template <> inline void SPIRVMap<Decoration, SPIRVCapVec>::init() {
+                {internal::CapabilityGlobalVariableDecorationsINTEL});
+   ADD_VEC_INIT(internal::DecorationArgumentAttributeINTEL,
+                {CapabilityFunctionPointersINTEL});
++#if !defined(__ANDROID__)
+   ADD_VEC_INIT(DecorationConduitKernelArgumentINTEL,
+                {CapabilityFPGAArgumentInterfacesINTEL});
+   ADD_VEC_INIT(DecorationRegisterMapKernelArgumentINTEL,
+@@ -469,6 +472,7 @@ template <> inline void SPIRVMap<Decoration, SPIRVCapVec>::init() {
+                {CapabilityFPGAArgumentInterfacesINTEL});
+   ADD_VEC_INIT(DecorationStableKernelArgumentINTEL,
+                {CapabilityFPGAArgumentInterfacesINTEL});
++#endif
+ }
+ 
+ template <> inline void SPIRVMap<BuiltIn, SPIRVCapVec>::init() {
+diff --git a/lib/SPIRV/libSPIRV/SPIRVIsValidEnum.h b/lib/SPIRV/libSPIRV/SPIRVIsValidEnum.h
+index 093141d..5c658e9 100644
+--- a/lib/SPIRV/libSPIRV/SPIRVIsValidEnum.h
++++ b/lib/SPIRV/libSPIRV/SPIRVIsValidEnum.h
+@@ -71,7 +71,9 @@ inline bool isValid(spv::ExecutionModel V) {
+   case ExecutionModelClosestHitKHR:
+   case ExecutionModelMissKHR:
+   case ExecutionModelCallableKHR:
++#if !defined(__ANDROID__)
+   case ExecutionModeStreamingInterfaceINTEL:
++#endif
+     return true;
+   default:
+     return false;
+diff --git a/lib/SPIRV/libSPIRV/SPIRVNameMapEnum.h b/lib/SPIRV/libSPIRV/SPIRVNameMapEnum.h
+index 2a34e0b..df8eb7a 100644
+--- a/lib/SPIRV/libSPIRV/SPIRVNameMapEnum.h
++++ b/lib/SPIRV/libSPIRV/SPIRVNameMapEnum.h
+@@ -183,6 +183,7 @@ template <> inline void SPIRVMap<Decoration, std::string>::init() {
+   add(DecorationInitiationIntervalINTEL, "InitiationIntervalINTEL");
+   add(DecorationMaxConcurrencyINTEL, "MaxConcurrencyINTEL");
+   add(DecorationPipelineEnableINTEL, "PipelineEnableINTEL");
++#if !defined(__ANDROID__)
+   add(DecorationConduitKernelArgumentINTEL, "ConduitKernelArgumentINTEL");
+   add(DecorationRegisterMapKernelArgumentINTEL,
+       "RegisterMapKernelArgumentINTEL");
+@@ -196,6 +197,7 @@ template <> inline void SPIRVMap<Decoration, std::string>::init() {
+   add(DecorationMMHostInterfaceWaitRequestINTEL,
+       "MMHostInterfaceWaitRequestINTEL");
+   add(DecorationStableKernelArgumentINTEL, "StableKernelArgumentINTEL");
++#endif
+ 
+   // From spirv_internal.hpp
+   add(internal::DecorationCallableFunctionINTEL, "CallableFunctionINTEL");
+@@ -615,7 +617,9 @@ template <> inline void SPIRVMap<Capability, std::string>::init() {
+       "FPGAInvocationPipeliningAttributesINTEL");
+   add(CapabilityRuntimeAlignedAttributeINTEL, "RuntimeAlignedAttributeINTEL");
+   add(CapabilityMax, "Max");
++#if !defined(__ANDROID__)
+   add(CapabilityFPGAArgumentInterfacesINTEL, "FPGAArgumentInterfacesINTEL");
++#endif
+ 
+   // From spirv_internal.hpp
+   add(internal::CapabilityFastCompositeINTEL, "FastCompositeINTEL");

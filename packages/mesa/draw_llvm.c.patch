@@ -1,0 +1,81 @@
+--- mesa-23.0.0/src/gallium/auxiliary/draw/draw_llvm.c	2023-02-23 05:36:49.000000000 +0300
++++ mesa-23.0.0/src/gallium/auxiliary/draw/draw_llvm.c.patch	2023-03-18 11:33:37.928635601 +0300
+@@ -872,12 +872,15 @@
+    variant = MALLOC(sizeof *variant +
+                     shader->variant_key_size -
+                     sizeof variant->key);
++   printf("ok1\n");
+    if (!variant)
+       return NULL;
++   printf("ok2\n");
+ 
+    variant->llvm = llvm;
+    variant->shader = shader;
+    memcpy(&variant->key, key, shader->variant_key_size);
++   printf("ok3\n");
+ 
+    snprintf(module_name, sizeof(module_name), "draw_llvm_vs_variant%u",
+             variant->shader->variants_cached);
+@@ -888,40 +891,59 @@
+                             shader->variant_key_size,
+                             num_inputs,
+                             ir_sha1_cache_key);
++      printf("ok3.1\n");
+ 
+       llvm->draw->disk_cache_find_shader(llvm->draw->disk_cache_cookie,
+                                          &cached,
+                                          ir_sha1_cache_key);
++      printf("ok3.2\n");
+       if (!cached.data_size)
+          needs_caching = true;
+    }
++   printf("ok4\n");
+    variant->gallivm = gallivm_create(module_name, llvm->context, &cached);
++   printf("ok5\n");
+ 
+    create_jit_types(variant);
++   printf("ok6\n");
+ 
+    if (gallivm_debug & (GALLIVM_DEBUG_TGSI | GALLIVM_DEBUG_IR)) {
+-      if (llvm->draw->vs.vertex_shader->state.type == PIPE_SHADER_IR_TGSI)
++      if (llvm->draw->vs.vertex_shader->state.type == PIPE_SHADER_IR_TGSI) {
+          tgsi_dump(llvm->draw->vs.vertex_shader->state.tokens, 0);
+-      else
++         printf("ok6.1\n");
++      } else {
+          nir_print_shader(llvm->draw->vs.vertex_shader->state.ir.nir, stderr);
++         printf("ok6.2\n");
++      }
+       draw_llvm_dump_variant_key(&variant->key);
++      printf("ok6.3\n");
+    }
++   printf("ok7\n");
+ 
+    variant->vertex_header_type = create_jit_vertex_header(variant->gallivm, num_inputs);
++   printf("ok8\n");
+    variant->vertex_header_ptr_type = LLVMPointerType(variant->vertex_header_type, 0);
++   printf("ok9\n");
+ 
+    draw_llvm_generate(llvm, variant);
++   printf("ok10\n");
+ 
+    gallivm_compile_module(variant->gallivm);
++   printf("ok11\n");
+ 
+    variant->jit_func = (draw_jit_vert_func)
+          gallivm_jit_function(variant->gallivm, variant->function);
++   printf("ok12\n");
+ 
+-   if (needs_caching)
++   if (needs_caching) {
+       llvm->draw->disk_cache_insert_shader(llvm->draw->disk_cache_cookie,
+                                            &cached,
+                                            ir_sha1_cache_key);
++      printf("ok12.1\n");
++   }
++   printf("ok13\n");
+    gallivm_free_ir(variant->gallivm);
++   printf("ok14\n");
+ 
+    variant->list_item_global.base = variant;
+    variant->list_item_local.base = variant;
