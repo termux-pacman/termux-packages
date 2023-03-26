@@ -3,19 +3,31 @@
 
 ### Code for connecting repository:
 main:
-```
+<!--```
 [main]
 Server = https://service.termux-pacman.dev/main/$arch
+```-->
+```
+[main]
+Server = https://s3.amazonaws.com/termux-pacman.us/main/$arch
 ```
 x11:
-```
-[main]
+<!--```
+[x11]
 Server = https://service.termux-pacman.dev/x11/$arch
+```-->
+```
+[x11]
+Server = https://s3.amazonaws.com/termux-pacman.us/x11/$arch
 ```
 root:
-```
-[main]
+<!--```
+[rott]
 Server = https://service.termux-pacman.dev/root/$arch
+```-->
+```
+[root]
+Server = https://s3.amazonaws.com/termux-pacman.us/root/$arch
 ```
 
 ### Other information:
