@@ -31,4 +31,3 @@ termux_step_post_make_install() {
 		ln -sfr $TERMUX_PREFIX/lib/libvulkan.so{,.1}
 	fi
 }
-

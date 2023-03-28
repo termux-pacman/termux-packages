@@ -34,4 +34,3 @@ termux_step_post_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/man/man1
 	cp $(find . -name bat.1) $TERMUX_PREFIX/share/man/man1/
 }
-
