@@ -80,4 +80,3 @@ termux_step_create_debscripts() {
 	chmod 0700 postinst prerm
 }
 
-
