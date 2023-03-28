@@ -14,4 +14,3 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="-f misc/termux/Makefile"
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob"
 }
-
