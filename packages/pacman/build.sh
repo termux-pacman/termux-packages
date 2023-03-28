@@ -30,4 +30,3 @@ termux_step_create_debscripts() {
 	echo "mkdir -p $TERMUX_PREFIX/var/cache/pacman/pkg" >> postinst
 	chmod 755 postinst
 }
-
