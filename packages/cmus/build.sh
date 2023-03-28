@@ -20,3 +20,4 @@ termux_step_pre_configure() {
 termux_step_configure() {
 	./configure prefix=$TERMUX_PREFIX
 }
+
