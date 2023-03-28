@@ -19,4 +19,3 @@ termux_step_make_install() {
 	install -Dm600 plantuml.jar $TERMUX_PREFIX/share/java/
 	install -Dm700 plantuml $TERMUX_PREFIX/bin/
 }
-
