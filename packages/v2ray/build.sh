@@ -33,4 +33,3 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin v2ray
 	install -Dm600 -t $TERMUX_PREFIX/share/v2ray release/config/*.json
 }
-
