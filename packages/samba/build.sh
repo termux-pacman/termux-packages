@@ -168,4 +168,3 @@ termux_step_post_massage() {
 	# 755 - as opposed to 700 - because testparm throws up a warning otherwise
 	chmod 755 "$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/var/lock/samba" "$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/var/lib/samba" "$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/var/cache/samba"
 }
-
