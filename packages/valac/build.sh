@@ -16,4 +16,3 @@ termux_step_post_make_install() {
 	local v=$(echo ${TERMUX_PKG_VERSION#*:} | cut -d . -f 1-2)
 	ln -sf vala-${v}/libvalaccodegen.so $TERMUX_PREFIX/lib/libvalaccodegen.so
 }
-
