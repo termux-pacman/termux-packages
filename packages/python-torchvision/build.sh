@@ -31,4 +31,3 @@ termux_step_create_debscripts() {
 	echo "#!$TERMUX_PREFIX/bin/sh" > postinst
 	echo "pip3 install typing_extensions requests" >> postinst
 }
-
