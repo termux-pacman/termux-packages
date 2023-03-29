@@ -247,6 +247,7 @@ jobs:
       run: |
         echo '${{ secrets.SF_GPG_BOT }}' > key.gpg
         gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --import key.gpg > /dev/null
+        rm key.gpg
     - name: Uploading packages to aws
       run: |
         source ./aws-cli-action/func.sh
