@@ -25,3 +25,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 
 TERMUX_PKG_DEPENDS="libc++, libprotobuf, vulkan-headers, vulkan-tools"
 TERMUX_PKG_PYTHON_COMMON_DEPS="wheel, pybind11"
+
