@@ -4,6 +4,7 @@ TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 # Align the version with `libarrow-cpp` package.
 TERMUX_PKG_VERSION=11.0.0
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/apache/arrow/archive/refs/tags/apache-arrow-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=4a8c0c3d5b39ca81f4a636a41863f1cf5e0ed199f994bf5ead0854ca037eb741
 TERMUX_PKG_DEPENDS="libarrow-cpp (>= ${TERMUX_PKG_VERSION}), libc++, python, python-numpy"
@@ -26,6 +27,7 @@ termux_step_pre_configure() {
 		"
 	export PYARROW_WITH_DATASET=1
 	export PYARROW_WITH_HDFS=1
+	export PYARROW_WITH_PARQUET=1
 }
 
 termux_step_configure() {
@@ -36,4 +38,11 @@ termux_step_configure() {
 
 termux_step_make_install() {
 	pip install --no-deps --no-build-isolation . --prefix $TERMUX_PREFIX
+}
+
+termux_step_post_make_install() {
+	local f="$TERMUX_PYTHON_HOME/site-packages/pyarrow/_generated_version.py"
+	if [ ! -e "${f}" ]; then
+		echo "version = '${TERMUX_PKG_VERSION#*:}'" > "${f}"
+	fi
 }
