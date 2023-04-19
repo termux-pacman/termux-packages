@@ -1,0 +1,10 @@
+--- mesa-23.0.0/meson.build	2023-02-23 05:36:49.000000000 +0300
++++ mesa-23.0.0/meson.build.patch	2023-03-11 18:38:50.288856581 +0300
+@@ -1178,7 +1178,6 @@
+     '-Werror=missing-prototypes',
+     '-Werror=return-type',
+     '-Werror=empty-body',
+-    '-Werror=incompatible-pointer-types',
+     '-Werror=int-conversion',
+     '-Wimplicit-fallthrough',
+     '-Wmisleading-indentation',

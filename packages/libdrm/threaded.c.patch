@@ -1,0 +1,38 @@
+--- src/tests/nouveau/threaded.c	2023-03-13 10:01:32.898802503 +0300
++++ src/tests/nouveau/threaded.c.patch	2023-03-13 10:02:05.108802491 +0300
+@@ -31,15 +31,14 @@
+ #include "xf86drm.h"
+ #include "nouveau.h"
+ 
+-static __typeof__(ioctl) *old_ioctl;
+ static int failed;
+ 
+ static int import_fd;
+ 
+ #if defined(__GLIBC__) || defined(__FreeBSD__)
+-int ioctl(int fd, unsigned long request, ...)
++int ioctl_new(int fd, unsigned long request, ...)
+ #else
+-int ioctl(int fd, int request, ...)
++int ioctl_new(int fd, int request, ...)
+ #endif
+ {
+ 	va_list va;
+@@ -48,7 +47,7 @@
+ 
+ 	va_start(va, request);
+ 	arg = va_arg(va, void *);
+-	ret = old_ioctl(fd, request, arg);
++	ret = ioctl(fd, request, arg);
+ 	va_end(va);
+ 
+ 	if (ret < 0 && request == DRM_IOCTL_GEM_CLOSE && errno == EINVAL)
+@@ -80,8 +79,6 @@
+ 	struct nouveau_bo *bo;
+ 	pthread_t t1, t2;
+ 
+-	old_ioctl = dlsym(RTLD_NEXT, "ioctl");
+-
+ 	if (argc < 2) {
+ 		fd = drmOpenWithType("nouveau", NULL, DRM_NODE_RENDER);
+ 		if (fd >= 0)

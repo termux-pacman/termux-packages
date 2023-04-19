@@ -1,0 +1,165 @@
+diff --git a/src/amd/common/ac_rgp.c b/src/amd/common/ac_rgp.c
+index ca42f67..a128993 100644
+--- a/src/amd/common/ac_rgp.c
++++ b/src/amd/common/ac_rgp.c
+@@ -1178,7 +1178,7 @@ int ac_dump_rgp_capture(struct radeon_info *info,
+    t = time(NULL);
+    now = *localtime(&t);
+ 
+-   snprintf(filename, sizeof(filename), "/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rgp",
++   snprintf(filename, sizeof(filename), "@TERMUX_PREFIX@/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rgp",
+             util_get_process_name(), 1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour,
+             now.tm_min, now.tm_sec);
+ 
+diff --git a/src/amd/compiler/aco_print_asm.cpp b/src/amd/compiler/aco_print_asm.cpp
+index ecfdb95..6d9480d 100644
+--- a/src/amd/compiler/aco_print_asm.cpp
++++ b/src/amd/compiler/aco_print_asm.cpp
+@@ -177,7 +177,7 @@ print_asm_clrx(Program* program, std::vector<uint32_t>& binary, unsigned exec_si
+ #ifdef _WIN32
+    return true;
+ #else
+-   char path[] = "/tmp/fileXXXXXX";
++   char path[] = "@TERMUX_PREFIX@/tmp/fileXXXXXX";
+    char line[2048], command[128];
+    FILE* p;
+    int fd;
+diff --git a/src/amd/vulkan/layers/radv_rra_layer.c b/src/amd/vulkan/layers/radv_rra_layer.c
+index 573baf9..657ec61 100644
+--- a/src/amd/vulkan/layers/radv_rra_layer.c
++++ b/src/amd/vulkan/layers/radv_rra_layer.c
+@@ -74,7 +74,7 @@ radv_rra_handle_trace(VkQueue _queue)
+    t = time(NULL);
+    now = *localtime(&t);
+ 
+-   snprintf(filename, sizeof(filename), "/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rra",
++   snprintf(filename, sizeof(filename), "@TERMUX_PREFIX@/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rra",
+             util_get_process_name(), 1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour,
+             now.tm_min, now.tm_sec);
+ 
+@@ -365,4 +365,4 @@ rra_DestroyAccelerationStructureKHR(VkDevice _device, VkAccelerationStructureKHR
+    simple_mtx_unlock(&device->rra_trace.data_mtx);
+ 
+    device->layer_dispatch.rra.DestroyAccelerationStructureKHR(_device, _structure, pAllocator);
+-}
+\ No newline at end of file
++}
+diff --git a/src/amd/vulkan/radv_debug.c b/src/amd/vulkan/radv_debug.c
+index a8a0a1c..253565f 100644
+--- a/src/amd/vulkan/radv_debug.c
++++ b/src/amd/vulkan/radv_debug.c
+@@ -837,7 +837,7 @@ void
+ radv_print_spirv(const char *data, uint32_t size, FILE *fp)
+ {
+ #ifndef _WIN32
+-   char path[] = "/tmp/fileXXXXXX";
++   char path[] = "@TERMUX_PREIFX@/tmp/fileXXXXXX";
+    char command[128];
+    int fd;
+ 
+diff --git a/src/broadcom/vulkan/v3dv_debug.c b/src/broadcom/vulkan/v3dv_debug.c
+index 065e8f6..733f35f 100644
+--- a/src/broadcom/vulkan/v3dv_debug.c
++++ b/src/broadcom/vulkan/v3dv_debug.c
+@@ -32,7 +32,7 @@
+ void
+ v3dv_print_spirv(const char *data, uint32_t size, FILE *fp)
+ {
+-   char path[] = "/tmp/fileXXXXXX";
++   char path[] = "@TERMUX_PREFIX@/tmp/fileXXXXXX";
+    char line[2048], command[128];
+    FILE *p;
+    int fd;
+diff --git a/src/freedreno/decode/replay.c b/src/freedreno/decode/replay.c
+index 8001dec..bb361ba 100644
+--- a/src/freedreno/decode/replay.c
++++ b/src/freedreno/decode/replay.c
+@@ -462,7 +462,7 @@ static int
+ override_cmdstream(struct device *dev, struct cmdstream *cs,
+                    const char *cmdstreamgen)
+ {
+-   static const char *tmpfilename = "/tmp/cmdstream_override.rd";
++   static const char *tmpfilename = "@TERMUX_PREFIX@/tmp/cmdstream_override.rd";
+ 
+    /* Find a free space for the new cmdstreams and resources we will use
+     * when overriding existing cmdstream.
+diff --git a/src/gallium/auxiliary/gallivm/lp_bld_debug.cpp b/src/gallium/auxiliary/gallivm/lp_bld_debug.cpp
+index 54bc5d5..dfcbb78 100644
+--- a/src/gallium/auxiliary/gallivm/lp_bld_debug.cpp
++++ b/src/gallium/auxiliary/gallivm/lp_bld_debug.cpp
+@@ -233,9 +233,9 @@ lp_profile(LLVMValueRef func, const void *code)
+       if (getenv("PERF_BUILDID_DIR")) {
+          pid_t pid = getpid();
+          char filename[256];
+-         snprintf(filename, sizeof filename, "/tmp/perf-%llu.map", (unsigned long long)pid);
++         snprintf(filename, sizeof filename, "@TERMUX_PREIFX@/tmp/perf-%llu.map", (unsigned long long)pid);
+          perf_map_file = fopen(filename, "wt");
+-         snprintf(filename, sizeof filename, "/tmp/perf-%llu.map.asm", (unsigned long long)pid);
++         snprintf(filename, sizeof filename, "@TERMUX_PREFIX@/tmp/perf-%llu.map.asm", (unsigned long long)pid);
+          perf_asm_file.open(filename);
+       }
+       first_time = FALSE;
+diff --git a/src/gallium/frontends/clover/llvm/invocation.cpp b/src/gallium/frontends/clover/llvm/invocation.cpp
+index 7a50fea..ab43146 100644
+--- a/src/gallium/frontends/clover/llvm/invocation.cpp
++++ b/src/gallium/frontends/clover/llvm/invocation.cpp
+@@ -355,7 +355,7 @@ namespace {
+               name, ::llvm::MemoryBuffer::getMemBuffer(source).release());
+ 
+       if (headers.size()) {
+-         const std::string tmp_header_path = "/tmp/clover/";
++         const std::string tmp_header_path = "@TERMUX_PREFIX@/tmp/clover/";
+ 
+          c.getHeaderSearchOpts().AddPath(tmp_header_path,
+                                          clang::frontend::Angled,
+diff --git a/src/gtest/src/gtest-port.cc b/src/gtest/src/gtest-port.cc
+index fc5ba6b..0c81248 100644
+--- a/src/gtest/src/gtest-port.cc
++++ b/src/gtest/src/gtest-port.cc
+@@ -1105,9 +1105,9 @@ class CapturedStream {
+     // The location /data/local/tmp is directly accessible from native code.
+     // '/sdcard' and other variants cannot be relied on, as they are not
+     // guaranteed to be mounted, or may have a delay in mounting.
+-    char name_template[] = "/data/local/tmp/gtest_captured_stream.XXXXXX";
++    char name_template[] = "@TERMUX_PREFIX@/tmp/gtest_captured_stream.XXXXXX";
+ #  else
+-    char name_template[] = "/tmp/captured_stream.XXXXXX";
++    char name_template[] = "@TERMUX_PREFIX@/tmp/captured_stream.XXXXXX";
+ #  endif  // GTEST_OS_LINUX_ANDROID
+     const int captured_fd = mkstemp(name_template);
+     if (captured_fd == -1) {
+diff --git a/src/mesa/main/debug.c b/src/mesa/main/debug.c
+index 43a68d1..eccc512 100644
+--- a/src/mesa/main/debug.c
++++ b/src/mesa/main/debug.c
+@@ -286,7 +286,7 @@ write_texture_image(struct gl_texture_object *texObj,
+                         GL_RGBA, GL_UNSIGNED_BYTE, buffer, img);
+ 
+       /* make filename */
+-      snprintf(s, sizeof(s), "/tmp/tex%u.l%u.f%u.ppm", texObj->Name, level, face);
++      snprintf(s, sizeof(s), "@TERMUX_PREFIX@/tmp/tex%u.l%u.f%u.ppm", texObj->Name, level, face);
+ 
+       printf("  Writing image level %u to %s\n", level, s);
+       write_ppm(s, buffer, img->Width, img->Height, 4, 0, 1, 2, GL_FALSE);
+@@ -332,7 +332,7 @@ _mesa_write_renderbuffer_image(const struct gl_renderbuffer *rb)
+                  format, type, &ctx->DefaultPacking, buffer);
+ 
+    /* make filename */
+-   snprintf(s, sizeof(s), "/tmp/renderbuffer%u.ppm", rb->Name);
++   snprintf(s, sizeof(s), "@TERMUX_PREFIX@/tmp/renderbuffer%u.ppm", rb->Name);
+    snprintf(s, sizeof(s), "C:\\renderbuffer%u.ppm", rb->Name);
+ 
+    printf("  Writing renderbuffer image to %s\n", s);
+diff --git a/src/vulkan/util/rmv/vk_rmv_exporter.c b/src/vulkan/util/rmv/vk_rmv_exporter.c
+index 026441a..dd92f10 100644
+--- a/src/vulkan/util/rmv/vk_rmv_exporter.c
++++ b/src/vulkan/util/rmv/vk_rmv_exporter.c
+@@ -1699,7 +1699,7 @@ vk_dump_rmv_capture(struct vk_memory_trace_data *data)
+    time_t t = time(NULL);
+    now = *localtime(&t);
+ 
+-   snprintf(filename, sizeof(filename), "/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rmv",
++   snprintf(filename, sizeof(filename), "@TERMUX_PREFIX@/tmp/%s_%04d.%02d.%02d_%02d.%02d.%02d.rmv",
+             util_get_process_name(), 1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour,
+             now.tm_min, now.tm_sec);
+ 

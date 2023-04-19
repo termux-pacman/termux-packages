@@ -1,0 +1,11 @@
+--- libclc-16.0.1.src/CMakeLists.txt	2023-04-05 06:36:38.000000000 +0300
++++ libclc-16.0.1.src/CMakeLists.txt.patch	2023-04-13 13:43:55.134228201 +0300
+@@ -326,7 +326,7 @@
+ 
+ 			# Add prepare target
+ 			add_custom_command( OUTPUT "${obj_suffix}"
+-				            COMMAND prepare_builtins -o
++				            COMMAND "./prepare_builtins_hb" -o
+ 					    "${obj_suffix}"
+ 					    "builtins.opt.${obj_suffix}"
+ 					    DEPENDS "opt.${obj_suffix}"

@@ -1,0 +1,10 @@
+--- libomxil-bellagio-0.9.3/configure.ac	2023-03-12 22:17:09.598818625 +0300
++++ libomxil-bellagio-0.9.3/configure.ac.patch	2023-03-12 22:35:17.768818210 +0300
+@@ -231,7 +231,6 @@
+ # Check for library functions                                                  #
+ ################################################################################
+ 
+-AC_FUNC_MALLOC
+ AC_FUNC_REALLOC
+ AC_CHECK_FUNCS([gethostbyname gettimeofday memset mkdir socket strdup strerror strndup strrchr])
+ 
