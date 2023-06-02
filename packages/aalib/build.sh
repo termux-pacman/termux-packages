@@ -29,4 +29,3 @@ termux_step_pre_configure() {
 	chmod 0700 $_bin/$_cc
 	export PATH=$_bin:$PATH
 }
-
