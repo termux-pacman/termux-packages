@@ -232,6 +232,10 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [aarch64, arm, i686, x86_64]
+      fail-fast: false
     steps:
     - name: Clone repository
       uses: actions/checkout@v3
@@ -254,30 +258,27 @@ jobs:
         sfuf() {
           gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "$1"
           for format_file in "" ".sig"; do
-            aws s3 cp "${1}${format_file}" s3://'${{ secrets.SFPU }}'/${repo#*-}/${file_sp[1]}/"${1##*/}${format_file}"
+            aws s3 cp "${1}${format_file}" s3://'${{ secrets.SFPU }}'/${repo#*-}/${{ matrix.arch }}/"${1##*/}${format_file}"
           done
           rm "$1.sig"
         }
-        for archive in pkgs-*/pkgs-{aarch64,arm,i686,x86_64}-${{ github.sha }}.tar; do
-          dir_sp=(${archive//// })
-          file_sp=(${dir_sp[-1]//-/ })
-          tar xf "$archive"
-          for repo in $(jq --raw-output '.[].name' repo.json); do
-            dp_file="deleted_${repo}_packages.txt"
-            if [[ -f pkgs/$dp_file ]]; then
-              path_dp_file=pkgs/${{ github.sha }}_${dp_file}
-              mv pkgs/${dp_file} ${path_dp_file}
-              sfuf "${path_dp_file}"
-            fi
-            for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
-              for list_pkg in pkgs/*.pkg.*; do
-                dir_pkg_sp=(${list_pkg//// })
-                if [[ $(echo $name_pkg | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
+        archive="pkgs-${{ matrix.arch }}-${{ github.sha }}/pkgs-${{ matrix.arch }}-${{ github.sha }}.tar"
+        tar xf "$archive"
+        for repo in $(jq --raw-output '.[].name' repo.json); do
+          dp_file="deleted_${repo}_packages.txt"
+          if [[ -f pkgs/$dp_file ]]; then
+            path_dp_file=pkgs/${{ github.sha }}_${dp_file}
+            mv pkgs/${dp_file} ${path_dp_file}
+            sfuf "${path_dp_file}"
+          fi
+          for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
+            for list_pkg in pkgs/*.pkg.*; do
+              dir_pkg_sp=(${list_pkg//// })
+              for static in "" "-static"; do
+                if [[ $(echo "${name_pkg}${static}" | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
                   sfuf "$list_pkg"
-                  break
                 fi
               done
             done
           done
-          rm -fr ./pkgs
         done
