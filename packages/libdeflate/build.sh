@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/ebiggers/libdeflate/archive/refs/tags/v${TE
 TERMUX_PKG_SHA256=225d982bcaf553221c76726358d2ea139bb34913180b20823c782cede060affd
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_FORCE_CMAKE=true
-
