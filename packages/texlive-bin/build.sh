@@ -118,4 +118,3 @@ termux_step_pre_configure() {
 	export OTANGLE=$TERMUX_PKG_HOSTBUILD_DIR/texk/web2c/otangle
 	export HIMKTABLES=$TERMUX_PKG_HOSTBUILD_DIR/texk/web2c/himktables
 }
-
