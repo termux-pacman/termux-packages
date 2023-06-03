@@ -30,4 +30,3 @@ termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/include/c-client c-client/linkage.[ch] src/c-client/*.h src/osdep/unix/*.h
 	cp -a c-client/osdep.h $TERMUX_PREFIX/include/c-client/
 }
-
