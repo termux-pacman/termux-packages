@@ -12,4 +12,3 @@ ac_cv_posix1_2008_realpath=yes
 "
 # coreutils provides the posix sort executable:
 TERMUX_PKG_DEPENDS="coreutils, ncurses, libltdl"
-
