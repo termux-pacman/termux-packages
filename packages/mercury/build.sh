@@ -64,4 +64,3 @@ termux_step_post_configure() {
 	sed -i -e 's,\([^A-Za-z0-9_]PATH=\)\.\.,\1'$_BUILD_UTIL':..,g' \
 		$TERMUX_PKG_SRCDIR/Mmakefile
 }
-
