@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL="https://github.com/MiniZinc/libminizinc/archive/refs/tags/$TE
 TERMUX_PKG_SHA256=012f8b1b995d2f93c6cb67f4e1e5321e8666ae51bd38e65337f7351f76468996
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++, zlib, gecode"
-
