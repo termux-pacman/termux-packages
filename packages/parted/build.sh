@@ -16,4 +16,3 @@ termux_step_pre_configure() {
 	CFLAGS+=" -Wno-gnu-designator"
 	export LIBS="-liconv"
 }
-
