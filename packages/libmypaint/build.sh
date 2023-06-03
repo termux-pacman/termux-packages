@@ -26,4 +26,3 @@ termux_step_post_configure() {
 	# What is this?
 	find . -name Makefile | xargs -n 1 sed -i 's/ yes -lm/ -lm/g'
 }
-
