@@ -34,4 +34,3 @@ termux_step_pre_configure() {
 		termux_error_exit "SOVERSION guard check failed."
 	fi
 }
-
