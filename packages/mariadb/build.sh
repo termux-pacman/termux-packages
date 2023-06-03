@@ -107,4 +107,3 @@ termux_step_create_debscripts() {
 	echo "exit 0" >> postinst
 	chmod 0755 postinst
 }
-
