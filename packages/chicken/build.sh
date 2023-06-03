@@ -18,4 +18,3 @@ termux_step_pre_configure() {
 
 	export C_COMPILER="$CC"
 }
-
