@@ -35,4 +35,3 @@ termux_step_post_massage() {
 		termux_error_exit "RUNPATH for recollindex is not properly set."
 	fi
 }
-
