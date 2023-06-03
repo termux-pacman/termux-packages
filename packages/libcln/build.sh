@@ -41,4 +41,3 @@ termux_step_post_configure() {
 		-e 's/^\(#define long_long_bitsize\) .*$/\1 64/' \
 		include/cln/intparam.h
 }
-
