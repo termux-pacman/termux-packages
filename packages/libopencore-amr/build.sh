@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://sourceforge.net/projects/opencore-amr/files/opencore-a
 TERMUX_PKG_SHA256=483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1
 TERMUX_PKG_BREAKS="libopencore-amr-dev"
 TERMUX_PKG_REPLACES="libopencore-amr-dev"
-
