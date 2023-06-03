@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-
 TERMUX_PKG_SHA256=70d9c156ec86d63de0f7bdae50540ffa492b25ec1d69491c7520845c860b9a62
 TERMUX_PKG_BREAKS="dtc-dev"
 TERMUX_PKG_REPLACES="dtc-dev"
-
