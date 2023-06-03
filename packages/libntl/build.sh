@@ -39,4 +39,3 @@ termux_step_make_install() {
 	cd src
 	make install
 }
-
