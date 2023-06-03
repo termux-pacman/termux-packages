@@ -11,4 +11,3 @@ TERMUX_PKG_BUILD_IN_SRC=true
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--with-pcap=linux --without-libnl"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/pcap-config share/man/man1/pcap-config.1"
-
