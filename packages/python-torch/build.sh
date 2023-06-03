@@ -89,4 +89,3 @@ termux_step_create_debscripts() {
 	echo "echo 'Installing dependencies for $TERMUX_PKG_NAME...'" >> postinst
 	echo "pip3 install filelock jinja2 networkx sympy typing_extensions" >> postinst
 }
-
