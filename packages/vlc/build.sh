@@ -83,4 +83,3 @@ termux_step_pre_configure() {
 	local _libgcc="$($CC -print-libgcc-file-name)"
 	LDFLAGS+=" -L$(dirname $_libgcc) -l:$(basename $_libgcc)"
 }
-
