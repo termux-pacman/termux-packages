@@ -15,4 +15,3 @@ termux_step_post_get_source() {
 termux_step_configure() {
 	:
 }
-
