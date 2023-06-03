@@ -10,4 +10,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/lib/libXfixes
 TERMUX_PKG_SHA256=b695f93cd2499421ab02d22744458e650ccc88c1d4c8130d60200213abc02d58
 TERMUX_PKG_DEPENDS="libx11"
 TERMUX_PKG_BUILD_DEPENDS="xorgproto, xorg-util-macros"
-
