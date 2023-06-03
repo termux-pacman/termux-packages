@@ -10,4 +10,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/lib/libxshmfe
 TERMUX_PKG_SHA256=870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f
 TERMUX_PKG_BUILD_DEPENDS="xorgproto, xorg-util-macros"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-futex"
-
