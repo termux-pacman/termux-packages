@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="libraptor2"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
+

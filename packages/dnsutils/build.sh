@@ -64,3 +64,4 @@ termux_step_make_install() {
 	make -C bin/delv install
 	make -C bin/nsupdate install
 }
+

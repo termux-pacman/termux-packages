@@ -13,3 +13,4 @@ ac_cv_header_glob_h=no
 --disable-threads
 --with-sysroot=$TERMUX_BASE_DIR
 "
+

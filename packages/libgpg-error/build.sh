@@ -37,3 +37,4 @@ termux_step_pre_configure() {
 	# errors, so force-disable it.
 	sed -i 's/USE_POSIX_THREADS_WEAK/DONT_USE_POSIX_THREADS_WEAK/g' configure
 }
+

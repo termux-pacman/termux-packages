@@ -26,3 +26,4 @@ termux_step_post_massage() {
 		ln -sf libraptor2.so libraptor2.so.0
 	fi
 }
+

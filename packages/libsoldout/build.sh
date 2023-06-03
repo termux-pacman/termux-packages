@@ -23,3 +23,4 @@ termux_step_make_install() {
 	install -pm700 -t "$TERMUX_PREFIX/lib" libsoldout.{a,so,so.*}
 	install -pm700 -t "$TERMUX_PREFIX/bin" mkd2{html,latex,man}
 }
+

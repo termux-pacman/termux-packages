@@ -39,3 +39,4 @@ termux_step_post_get_source() {
 	done
 	unset PATCH_CHECKSUMS PATCHFILE PATCH_NUM
 }
+

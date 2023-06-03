@@ -27,3 +27,4 @@ termux_step_post_make_install() {
 
 	install -Dm700 -t $TERMUX_PREFIX/bin target/${CARGO_TARGET_NAME}/release/tree-sitter
 }
+

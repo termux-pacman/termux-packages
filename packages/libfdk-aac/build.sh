@@ -11,3 +11,4 @@ TERMUX_PKG_LICENSE_FILE=NOTICE
 termux_step_pre_configure() {
 	./autogen.sh
 }
+

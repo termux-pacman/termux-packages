@@ -29,3 +29,4 @@ termux_step_pre_configure() {
 termux_step_post_make_install() {
 	ln -sf avahi-compat-libdns_sd/dns_sd.h $TERMUX_PREFIX/include/dns_sd.h
 }
+

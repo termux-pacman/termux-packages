@@ -17,3 +17,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob"
 	CFLAGS+=" -DNO_INLINE_GETPASS=1"
 }
+

@@ -11,3 +11,4 @@ TERMUX_PKG_AUTO_UPDATE=true
 termux_step_post_make_install() {
 	mv "$TERMUX_PREFIX"/lib/libPNGwriter_shared.so libPNGwriter.so
 }
+

@@ -15,3 +15,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-posix-semaphore"
 	./bootstrap.sh
 }
+

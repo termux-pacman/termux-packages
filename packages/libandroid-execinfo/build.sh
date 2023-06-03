@@ -26,3 +26,4 @@ termux_step_make_install() {
 	install -Dm600 libandroid-execinfo.so $TERMUX_PREFIX/lib/libandroid-execinfo.so
 	ln -sfr $TERMUX_PREFIX/lib/libandroid-execinfo.so $TERMUX_PREFIX/lib/libexecinfo.so
 }
+

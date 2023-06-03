@@ -26,3 +26,4 @@ termux_step_post_massage() {
 		termux_error_exit "SONAME of liblzma.so is not properly set."
 	fi
 }
+

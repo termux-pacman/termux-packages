@@ -33,3 +33,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -liconv -llog"
 	export TERMUX_PKG_SRCDIR="$TERMUX_PKG_SRCDIR/src"
 }
+

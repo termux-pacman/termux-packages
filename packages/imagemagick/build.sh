@@ -35,3 +35,4 @@ termux_step_pre_configure() {
 	# Value of PKG_CONFIG becomes hardcoded in bin/*-config
 	export PKG_CONFIG=pkg-config
 }
+

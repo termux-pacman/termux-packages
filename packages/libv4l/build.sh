@@ -11,3 +11,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-v4l-utils
 --disable-qv4l2
 "
+

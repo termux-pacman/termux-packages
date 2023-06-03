@@ -17,3 +17,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -llog"
 	CXXFLAGS+=" -D_GLIBCXX_USE_CXX11_ABI=1"
 }
+

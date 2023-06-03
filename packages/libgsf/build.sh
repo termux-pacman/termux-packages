@@ -22,3 +22,4 @@ termux_step_pre_configure() {
 termux_step_post_configure() {
 	touch ./gsf/g-ir-scanner
 }
+
