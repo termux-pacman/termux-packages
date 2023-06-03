@@ -36,4 +36,3 @@ termux_step_pre_configure() {
 	local libgcc=$($CC -print-libgcc-file-name)
 	export LIBS="-L$(dirname ${libgcc}) -l:$(basename ${libgcc})"
 }
-
