@@ -23,4 +23,3 @@ termux_step_configure() {
 		PREFIX="$TERMUX_PREFIX" \
 		MANDIR="$TERMUX_PREFIX/share/man"
 }
-
