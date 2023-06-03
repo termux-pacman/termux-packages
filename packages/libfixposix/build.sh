@@ -13,4 +13,3 @@ ac_cv_prog_PKGCONFIG=yes
 termux_step_pre_configure() {
 	autoreconf -fi
 }
-
