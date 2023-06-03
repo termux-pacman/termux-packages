@@ -9,4 +9,3 @@ TERMUX_PKG_SHA256=a38f0f194555d558533b8b15c0c478e946310022d0ec7b34334e19e4574dce
 termux_step_pre_configure() {
 	autoreconf -vfi
 }
-
