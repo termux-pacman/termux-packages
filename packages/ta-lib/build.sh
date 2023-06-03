@@ -13,4 +13,3 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	curl https://sourceforge.net/p/ta-lib/code/HEAD/tree/tags/release-${TERMUX_PKG_VERSION//./-}/ta-lib/LICENSE.TXT?format=raw -o $TERMUX_PKG_SRCDIR/LICENSE
 }
-
