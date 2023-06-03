@@ -45,4 +45,3 @@ termux_step_post_make_install() {
 
 	install -Dm600 -t "${TERMUX_PREFIX}"/share/man/man1 ./debian/i2pd.1
 }
-
