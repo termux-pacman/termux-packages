@@ -11,4 +11,3 @@ TERMUX_PKG_SHA256=89bfc0e814f288f784202e6e5f9b362b788ccecdeb078670145eacd8749656
 TERMUX_PKG_DEPENDS="libx11, libxext"
 TERMUX_PKG_BUILD_DEPENDS="libxfixes, xorgproto, xorg-util-macros"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-malloc0returnsnull"
-
