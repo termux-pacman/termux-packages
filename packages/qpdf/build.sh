@@ -15,4 +15,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DRANDOM_DEVICE=/dev/urandom"
 termux_step_pre_configure() {
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
-
