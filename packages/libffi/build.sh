@@ -27,4 +27,3 @@ termux_step_post_configure() {
 	# work around since mmap can't be written and marked executable in android anymore from userspace
 	echo "#define FFI_MMAP_EXEC_WRIT 1" >> fficonfig.h
 }
-
