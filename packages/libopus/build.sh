@@ -8,4 +8,3 @@ TERMUX_PKG_SHA256=c9b32b4253be5ae63d1ff16eea06b94b5f0f2951b7a02aceef58e3a3ce49c5
 TERMUX_PKG_BREAKS="libopus-dev"
 TERMUX_PKG_REPLACES="libopus-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-extra-programs"
-
