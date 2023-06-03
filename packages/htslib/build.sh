@@ -14,4 +14,3 @@ TERMUX_PKG_BLACKLISTED_ARCHES="arm"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
-
