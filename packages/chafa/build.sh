@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://github.com/hpjansson/chafa/releases/download/${TERMUX
 TERMUX_PKG_SHA256=0f5490d52a500a6b386f15cc04c6e8702afd0285d422b9575b332e0c683957f2
 TERMUX_PKG_DEPENDS="freetype, glib, imagemagick, libcairo, libjpeg-turbo, librsvg, libtiff, libwebp"
 
-
