@@ -13,4 +13,3 @@ ac_cv_file__tmp_hstr_ms_wsl=no
 termux_step_pre_configure() {
 	autoreconf -fi
 }
-
