@@ -7,3 +7,4 @@ TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/skvadrik/re2c/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=acc6e49ec9638d4a75578f161945567d52bfcb85da998212adaef6328f5bdcc5
 TERMUX_PKG_DEPENDS="libc++"
+
