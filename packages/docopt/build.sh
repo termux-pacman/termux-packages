@@ -13,4 +13,3 @@ TERMUX_PKG_AUTO_UPDATE=true
 termux_step_pre_configure() {
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
-
