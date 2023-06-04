@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dqt5=disabled
 -Dx11=disabled
 "
+
