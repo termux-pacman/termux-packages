@@ -18,3 +18,4 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin ./bin/sshping
 	install -Dm600 -t $TERMUX_PREFIX/share/man/man8 ./doc/sshping.8
 }
+
