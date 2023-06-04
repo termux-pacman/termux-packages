@@ -39,3 +39,4 @@ termux_step_pre_configure() {
 termux_step_post_configure() {
 	sed -i 's:\./\(rexximage\):\1:' Makefile
 }
+
