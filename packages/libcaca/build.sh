@@ -48,4 +48,3 @@ termux_step_post_configure() {
 		perl -p -i -e 's/#define HAVE_FLDLN2 1//' $TERMUX_PKG_BUILDDIR/config.h
 	fi
 }
-
