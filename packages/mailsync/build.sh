@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--with-c-client=$TERMUX_PREFIX"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
+
