@@ -19,3 +19,4 @@ ac_cv_lib_pthread_pthread_create=yes
 ac_cv_lib_rt_clock_gettime=yes
 "
 TERMUX_MAKE_PROCESSES=1
+
