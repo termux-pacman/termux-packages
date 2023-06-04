@@ -32,3 +32,4 @@ termux_step_post_get_source() {
 termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin executable/crypto_monitor
 }
+
