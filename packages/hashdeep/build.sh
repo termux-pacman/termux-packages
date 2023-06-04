@@ -12,3 +12,4 @@ TERMUX_PKG_DEPENDS="libc++"
 termux_step_pre_configure() {
 	sh bootstrap.sh
 }
+
