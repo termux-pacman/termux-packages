@@ -10,3 +10,4 @@ TERMUX_PKG_SHA256=add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a1755
 # SOVERSION is equal to VERSION. Do not enable auto-update.
 TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_DEPENDS="brotli, libc++"
+
