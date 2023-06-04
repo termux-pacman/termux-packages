@@ -22,3 +22,4 @@ ac_cv_func_dn_expand=no
 termux_step_pre_configure() {
 	CXXFLAGS+=" -DNO_INLINE_GETPASS=1"
 }
+
