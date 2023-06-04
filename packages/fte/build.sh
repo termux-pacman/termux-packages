@@ -38,3 +38,4 @@ termux_step_pre_configure() {
 
 	echo '#include_next <ncurses.h>' > "$TERMUX_PKG_SRCDIR"/src/ncurses.h
 }
+
