@@ -14,3 +14,4 @@ termux_step_make_install () {
 	cp curseofwar $TERMUX_PREFIX/bin
 	cp $TERMUX_PKG_SRCDIR/curseofwar.6 $TERMUX_PREFIX/share/man/man6
 }
+
