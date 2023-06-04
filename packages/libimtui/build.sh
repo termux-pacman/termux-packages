@@ -14,3 +14,5 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_post_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin bin/hnterm
 }
+
+
