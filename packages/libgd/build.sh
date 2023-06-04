@@ -14,4 +14,3 @@ TERMUX_PKG_REPLACES="libgd-dev"
 # Disable vpx support for now, look at https://github.com/gagern/libgd/commit/d41eb72cd4545c394578332e5c102dee69e02ee8
 # for enabling:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--without-vpx --without-x"
-
