@@ -14,4 +14,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/gc"
 termux_step_post_get_source() {
 	./autogen.sh
 }
-
