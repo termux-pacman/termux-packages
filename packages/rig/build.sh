@@ -14,4 +14,3 @@ termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/man/man6 rig.6
 	install -Dm600 -t $TERMUX_PREFIX/share/rig data/*.idx
 }
-
