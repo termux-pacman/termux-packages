@@ -40,4 +40,3 @@ termux_step_pre_configure() {
 	# so if rebuilding these are not detected as modified. Fix that:
 	rm -f $TERMUX_PREFIX/lib/libjsoncpp.so*
 }
-
