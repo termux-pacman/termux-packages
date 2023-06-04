@@ -31,3 +31,4 @@ termux_step_post_make_install() {
 	fi
 	ln -sf $_LIBID3_SO $TERMUX_PREFIX/lib/libid3.so
 }
+
