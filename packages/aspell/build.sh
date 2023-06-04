@@ -13,4 +13,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --enable-32-bit-hash-fun"
 termux_step_pre_configure() {
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
-

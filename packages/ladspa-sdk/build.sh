@@ -14,4 +14,3 @@ termux_step_pre_configure() {
 	TERMUX_PKG_SRCDIR+="/src"
 	TERMUX_PKG_BUILDDIR="$TERMUX_PKG_SRCDIR"
 }
-

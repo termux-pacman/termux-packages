@@ -12,5 +12,3 @@ termux_step_post_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/man/man1 \
 		$TERMUX_PKG_SRCDIR/debian/cec-client.1
 }
-
-

@@ -27,4 +27,3 @@ termux_step_pre_configure() {
 	sed -i -e 's|@CMAKE_CXX_COMPILER@|'$CXX'|g' \
 		"$TERMUX_PKG_SRCDIR"/CMakeLists.txt
 }
-

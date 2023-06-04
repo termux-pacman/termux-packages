@@ -53,4 +53,3 @@ termux_step_host_build() {
 termux_step_pre_configure() {
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DIMPORT_EXECUTABLES=$TERMUX_PKG_HOSTBUILD_DIR/ImportExecutables.cmake"
 }
-

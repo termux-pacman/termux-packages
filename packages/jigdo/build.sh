@@ -18,4 +18,3 @@ termux_step_pre_configure() {
 	# Should prevent random failures on installation step.
 	export TERMUX_MAKE_PROCESSES=1
 }
-
