@@ -33,4 +33,3 @@ termux_step_post_get_source() {
 		termux_error_exit "Checksum mismatch for source files."
 	fi
 }
-
