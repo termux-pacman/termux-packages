@@ -25,3 +25,4 @@ termux_step_make_install() {
 		--prefix $TERMUX_PREFIX \
 		--jobs $TERMUX_MAKE_PROCESSES
 }
+
