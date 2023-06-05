@@ -7,3 +7,4 @@ TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/panotools/libpano13-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=79e5a1452199305e2961462720ef5941152779c127c5b96fc340d2492e633590
 TERMUX_PKG_DEPENDS="libjpeg-turbo, libpng, libtiff, zlib"
+
