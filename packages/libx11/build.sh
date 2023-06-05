@@ -33,4 +33,3 @@ termux_step_post_massage() {
 		ln -sf libX11.so libX11.so.6
 	fi
 }
-
