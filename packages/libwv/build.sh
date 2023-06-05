@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="glib, libgsf, libpng, libxml2, zlib"
 termux_step_pre_configure() {
 	NOCONFIGURE=1 ./autogen.sh
 }
-
