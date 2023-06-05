@@ -14,4 +14,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/gtk-doc"
 TERMUX_PKG_DEPENDS="libiconv, liblzma, zlib"
 TERMUX_PKG_BREAKS="libxml2-dev"
 TERMUX_PKG_REPLACES="libxml2-dev"
-
