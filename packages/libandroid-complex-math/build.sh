@@ -29,3 +29,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm644 -t $TERMUX_PREFIX/lib libandroid-complex-math.{a,so}
 }
+
