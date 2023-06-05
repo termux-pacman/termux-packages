@@ -10,3 +10,4 @@ termux_step_pre_configure() {
 	rm -f config.status
 	autoreconf -fi
 }
+
