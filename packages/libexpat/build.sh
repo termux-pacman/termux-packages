@@ -29,4 +29,3 @@ termux_step_post_get_source() {
 termux_step_post_make_install() {
 	sed  -r 's/.[0-9]+(\.[0-9]+)*//' -i $TERMUX_PREFIX/lib/cmake/expat-$TERMUX_PKG_VERSION/expat-noconfig.cmake
 }
-
