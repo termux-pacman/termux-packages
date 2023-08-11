@@ -14,7 +14,7 @@ Server = https://service.termux-pacman.dev/x11/$arch
 ```
 root:
 ```
-[rott]
+[root]
 Server = https://service.termux-pacman.dev/root/$arch
 ```
 
