@@ -35,4 +35,3 @@ termux_step_make_install() {
 	install -Dm700 restic "$TERMUX_PREFIX"/bin/restic
 	install -Dm600 -t "$TERMUX_PREFIX/share/man/man1/" doc/man/*.1
 }
-
