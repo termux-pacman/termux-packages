@@ -12,4 +12,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-gtk3"
 termux_step_pre_configure() {
 	./autogen.sh
 }
-
