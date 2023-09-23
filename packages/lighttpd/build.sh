@@ -41,3 +41,4 @@ termux_step_post_make_install() {
 	cd $TERMUX_PKG_SRCDIR/doc/config
 	TERMUX_PKG_CONFFILES+="$(find conf.d -type f -iname "*.conf" | sed -E 's/(.*)/etc\/lighttpd\/\1/g')"
 }
+

@@ -8,3 +8,4 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/lib/libXtst-$
 TERMUX_PKG_SHA256=84f5f30b9254b4ffee14b5b0940e2622153b0d3aed8286a3c5b7eeb340ca33c8
 TERMUX_PKG_DEPENDS="libx11, libxext, libxi"
 TERMUX_PKG_BUILD_DEPENDS="libxfixes, xorg-util-macros"
+

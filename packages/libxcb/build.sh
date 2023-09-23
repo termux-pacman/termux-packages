@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="libxau, libxdmcp"
 TERMUX_PKG_BUILD_DEPENDS="xcb-proto, xorg-util-macros"
 TERMUX_PKG_RECOMMENDS="xorg-xauth"
 TERMUX_PKG_RM_AFTER_INSTALL="lib/python*"
+
