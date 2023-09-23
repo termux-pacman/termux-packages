@@ -7,3 +7,4 @@ TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://github.com/Pulse-Eight/platform/archive/p8-platform-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=064f8d2c358895c7e0bea9ae956f8d46f3f057772cb97f2743a11d478a0f68a0
 TERMUX_PKG_DEPENDS="libc++"
+

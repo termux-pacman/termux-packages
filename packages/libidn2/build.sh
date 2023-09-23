@@ -8,3 +8,4 @@ TERMUX_PKG_SHA256=93caba72b4e051d1f8d4f5a076ab63c99b77faee019b72b9783b267986dbb4
 TERMUX_PKG_DEPENDS="libandroid-support, libiconv, libunistring"
 TERMUX_PKG_BREAKS="libidn2-dev"
 TERMUX_PKG_REPLACES="libidn2-dev"
+

@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="libflac, libid3tag, libltdl, libmad, libogg, libvorbis, pcre
 TERMUX_PKG_BREAKS="libmp3splt-dev"
 TERMUX_PKG_REPLACES="libmp3splt-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-cutter"
+

@@ -42,3 +42,4 @@ termux_step_post_make_install() {
 	mv -f luac.1 luac5.3.1
 	export AR="$OLDAR"
 }
+
