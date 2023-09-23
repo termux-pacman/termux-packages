@@ -46,3 +46,4 @@ termux_step_post_make_install() {
 		"$TERMUX_PREFIX"/share/aclocal/guile.m4 \
 		"$TERMUX_PREFIX"/share/aclocal/guile18.m4
 }
+

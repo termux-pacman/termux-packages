@@ -60,3 +60,4 @@ termux_step_make_install() {
 	# in host build step.
 	make install-data install-exec
 }
+
