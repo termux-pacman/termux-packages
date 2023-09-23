@@ -17,4 +17,3 @@ termux_step_post_get_source() {
 	./autogen.sh
 	export PYTHON="python${TERMUX_PYTHON_VERSION}"
 }
-
