@@ -36,3 +36,5 @@ termux_step_pre_configure () {
 termux_step_post_configure () {
 	cp $TERMUX_PKG_BUILDER_DIR/$TERMUX_ARCH/{H5Tinit.c,H5lib_settings.c} $TERMUX_PKG_BUILDDIR/src/shared/
 }
+
+

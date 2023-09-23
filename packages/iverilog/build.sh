@@ -34,3 +34,5 @@ termux_step_post_configure() {
 		-e 's:@rdynamic@:-rdynamic:g' \
 		-e 's:@shared@:-shared:g'
 }
+
+

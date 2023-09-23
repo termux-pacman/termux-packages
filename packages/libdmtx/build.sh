@@ -9,3 +9,5 @@ TERMUX_PKG_SHA256=7aa62adcefdd6e24bdabeb82b3ce41a8d35f4a0c95ab0c4438206aecafd6e1
 termux_step_pre_configure() {
 	autoreconf -fi
 }
+
+
