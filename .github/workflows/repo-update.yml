@@ -87,7 +87,6 @@ jobs:
         if $(git log -1 --pretty=%B | grep -q '%needbuild'); then
           needbuild=true
         fi
-        info_commit=$(git log -1 --pretty=%B)
         git config --global user.name "termux-pacman-bot"
         git config --global user.email "termux-pacman-bot@outlook.com"
         git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages-pacman.git"
@@ -108,7 +107,7 @@ jobs:
           git add $(echo ${i_sp[1]} | sed 's/&&/ /g')
           {
             if $needbuild; then
-              git commit -m "$(echo $commit_file | sed '/%ci:no-build/d; /\[skip ci\]/d')"
+              git commit -m "$(echo '"$commit_file"' | sed '/%ci:no-build/d; /\[skip ci\]/d')"
             else
               git commit -m "$commit_file"
             fi
