@@ -26,3 +26,4 @@ termux_step_post_make_install() {
 	mkdir -p $TERMUX_PREFIX/lib/pkgconfig
 	cp packaging/libldns.pc $TERMUX_PREFIX/lib/pkgconfig/libldns.pc
 }
+
