@@ -23,4 +23,3 @@ termux_step_post_make_install() {
 	# (GAP transparently allows read access to those)
 	gzip -9 -n -f $TERMUX_PREFIX/lib/gap/pkg/transgrp/data/*.*
 }
-
