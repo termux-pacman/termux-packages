@@ -15,4 +15,3 @@ termux_step_pre_configure() {
 		termux_setup_no_integrated_as
 	fi
 }
-
