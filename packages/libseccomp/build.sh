@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/seccomp/libseccomp/releases/download/v${TER
 TERMUX_PKG_SHA256=d82902400405cf0068574ef3dc1fe5f5926207543ba1ae6f8e7a1576351dcbdb
 TERMUX_PKG_BREAKS="libseccomp-dev"
 TERMUX_PKG_REPLACES="libseccomp-dev"
-
