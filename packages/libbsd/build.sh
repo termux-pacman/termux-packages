@@ -9,5 +9,3 @@ TERMUX_PKG_DEPENDS="libmd"
 TERMUX_PKG_BREAKS="libbsd-dev"
 TERMUX_PKG_REPLACES="libbsd-dev"
 TERMUX_PKG_BUILD_IN_SRC=true
-
-
