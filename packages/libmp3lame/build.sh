@@ -26,4 +26,3 @@ termux_step_post_make_install() {
 		Cflags: -I\${includedir}
 	EOF
 }
-
