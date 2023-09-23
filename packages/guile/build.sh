@@ -46,4 +46,3 @@ termux_step_pre_configure() {
 termux_step_post_configure() {
 	cp $TERMUX_PKG_BUILDER_DIR/malloc.h $TERMUX_PKG_BUILDDIR/lib/
 }
-
