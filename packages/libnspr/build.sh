@@ -24,4 +24,3 @@ termux_step_pre_configure() {
 		NOW=$TERMUX_PKG_HOSTBUILD_DIR/config/now
 		"
 }
-
