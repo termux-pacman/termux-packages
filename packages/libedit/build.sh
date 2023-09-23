@@ -13,5 +13,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="share/man/man7/editline.7 share/man/man3/history.3"
 termux_step_pre_configure() {
 	CFLAGS+=" -D__STDC_ISO_10646__=201103L -DNBBY=CHAR_BIT"
 }
-
-
