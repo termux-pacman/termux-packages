@@ -22,4 +22,3 @@ termux_step_pre_configure() {
 	find $TERMUX_PKG_SRCDIR -name '*.h' -o -name '*.c' -o -name '*.cpp' | \
 		xargs -n 1 sed -i -e 's:"/tmp:"'$TERMUX_PREFIX'/tmp:g'
 }
-
