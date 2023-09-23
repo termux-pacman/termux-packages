@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="libc++"
 termux_step_pre_configure() {
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
-
