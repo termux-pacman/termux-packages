@@ -32,4 +32,3 @@ termux_step_post_make_install() {
 	mkdir -p ${TERMUX_PREFIX}/share/bash-completion/completions
 	install -m 644 ${TERMUX_PKG_SRCDIR}/tools/bash-autocomplete.sh ${TERMUX_PREFIX}/share/bash-completion/completions/x264
 }
-
