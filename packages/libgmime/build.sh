@@ -24,5 +24,3 @@ termux_step_pre_configure() {
 
 	cp "$TERMUX_PKG_BUILDER_DIR"/iconv-detect.h ./
 }
-
-
