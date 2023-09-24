@@ -64,5 +64,3 @@ termux_step_post_massage() {
 		ln -sf libpulse.so libpulse.so.0
 	fi
 }
-
-
