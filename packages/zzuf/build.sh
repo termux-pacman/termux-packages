@@ -30,3 +30,4 @@ termux_step_pre_configure() {
 
 	CPPFLAGS+=" -D__USE_GNU"
 }
+

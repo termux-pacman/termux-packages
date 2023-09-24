@@ -24,3 +24,4 @@ termux_step_make() {
 termux_step_make_install() {
 	python makepanda/installpanda.py --prefix $TERMUX_PREFIX
 }
+

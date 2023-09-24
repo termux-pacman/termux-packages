@@ -17,3 +17,4 @@ share/doc/xapian-core/
 termux_step_pre_configure() {
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
+

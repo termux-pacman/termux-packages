@@ -24,3 +24,4 @@ termux_step_pre_configure() {
 		CPPFLAGS+=" -DOPENSSL_NO_INLINE_ASM"
 	fi
 }
+

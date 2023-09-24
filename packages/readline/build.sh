@@ -38,3 +38,4 @@ termux_step_post_make_install() {
 	mkdir -p $TERMUX_PREFIX/etc
 	cp $TERMUX_PKG_BUILDER_DIR/inputrc $TERMUX_PREFIX/etc/
 }
+
