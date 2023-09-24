@@ -41,4 +41,3 @@ termux_step_post_make_install() {
 		"$TERMUX_PKG_HOSTBUILD_DIR"/tidy.1 \
 		"$TERMUX_PREFIX"/share/man/man1/
 }
-
