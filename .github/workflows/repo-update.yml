@@ -107,7 +107,7 @@ jobs:
           git add $(echo ${i_sp[1]} | sed 's/&&/ /g')
           {
             if $needbuild; then
-              git commit -m "$(echo '"$commit_file"' | sed '/%ci:no-build/d; /\[skip ci\]/d')"
+              git commit -m "$(echo $commit_file | sed '/%ci:no-build/d; /\[skip ci\]/d')"
             else
               git commit -m "$commit_file"
             fi
