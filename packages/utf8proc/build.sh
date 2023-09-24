@@ -24,4 +24,3 @@ termux_step_post_get_source() {
 termux_step_pre_configure() {
 	rm $TERMUX_PKG_SRCDIR/CMakeLists.txt
 }
-
