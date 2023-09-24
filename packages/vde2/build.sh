@@ -12,4 +12,3 @@ termux_step_pre_configure() {
 	autoreconf --install
 	CFLAGS+=" -Dindex=strchr -Drindex=strrchr"
 }
-
