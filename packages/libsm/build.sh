@@ -9,4 +9,3 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/lib/libSM-${T
 TERMUX_PKG_SHA256=fdcbe51e4d1276b1183da77a8a4e74a137ca203e0bcfb20972dd5f3347e97b84
 TERMUX_PKG_DEPENDS="libice, libuuid"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros, xtrans"
-
