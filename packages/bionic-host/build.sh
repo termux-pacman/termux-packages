@@ -78,3 +78,4 @@ termux_step_make_install() {
     cp ${TERMUX_PKG_SRCDIR}/external/icu/icu4c/source/stubdata/icudt58l.dat ${TERMUX_PREFIX}/opt/bionic-host/usr/icu/
     cp -r ${TERMUX_PKG_SRCDIR}/out/target/product/generic*/system/* ${TERMUX_PREFIX}/opt/bionic-host/
 }
+
