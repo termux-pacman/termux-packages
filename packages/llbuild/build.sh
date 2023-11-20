@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://github.com/apple/swift-llbuild/archive/swift-${TERMUX_
 TERMUX_PKG_SHA256=cc8dfb098db4b0210ca5466f59d3e5fc55c4eedcd835263e6eae7dd719ba8203
 TERMUX_PKG_DEPENDS="libc++, libandroid-spawn, libsqlite"
 TERMUX_PKG_NO_STATICSPLIT=true
-

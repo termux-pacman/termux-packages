@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://github.com/apple/swift-corelibs-libdispatch/archive/sw
 TERMUX_PKG_SHA256=db30ccf6b20963112ab3aad256c2e49a18041a9806cf2f05854fe63a90d688c2
 TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_DEPENDS="libc++, libblocksruntime"
-
