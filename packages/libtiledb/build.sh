@@ -22,4 +22,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dlibmagic_FOUND=ON
 -Dlibmagic_DICTIONARY=$TERMUX_PREFIX/share/misc/magic.mgc
 "
-
