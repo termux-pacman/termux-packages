@@ -22,4 +22,3 @@ termux_step_make_install() {
 		-o "$TERMUX_PREFIX/bin/shfmt" \
 		./cmd/shfmt
 }
-
