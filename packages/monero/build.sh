@@ -26,4 +26,3 @@ termux_step_post_configure() {
 		-o $bin/generate_translations_header_for_build
 	export PATH=$bin:$PATH
 }
-

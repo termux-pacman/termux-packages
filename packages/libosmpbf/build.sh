@@ -14,4 +14,3 @@ termux_step_pre_configure() {
 
 	CPPFLAGS+=" -DPROTOBUF_USE_DLLS"
 }
-

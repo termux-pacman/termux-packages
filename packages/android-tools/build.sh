@@ -17,4 +17,3 @@ termux_step_pre_configure() {
 
 	LDFLAGS+=" $($TERMUX_SCRIPTDIR/packages/libprotobuf/interface_link_libraries.sh)"
 }
-
