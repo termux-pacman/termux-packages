@@ -36,4 +36,3 @@ termux_step_install_license() {
 	install -Dm600 -t $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME \
 		$TERMUX_PKG_BUILDER_DIR/LICENSE
 }
-
