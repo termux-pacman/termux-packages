@@ -104,3 +104,4 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin \
 		$_TMP_BINDIR/sysprop_{cpp,java}
 }
+

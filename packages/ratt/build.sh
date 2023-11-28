@@ -34,3 +34,4 @@ termux_step_pre_configure() {
 	go mod init || :
 	go mod tidy
 }
+
