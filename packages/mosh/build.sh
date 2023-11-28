@@ -36,3 +36,4 @@ termux_step_post_make_install() {
 	EOF
 	chmod 0700 mosh
 }
+

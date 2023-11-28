@@ -48,3 +48,4 @@ termux_step_make_install() {
 	make install PREFIX="$TERMUX_PREFIX"
 	cd shards && make install PREFIX="$TERMUX_PREFIX"
 }
+
