@@ -240,4 +240,3 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/aapt
 	jar cfM $TERMUX_PREFIX/share/aapt/android.jar AndroidManifest.xml resources.arsc
 }
-

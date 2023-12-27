@@ -24,4 +24,3 @@ termux_step_pre_configure() {
 	CFLAGS+=" -fcommon"
 	LDFLAGS+=" -liconv"
 }
-

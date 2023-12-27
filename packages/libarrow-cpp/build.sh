@@ -36,4 +36,3 @@ termux_step_pre_configure() {
 	# Fix linker script error for zlib 1.3
 	LDFLAGS+=" -Wl,--undefined-version"
 }
-
