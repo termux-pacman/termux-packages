@@ -24,3 +24,4 @@ termux_pkg_auto_update() {
 		echo "WARNING: Skipping auto-update: Not a release($tag)"
 	fi
 }
+
