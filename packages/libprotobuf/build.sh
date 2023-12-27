@@ -28,3 +28,4 @@ termux_step_post_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/doc/libutf8-range \
 		$TERMUX_PKG_SRCDIR/third_party/utf8_range/LICENSE
 }
+
