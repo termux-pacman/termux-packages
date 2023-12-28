@@ -168,7 +168,6 @@ jobs:
           fi
           sort_list_files+="${list_files[$index]}"
         done
-        exit 0
         
         # Start upload
         info "Start upload"
