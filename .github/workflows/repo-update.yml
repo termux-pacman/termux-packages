@@ -8,14 +8,103 @@ on:
   schedule:
     - cron:  '0,30 0-23 * * *'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
-  update-repo:
+  check-repo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target_repo: [main-aarch64, main-arm, main-i686, main-x86_64, x11-aarch64, x11-arm, x11-i686, x11-x86_64, root-aarch64, root-arm, root-i686, root-x86_64]
+      fail-fast: false
+    steps:
+    - name: Clone check-tools
+      run: git clone "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/check-tools"
+    - name: Import pub key of Termux-Pacman
+      run: gpg --keyserver keyserver.ubuntu.com --recv-keys 998de27318e867ea976ba877389ceed64573dfca
+    - name: Clone termux-packages
+      run: |
+        cd check-tools
+        git clone https://github.com/termux-pacman/termux-packages
+    - name: Running a scan
+      run: |
+        target_repo='${{ matrix.target_repo }}'
+        REPO="${target_repo%%-*}"
+        ARCH="${target_repo#*-}"
+        TOTAL="RESULT.${REPO}.${ARCH}"
+
+        case "$REPO" in
+          "main") DIR_REPO="termux-packages/packages";;
+          "x11") DIR_REPO="termux-packages/x11-packages";;
+          "root") DIR_REPO="termux-packages/root-packages";;
+          *)
+            echo "Error: repo '${REPO}' is unknown"
+            exit 0;;
+        esac
+
+        cd check-tools
+        if [ ! -d "$DIR_REPO" ]; then
+          echo "Error: '$DIR_REPO' not found."
+          exit 0
+        fi
+
+        bash ./check_pkgs_by_repo.sh "$REPO" "$ARCH" "$DIR_REPO"
+
+        mkdir total
+        touch ./total/${TOTAL}
+        for RESULT in "./output/DOESNOTMATCH.${REPO}.${ARCH}"; do
+          if [ -f ${RESULT} ]; then
+            cat ${RESULT} | awk '{printf $1 "\n"}' >> ./total/${TOTAL}
+          fi
+        done
+        tar cf total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz ./total
+    - name: Store RESULT.* files
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: total-${{ matrix.target_repo }}-${{ github.sha }}
+        path: ./check-tools/total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz
+        if-no-files-found: error
+
+  rebuild-pkgs:
+    needs: check-repo
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
+      run: git clone https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
+    - name: Get RESULT.* files
+      uses: actions/download-artifact@v3
+      with:
+        path: ./termux-packages-pacman/
+    - name: Rebuild packages
       run: |
-        git clone https://github.com/termux-pacman/termux-packages.git
-        mv termux-packages termux-packages-pacman
+        cd termux-packages-pacman
+        for i in ./total-*/total-*.tar.gz; do
+          tar xf $i -C ./
+        done
+        for i in $(sort ./total/RESULT.* | uniq); do
+          BUILD_SOURCE=$(ls */${i}/build.sh 2> /dev/null) || true
+          if [ -z "${BUILD_SOURCE}" ]; then
+            BUILD_SOURCE=$(ls */*/${i}.subpackage.sh 2> /dev/null) || true
+            if [ -n "${BUILD_SOURCE}" ]; then
+              BUILD_SOURCE="$(dirname ${BUILD_SOURCE})/build.sh"
+            else
+              echo "Source package '${i}' was not found, skip"
+              continue
+            fi
+          fi
+          PAST_TIME=$(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE})))
+          echo "$i - ${BUILD_SOURCE} - $(expr ${PAST_TIME} / 3600)"
+        done
+
+  update-repo:
+    needs: rebuild-pkgs
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone repository
+      run: git clone https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
     - name: Clone root repository
       run: git clone https://github.com/termux/termux-packages.git
     - name: Update repo
@@ -79,6 +168,7 @@ jobs:
           fi
           sort_list_files+="${list_files[$index]}"
         done
+        exit 0
         
         # Start upload
         info "Start upload"
