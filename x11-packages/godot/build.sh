@@ -62,3 +62,4 @@ termux_step_make_install() {
 	install -Dm644 $TERMUX_PKG_BUILDDIR/misc/dist/linux/godot.6 $TERMUX_PREFIX/share/man/man6/godot.6
 	install -Dm644 $TERMUX_PKG_BUILDDIR/misc/dist/linux/org.godotengine.Godot.xml $TERMUX_PREFIX/share/mime/packages/org.godotengine.Godot.xml
 }
+
