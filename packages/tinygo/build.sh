@@ -220,3 +220,4 @@ termux_step_make_install() {
 	cp -fr "${TERMUX_PKG_SRCDIR}/build/release/tinygo" "${TERMUX_PREFIX}/lib"
 	ln -fsv "../lib/tinygo/bin/tinygo" "${TERMUX_PREFIX}/bin/tinygo"
 }
+
