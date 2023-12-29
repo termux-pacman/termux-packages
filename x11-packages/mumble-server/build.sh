@@ -33,3 +33,4 @@ termux_step_post_make_install() {
 		$TERMUX_PKG_SRCDIR/auxiliary_files/mumble-server.ini
 	chmod 0700 $TERMUX_PREFIX/bin/mumble-server-user-wrapper
 }
+
