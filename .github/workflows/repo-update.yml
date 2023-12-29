@@ -22,7 +22,7 @@ jobs:
     steps:
     - name: Clone check-tools
       run: git clone "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/check-tools"
-    - name: Import pub key of Termux-Pacman
+    - name: Import key of Termux-Pacman
       run: gpg --keyserver keyserver.ubuntu.com --recv-keys 998de27318e867ea976ba877389ceed64573dfca
     - name: Clone termux-packages
       run: |
@@ -52,8 +52,31 @@ jobs:
 
         bash ./check_pkgs_by_repo.sh "$REPO" "$ARCH" "$DIR_REPO"
 
+        # Packages should be removed as they do not support the architecture
+        if [ -f "./output/NOTSUPPORTARCH.${REPO}.${ARCH}" ]; then
+          # Install aws-cli
+          git clone https://github.com/termux-pacman/aws-cli-action
+          ./aws-cli-action/setup.sh '${{ secrets.AWS_ACCESS_KEY_ID }}' '${{ secrets.AWS_ACCESS_KEY }}' '${{ secrets.AWS_REGION }}'
+
+          # Import gpg key
+          mkdir gk
+          echo "${{ secrets.SF_GPG_BOT }}" > gk/termux-pacman-bot.gpg
+          gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --import gk/termux-pacman-bot.gpg
+          rm -fr gk
+
+          # Upload file
+          DELETED_FILE="./output/$(date +%s)-deleted_termux-${REPO}_packages.txt"
+          mv "./output/NOTSUPPORTARCH.${REPO}.${ARCH}" "${DELETED_FILE}"
+          gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "${DELETED_FILE}"
+          for format_file in "" ".sig"; do
+            aws s3 cp "${DELETED_FILE}${format_file}" s3://'${{ secrets.SFPU }}'/${REPO}/${ARCH}/"${DELETED_FILE##*/}${format_file}"
+          done
+          rm "${DELETED_FILE}.sig"
+        fi
+
         mkdir total
         touch ./total/${TOTAL}
+        # NOTFOUND.${REPO}.${ARCH}
         for RESULT in "./output/DOESNOTMATCH.${REPO}.${ARCH}"; do
           if [ -f ${RESULT} ]; then
             cat ${RESULT} | awk '{printf $1 "\n"}' >> ./total/${TOTAL}
@@ -179,7 +202,7 @@ jobs:
         fi
         git config --global user.name "termux-pacman-bot"
         git config --global user.email "termux-pacman-bot@outlook.com"
-        git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages-pacman.git"
+        git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages.git"
         commit "Update system repo"
         git add .
         git reset packages root-packages x11-packages README.md SECURITY.md repo.json
