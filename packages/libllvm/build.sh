@@ -152,3 +152,4 @@ termux_step_post_make_install() {
 		done
 	fi
 }
+
