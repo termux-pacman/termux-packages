@@ -149,7 +149,7 @@ jobs:
         list_files=" "
         for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
           dir_sp=(${i//// })
-          if [[ ! $(echo "$list_files" | grep " ${dir_sp[0]}/${dir_sp[1]} ") ]]; then
+          if ! $(echo "$list_files" | grep -q " ${dir_sp[0]}/${dir_sp[1]} "); then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
             source_build="${dir_sp[0]}/${dir_sp[1]}/build.sh"
             if $(grep -q '^'${source_build}'$' ../REBUILD-LIST-BUILD); then
@@ -220,25 +220,44 @@ jobs:
           git add $(echo ${i_sp[1]} | sed 's/&&/ /g')
           {
             if $needbuild; then
-              git commit -m "$(echo $commit_file | sed '/%ci:no-build/d; /\[skip ci\]/d')"
+              git commit -m "$(echo $commit_file | sed 's/%ci:no-build//g; s/\[skip ci\]//g')"
             else
               git commit -m "$commit_file"
             fi
             git push origin master
           } || true
         done
+
+        # Recompile packages if necessary
         if [ -n "$(cat ../REBUILD-LIST-BUILD)" ]; then
-          commit "Rebuild packages"
+          info "Rebuild packages"
+          listchanged=""
+          curl https://api.github.com/repos/termux-pacman/termux-packages/issues -o ./LIST-ISSUES
           for i in $(cat ../REBUILD-LIST-BUILD); do
+            # It is necessary to create an issue because the package has
+            # a compilation error even after recompilation.
+            if $(git log -n 1 --format=%B -- "${i}" | grep -q '^termux-pacman/auto-check-repo:'); then
+              if ! $(jq -r ".[].title" ./LIST-ISSUES | grep -q "^\[AUTO-CHECK\]:.*$(dirname ${i})$"); then
+                commit "Create an issue on $(dirname ${i})"
+                GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
+                  --title "[AUTO-CHECK]: failed to recompile $(dirname ${i})" \
+                  --body "$(echo -e "This issue was automatically generated because the '$(dirname ${i})' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 2 --format=%H -- ${i} | tail -n1)")" \
+                  --label "auto recompilation failed" \
+                  --assignee Maxython
+              fi
+              continue
+            fi
             echo "" >> ./${i}
             git add ./${i}
             git commit -m "rebuild($(dirname ${i})): auto check"
             git push origin master
+            listchanged+=" ${i}"
           done
-          for i in $(cat ../REBUILD-LIST-BUILD); do
+          rm ./LIST-ISSUES
+          for i in ${listchanged}; do
             sed -i '$d' ./${i}
             git add ./${i}
           done
-          git commit -m "$(echo -e "Do not rebuild these packages again\n[skip ci]")"
+          git commit -m "$(echo -e "termux-pacman/auto-check-repo: do not rebuild these packages again\n[skip ci]")"
           git push origin master
         fi
