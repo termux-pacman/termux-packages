@@ -44,3 +44,4 @@ termux_step_post_configure() {
     # required by make install, otherwise it installs to '/'
     export INSTALL_ROOT="${TERMUX_PREFIX}"
 }
+
