@@ -254,10 +254,12 @@ jobs:
             listchanged+=" ${i}"
           done
           rm ./LIST-ISSUES
-          for i in ${listchanged}; do
-            sed -i '$d' ./${i}
-            git add ./${i}
-          done
-          git commit -m "$(echo -e "termux-pacman/auto-check-repo: do not rebuild these packages again\n[skip ci]")"
-          git push origin master
+          if [ -n "${listchanged}" ]; then
+            for i in ${listchanged}; do
+              sed -i '$d' ./${i}
+              git add ./${i}
+            done
+            git commit -m "$(echo -e "termux-pacman/auto-check-repo: do not rebuild these packages again\n[skip ci]")"
+            git push origin master
+          fi
         fi
