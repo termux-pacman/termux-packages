@@ -55,4 +55,3 @@ lib/libsundials_sunmatrixsparse.so.4
 		fi
 	done
 }
-
