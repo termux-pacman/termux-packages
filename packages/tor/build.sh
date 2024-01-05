@@ -21,4 +21,3 @@ termux_step_post_make_install() {
 	# use default config
 	mv "$TERMUX_PREFIX/etc/tor/torrc.sample" "$TERMUX_PREFIX/etc/tor/torrc"
 }
-
