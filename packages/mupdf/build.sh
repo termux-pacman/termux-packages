@@ -27,4 +27,3 @@ termux_step_post_make_install() {
 	termux_step_make
 	install -Dm600 -t $TERMUX_PREFIX/lib build/release*/libmupdf{-third,}.a
 }
-
