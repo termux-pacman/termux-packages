@@ -135,6 +135,13 @@ jobs:
         commit() {
           echo "-> $1"
         }
+        install_list_issues() {
+          if [ -f ../LIST-ISSUES ]; then
+            rm ../LIST-ISSUES
+          fi
+          curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
+            "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
+        }
         
         # Edit
         info "Edit"
@@ -211,8 +218,7 @@ jobs:
           git push origin master
         } || true
         commit "Update repo packages"
-        curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
-          "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
+        install_list_issues
         for i in $sort_list_files; do
           i_sp=(${i//###/ })
           commit "    ${i_sp[1]}"
@@ -239,6 +245,8 @@ jobs:
               NUMBER=$(echo "$LINE" | awk -F ' // ' '{printf $3}')
               GH_TOKEN="${{ secrets.TOKEN }}" gh issue close ${NUMBER} \
                 -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
+              install_list_issues
+              break
             done <<< $(jq -r '.[] | "\(.user.login) \("//") \(.state) \("//") \(.number) \("//") \(.title)"' ../LIST-ISSUES)
           done
         done
@@ -251,7 +259,7 @@ jobs:
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
             if $(git log -n 1 --format=%B -- "${i}" | grep -q '^termux-pacman/auto-check-repo:'); then
-              if ! $(jq -r ".[].title" ../LIST-ISSUES | grep -q "^\[AUTO-CHECK\]:.*$(dirname ${i})$"); then
+              if ! $(jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*$(dirname ${i})$"); then
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
                   --title "[AUTO-CHECK]: failed to recompile $(dirname ${i})" \
