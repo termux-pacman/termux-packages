@@ -233,8 +233,6 @@ jobs:
               USER=$(echo "$LINE" | awk -F ' // ' '{printf $1}')
               STATE=$(echo "$LINE" | awk -F ' // ' '{printf $2}')
               TITLE=$(echo "$LINE" | awk -F ' // ' '{printf $4}')
-              # TEST
-              echo "[AUTO-CHECK]: failed to recompile ${j}"
               if [ $STATE != "open" ] || [ $USER != "termux-pacman-bot" ] || [[ $TITLE != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
                 continue
               fi
