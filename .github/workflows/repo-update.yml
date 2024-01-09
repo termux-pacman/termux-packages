@@ -211,6 +211,8 @@ jobs:
           git push origin master
         } || true
         commit "Update repo packages"
+        curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
+          "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
         for i in $sort_list_files; do
           i_sp=(${i//###/ })
           commit "    ${i_sp[1]}"
@@ -226,18 +228,32 @@ jobs:
             fi
             git push origin master
           } || true
+          for j in $(echo ${i_sp[1]} | sed 's/&&/ /g'); do
+            while read LINE; do
+              USER=$(echo "$LINE" | awk -F ' // ' '{printf $1}')
+              STATE=$(echo "$LINE" | awk -F ' // ' '{printf $2}')
+              TITLE=$(echo "$LINE" | awk -F ' // ' '{printf $4}')
+              # TEST
+              echo "[AUTO-CHECK]: failed to recompile ${j}"
+              if [ $STATE != "open" ] || [ $USER != "termux-pacman-bot" ] || [[ $TITLE != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
+                continue
+              fi
+              NUMBER=$(echo "$LINE" | awk -F ' // ' '{printf $3}')
+              GH_TOKEN="${{ secrets.TOKEN }}" gh issue close ${NUMBER} \
+                -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
+            done <<< $(jq -r '.[] | "\(.user.login) \("//") \(.state) \("//") \(.number) \("//") \(.title)"' ../LIST-ISSUES)
+          done
         done
 
         # Recompile packages if necessary
         if [ -n "$(cat ../REBUILD-LIST-BUILD)" ]; then
           info "Rebuild packages"
           listchanged=""
-          curl https://api.github.com/repos/termux-pacman/termux-packages/issues -o ./LIST-ISSUES
           for i in $(cat ../REBUILD-LIST-BUILD); do
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
             if $(git log -n 1 --format=%B -- "${i}" | grep -q '^termux-pacman/auto-check-repo:'); then
-              if ! $(jq -r ".[].title" ./LIST-ISSUES | grep -q "^\[AUTO-CHECK\]:.*$(dirname ${i})$"); then
+              if ! $(jq -r ".[].title" ../LIST-ISSUES | grep -q "^\[AUTO-CHECK\]:.*$(dirname ${i})$"); then
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
                   --title "[AUTO-CHECK]: failed to recompile $(dirname ${i})" \
@@ -253,7 +269,6 @@ jobs:
             git push origin master
             listchanged+=" ${i}"
           done
-          rm ./LIST-ISSUES
           if [ -n "${listchanged}" ]; then
             for i in ${listchanged}; do
               sed -i '$d' ./${i}
