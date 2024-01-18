@@ -26,3 +26,4 @@ scripts/.vagrant/
 /packages/root-repo/
 /packages/x11-repo/
 /packages/tur-repo/
+/packages/glibc-repo/
