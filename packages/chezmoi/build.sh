@@ -36,3 +36,4 @@ termux_step_make_install() {
 	install -Dm600 ${TERMUX_PKG_BUILDDIR}/src/github.com/twpayne/chezmoi/completions/chezmoi.zsh \
 		$TERMUX_PREFIX/share/zsh/site-functions/_chezmoi
 }
+
