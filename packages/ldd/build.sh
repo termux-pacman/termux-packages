@@ -20,3 +20,4 @@ termux_step_make_install() {
 		> "${ldd}"
 	chmod 0700 "${ldd}"
 }
+
