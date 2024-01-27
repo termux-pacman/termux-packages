@@ -19,3 +19,4 @@ ac_cv_path_ZIP=$TERMUX_PREFIX/bin/zip
 --with-ncurses-libs=$TERMUX_PREFIX/lib
 --with-screen=ncurses
 "
+
