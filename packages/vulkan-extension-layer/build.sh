@@ -32,4 +32,3 @@ termux_pkg_auto_update() {
 
 	termux_pkg_upgrade_version "${latest_version}"
 }
-
