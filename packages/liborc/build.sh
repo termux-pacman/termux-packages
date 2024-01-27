@@ -16,4 +16,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dexamples=disabled
 -Dgtk_doc=disabled
 "
-
