@@ -13,4 +13,3 @@ TERMUX_PKG_RM_AFTER_INSTALL="bin/tkremind share/man/man1/tkremind.1 bin/cm2rem.t
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob"
 }
-
