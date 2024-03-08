@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://termux.dev/
 TERMUX_PKG_DESCRIPTION="Basic system tools for Termux"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.40.7"
+TERMUX_PKG_VERSION="1.41.0"
 TERMUX_PKG_SRCURL=https://github.com/termux/termux-tools/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=45cff1b95586ba1fac6ca768097bc9024b14d1c5b01bc213165f5ab0240b6a23
+TERMUX_PKG_SHA256=a840d56cf03d56370a493726bfb2a91859736baf2f2e07972d3e94f82351e49c
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_AUTO_UPDATE=true
@@ -12,13 +12,6 @@ TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag"
 TERMUX_PKG_BREAKS="termux-keyring (<< 1.9)"
 TERMUX_PKG_CONFLICTS="procps (<< 3.3.15-2)"
 TERMUX_PKG_SUGGESTS="termux-api"
-TERMUX_PKG_CONFFILES="
-etc/motd
-etc/motd.sh
-etc/motd-playstore
-etc/profile.d/init-termux-properties.sh
-etc/termux-login.sh
-"
 
 # Some of these packages are not dependencies and used only to ensure
 # that core packages are installed after upgrading (we removed busybox
@@ -33,6 +26,11 @@ termux_step_pre_configure() {
 }
 
 termux_step_post_make_install() {
-	cd "$TERMUX_PREFIX"
-	TERMUX_PKG_CONFFILES+=" $(find etc/termux/mirrors -type f)"
+	TERMUX_PKG_CONFFILES="$(cat "$TERMUX_PKG_BUILDDIR/conffiles")"
+}
+
+termux_step_create_debscripts() {
+	cat <<- EOF > ./preinst
+	$(cat "$TERMUX_PKG_BUILDDIR/preinst")
+	EOF
 }
