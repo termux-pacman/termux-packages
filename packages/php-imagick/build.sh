@@ -14,4 +14,3 @@ TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag"
 termux_step_pre_configure() {
 	$TERMUX_PREFIX/bin/phpize
 }
-
