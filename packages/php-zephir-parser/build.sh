@@ -22,3 +22,4 @@ termux_step_host_build() {
 	gcc -o "$TERMUX_PKG_HOSTBUILD_DIR/lemon" $TERMUX_PKG_SRCDIR/parser/lemon.c
 
 }
+
