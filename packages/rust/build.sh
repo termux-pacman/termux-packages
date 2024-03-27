@@ -203,4 +203,3 @@ termux_step_post_massage() {
 	rm -f lib/liblzma.so.$LZMA_VERSION
 	rm -f lib/liblzma.a
 }
-
