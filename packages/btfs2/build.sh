@@ -55,3 +55,4 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin $TERMUX_PKG_SRCDIR/cmd/btfs/btfs
 	ln -sfT btfs $TERMUX_PREFIX/bin/btfs2
 }
+
