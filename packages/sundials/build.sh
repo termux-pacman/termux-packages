@@ -65,3 +65,4 @@ lib/libsundials_sunnonlinsolnewton.so.4
 		fi
 	done
 }
+
