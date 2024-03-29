@@ -112,4 +112,3 @@ lib/libumfpack.so.6
 		fi
 	done
 }
-

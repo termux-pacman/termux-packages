@@ -58,4 +58,3 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -Wl,-rpath,$TERMUX_PREFIX/lib/octave/$TERMUX_PKG_VERSION"
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
-
