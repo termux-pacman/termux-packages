@@ -29,3 +29,4 @@ termux_step_install_license() {
 	# Install the license of LLVM
 	cp $TERMUX_PKG_SRCDIR/LICENSE.TXT $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME/LICENSE-LLVM.TXT
 }
+
