@@ -38,4 +38,3 @@ termux_step_make_install() {
 	install -Dm644 -T etc/lfcd.sh "$TERMUX_PREFIX/share/zsh/site-functions/lfcd"
 	install -Dm644 -T etc/lf.zsh "$TERMUX_PREFIX/share/zsh/site-functions/_lf"
 }
-
