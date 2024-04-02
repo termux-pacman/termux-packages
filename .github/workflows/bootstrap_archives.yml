@@ -23,7 +23,7 @@ jobs:
           - arm
           - i686
           - x86_64
-    if: github.repository == 'termux/termux-packages'
+    if: github.repository == 'termux-pacman/termux-packages'
     steps:
       - name: Git clone
         uses: actions/checkout@v4
