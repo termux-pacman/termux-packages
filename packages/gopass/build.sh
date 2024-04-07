@@ -35,4 +35,3 @@ termux_step_post_make_install() {
 	rm -f logo*.*
 	cp --parents -r * -t "$TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME"
 }
-
