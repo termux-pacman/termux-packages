@@ -22,3 +22,4 @@ termux_step_install_license() {
 	mkdir -p $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME
 	cp $TERMUX_PKG_SRCDIR/LICENSE.TXT $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME/
 }
+
