@@ -48,4 +48,3 @@ termux_step_post_make_install() {
 		echo "version = '${TERMUX_PKG_VERSION#*:}'" > "${f}"
 	fi
 }
-
