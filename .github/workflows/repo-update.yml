@@ -258,9 +258,9 @@ jobs:
           for i in $(cat ../REBUILD-LIST-BUILD); do
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
-            if [ $(git log -n 1 --format=%B -- "${i}") = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ] && \
-              [ $(git log -n 1 --format=%an -- "${i}") = "termux-pacman-bot" ] && \
-              [ $(git log -n 1 --format=%ae -- "${i}") = "termux-pacman-bot@outlook.com" ]; then
+            if [[ $(git log -n 1 --format=%B -- "${i}") = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ]] && \
+              [[ $(git log -n 1 --format=%an -- "${i}") = "termux-pacman-bot" ]] && \
+              [[ $(git log -n 1 --format=%ae -- "${i}") = "termux-pacman-bot@outlook.com" ]]; then
               if ! $(jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*$(dirname ${i})$"); then
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
