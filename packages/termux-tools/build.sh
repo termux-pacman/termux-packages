@@ -34,3 +34,4 @@ termux_step_create_debscripts() {
 	$(cat "$TERMUX_PKG_BUILDDIR/preinst")
 	EOF
 }
+
