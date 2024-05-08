@@ -258,7 +258,9 @@ jobs:
           for i in $(cat ../REBUILD-LIST-BUILD); do
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
-            if $(git log -n 1 --format=%B -- "${i}" | grep -q '^termux-pacman/auto-check-repo:'); then
+            if [ $(git log -n 1 --format=%B -- "${i}") = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ] && \
+              [ $(git log -n 1 --format=%an -- "${i}") = "termux-pacman-bot" ] && \
+              [ $(git log -n 1 --format=%ae -- "${i}") = "termux-pacman-bot@outlook.com" ]; then
               if ! $(jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*$(dirname ${i})$"); then
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
@@ -271,16 +273,16 @@ jobs:
             fi
             echo "" >> ./${i}
             git add ./${i}
-            git commit -m "rebuild($(dirname ${i})): auto check"
-            git push origin master
             listchanged+=" ${i}"
           done
           if [ -n "${listchanged}" ]; then
+            git commit -m "$(echo -e "termux-pacman/auto-check-repo: preparing to recompile packages\n[skip ci]")"
+            git push origin master
             for i in ${listchanged}; do
               sed -i '$d' ./${i}
               git add ./${i}
+              git commit -m "rebuild($(dirname ${i})): auto check by @termux-pacman-bot"
+              git push origin master
             done
-            git commit -m "$(echo -e "termux-pacman/auto-check-repo: do not rebuild these packages again\n[skip ci]")"
-            git push origin master
           fi
         fi
