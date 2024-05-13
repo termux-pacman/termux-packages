@@ -24,7 +24,6 @@ Server = https://service.termux-pacman.dev/root/$arch
 ### Other information:
  - Android support: 7+
  - Architecture support: all (aarch64, arm, x86_64, i686)
- - Security level: not complete (db and only a few packages are protected by signature)
  - Signature: termux-pacman organization gpg key
  - Powered by aws
  - Root repository: https://github.com/termux/termux-packages
