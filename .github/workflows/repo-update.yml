@@ -265,7 +265,7 @@ jobs:
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
                   --title "[AUTO-CHECK]: failed to recompile $(dirname ${i})" \
-                  --body "$(echo -e "This issue was automatically generated because the '$(dirname ${i})' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 2 --format=%H -- ${i} | tail -n1)")" \
+                  --body "$(echo -e "This issue was automatically generated because the '$(dirname ${i})' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
                   --label "auto recompilation failed" \
                   --assignee Maxython
               fi
