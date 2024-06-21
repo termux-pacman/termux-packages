@@ -34,4 +34,3 @@ termux_step_create_debscripts() {
 		rbw gen-completions elvish > ${TERMUX_PREFIX}/share/elvish/lib/rbw.elv
 	EOF
 }
-
