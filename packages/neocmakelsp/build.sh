@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://github.com/Decodetalkers/neocmakelsp/archive/refs/tags
 TERMUX_PKG_SHA256=f2a662f288a3212e37827e568013c4bb365dea26d4b3bc2cd01f955dfb46811c
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
+
