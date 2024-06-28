@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=17.0
-TERMUX_PKG_REVISION=33
+TERMUX_PKG_REVISION=34
 _COMMIT=82234f890786d49c49cf4ecbcb09c47bd9bea7ed
 TERMUX_PKG_SRCURL=https://github.com/openjdk/mobile/archive/$_COMMIT.tar.gz
 TERMUX_PKG_SHA256=5b298148a26e754120c6dfe699056d0609fc6ed92bfc858dc2ba4909ef6e791b
@@ -86,10 +86,13 @@ termux_step_create_debscripts() {
 	binaries="$(find $TERMUX_PREFIX/lib/jvm/java-17-openjdk/bin -executable -type f | xargs -I{} basename "{}" | xargs echo)"
 	manpages="$(find $TERMUX_PREFIX/lib/jvm/java-17-openjdk/man/man1 -name "*.1.gz" | xargs -I{} basename "{}" | xargs echo)"
 
-	cp $TERMUX_PKG_BUILDER_DIR/hooks/$TERMUX_PACKAGE_FORMAT/{postinst,prerm} .
-	sed -i -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" \
-		-e "s|@binaries@|${binaries}|g" \
-		-e "s|@manpages@|${manpages}|g" ./{postinst,prerm}
+	for hook in postinst prerm; do
+		sed -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" \
+			-e "s|@binaries@|${binaries}|g" \
+			-e "s|@manpages@|${manpages}|g" \
+			"$TERMUX_PKG_BUILDER_DIR/hooks/$TERMUX_PACKAGE_FORMAT/$hook.in" > $hook
+		chmod 700 $hook
+	done
 
 	if [ "$TERMUX_PACKAGE_FORMAT" = "pacman" ]; then
 		echo "post_install" > postupg
