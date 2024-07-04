@@ -9,3 +9,4 @@ TERMUX_PKG_BUILD_DEPENDS="lxqt-build-tools, qt6-qtbase, qt6-qttools"
 TERMUX_PKG_BREAKS="lxqt-panel (<= 1.3.0)"
 TERMUX_PKG_CONFLICTS="lxqt-panel (<= 1.3.0)"
 TERMUX_PKG_AUTO_UPDATE=true
+
