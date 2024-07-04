@@ -37,3 +37,4 @@ termux_step_make_install() {
 		--force-new-overwrite \
 		--import-pem-file $CERTFILE
 }
+
