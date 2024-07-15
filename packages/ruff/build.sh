@@ -37,3 +37,4 @@ termux_step_pre_configure() {
 		patch --silent -p1 -d ${d} < ${_patch} || :
 	done
 }
+
