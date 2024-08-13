@@ -20,3 +20,4 @@ termux_step_configure() {
 		--notmuch \
 		--disable-gpgme --disable-idn --zlib --zstd --sasl --ssl --gdbm --gss
 }
+

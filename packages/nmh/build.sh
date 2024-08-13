@@ -60,3 +60,4 @@ termux_step_post_make_install() {
 	ln -sfr "$TERMUX_PREFIX"/bin/show "$TERMUX_PREFIX"/bin/prev
 	ln -sfr "$TERMUX_PREFIX"/bin/show "$TERMUX_PREFIX"/bin/next
 }
+

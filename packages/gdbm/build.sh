@@ -9,3 +9,4 @@ TERMUX_PKG_DEPENDS="readline"
 TERMUX_PKG_BREAKS="gdbm-dev"
 TERMUX_PKG_REPLACES="gdbm-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-libgdbm-compat"
+
