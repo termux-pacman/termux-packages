@@ -63,4 +63,3 @@ termux_step_post_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/examples/mutt/
 	cp contrib/gpg.rc $TERMUX_PREFIX/share/examples/mutt/
 }
-
