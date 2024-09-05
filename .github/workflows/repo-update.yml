@@ -98,7 +98,7 @@ jobs:
     - name: Clone repository
       run: git clone https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
     - name: Get RESULT.* files
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v4.1.7
       with:
         path: ./
     - name: Creating a REBUILD-LIST-BUILD
