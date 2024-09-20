@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Secure shell for logging into a remote machine"
 TERMUX_PKG_LICENSE="BSD"
 TERMUX_PKG_MAINTAINER="Joshua Kahn @TomJo2000"
 TERMUX_PKG_VERSION="9.9p1"
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://github.com/openssh/openssh-portable/archive/refs/tags/V_$(sed 's/\./_/g; s/p/_P/g' <<< $TERMUX_PKG_VERSION).tar.gz
 TERMUX_PKG_SHA256=e8858153f188754d0bbf109477690eba226132879b6840cf08b51afb38151040
 TERMUX_PKG_AUTO_UPDATE=true
@@ -67,7 +67,7 @@ termux_step_pre_configure() {
 termux_step_post_configure() {
 	# We need to remove this file before installing, since otherwise the
 	# install leaves it alone which means no updated timestamps.
-	rm -Rf $TERMUX_PREFIX/etc/moduli
+	rm -f $TERMUX_PREFIX/etc/ssh/moduli
 }
 
 termux_step_post_make_install() {
@@ -87,6 +87,11 @@ termux_step_post_make_install() {
 
 	mkdir -p $TERMUX_PREFIX/etc/ssh/
 	cp $TERMUX_PKG_SRCDIR/moduli $TERMUX_PREFIX/etc/ssh/moduli
+
+	mkdir -p $TERMUX_PREFIX/etc/ssh/ssh_config.d
+	touch $TERMUX_PREFIX/etc/ssh/ssh_config.d/.placeholder
+	mkdir -p $TERMUX_PREFIX/etc/ssh/sshd_config.d
+	touch $TERMUX_PREFIX/etc/ssh/sshd_config.d/.placeholder
 }
 
 termux_step_post_massage() {
