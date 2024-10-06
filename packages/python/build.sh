@@ -4,9 +4,9 @@ TERMUX_PKG_DESCRIPTION="Python 3 programming language intended to enable clear p
 TERMUX_PKG_LICENSE="custom"
 TERMUX_PKG_LICENSE_FILE="LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=3.11.10
+TERMUX_PKG_VERSION=3.12.7
 TERMUX_PKG_SRCURL=https://www.python.org/ftp/python/${TERMUX_PKG_VERSION}/Python-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=07a4356e912900e61a15cb0949a06c4a05012e213ecd6b4e84d0f67aabbee372
+TERMUX_PKG_SHA256=24887b92e2afd4a2ac602419ad4b596372f67ac9b077190f459aba390faf5550
 TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_DEPENDS="gdbm, libandroid-posix-semaphore, libandroid-support, libbz2, libcrypt, libexpat, libffi, liblzma, libsqlite, ncurses, ncurses-ui-libs, openssl, readline, zlib"
 TERMUX_PKG_BUILD_DEPENDS="tk"
@@ -18,7 +18,7 @@ TERMUX_PKG_REPLACES="python-dev"
 TERMUX_PKG_PROVIDES="python3"
 
 # https://github.com/termux/termux-packages/issues/15908
-TERMUX_PKG_MAKE_PROCESSES=1
+TERMUX_MAKE_PROCESSES=1
 
 _MAJOR_VERSION="${TERMUX_PKG_VERSION%.*}"
 
@@ -75,6 +75,9 @@ termux_step_pre_configure() {
 		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --with-build-python=python$_MAJOR_VERSION"
 	fi
 
+	# For multiprocessing libs
+	export LDFLAGS+=" -landroid-posix-semaphore"
+
 	export LIBCRYPT_LIBS="-lcrypt"
 }
 
@@ -116,6 +119,14 @@ termux_step_create_debscripts() {
 		echo "== Note: pip is now separate from python =="
 		echo "To install, enter the following command:"
 		echo "   pkg install python-pip"
+		echo
+	fi
+
+	if [ -d $TERMUX_PREFIX/lib/python3.11/site-packages ]; then
+		echo
+		echo "NOTE: The system python package has been updated to 3.12."
+		echo "NOTE: Run 'pkg upgrade' to update system python packages."
+		echo "NOTE: Packages installed using pip needs to be re-installed."
 		echo
 	fi
 
