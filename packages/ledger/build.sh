@@ -24,4 +24,3 @@ termux_step_pre_configure() {
 		-e "s%@PYTHON_VERSION@%${TERMUX_PYTHON_VERSION}%g" \
 		| patch --silent -p1
 }
-
