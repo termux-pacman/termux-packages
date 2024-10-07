@@ -15,4 +15,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dboost-python-module-name=python
 -Dpython-bindings=ON
 "
-
