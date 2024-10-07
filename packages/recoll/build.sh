@@ -25,3 +25,4 @@ termux_step_pre_configure() {
 	CXXFLAGS+=" -fPIC"
 	CPPFLAGS+=" -I${TERMUX_PREFIX}/include/python${TERMUX_PYTHON_VERSION}/"
 }
+
