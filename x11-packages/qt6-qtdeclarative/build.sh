@@ -67,3 +67,4 @@ termux_step_post_make_install() {
 		-exec cat "{}" \;
 	cat $PWD/user_facing_tool_links.txt | xargs -P${TERMUX_PKG_MAKE_PROCESSES} -L1 ln -sv
 }
+
