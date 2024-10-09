@@ -19,4 +19,3 @@ termux_pkg_auto_update() {
 	local latest_version=$(echo "${latest_refs_tags}" | sort -V | tail -n1)
 	termux_pkg_upgrade_version "${latest_version//vulkan-sdk-}"
 }
-
