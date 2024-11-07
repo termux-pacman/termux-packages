@@ -60,3 +60,4 @@ termux_step_make_install() {
 		cp -rT $d "$sharedir"/$d
 	done
 }
+
