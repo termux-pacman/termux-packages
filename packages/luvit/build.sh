@@ -25,3 +25,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 luvit "${TERMUX_PREFIX}/bin/luvit"
 }
+
