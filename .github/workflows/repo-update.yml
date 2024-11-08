@@ -76,8 +76,7 @@ jobs:
 
         mkdir total
         touch ./total/${TOTAL}
-        # NOTFOUND.${REPO}.${ARCH}
-        for RESULT in "./output/DOESNOTMATCH.${REPO}.${ARCH}"; do
+        for RESULT in "./output/"{NOTFOUND,DOESNOTMATCH}".${REPO}.${ARCH}"; do
           if [ -f ${RESULT} ]; then
             cat ${RESULT} | awk '{printf $1 "\n"}' >> ./total/${TOTAL}
           fi
