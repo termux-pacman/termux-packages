@@ -280,23 +280,30 @@ jobs:
           done
           rm "$1.sig"
         }
-        archive="pkgs-${{ matrix.arch }}-${{ github.sha }}/pkgs-${{ matrix.arch }}-${{ github.sha }}.tar"
-        tar xf "$archive"
+        for archive in pkgs-*-${{ github.sha }}/pkgs-*-${{ github.sha }}.tar; do
+          archive_sp=(${archive//-/ })
+          tar xf "$archive"
+          mv pkgs pkgs-${archive_sp[1]}
+        done
+        pkgsarch='pkgs-${{ matrix.arch }}'
         for repo in $(jq --raw-output 'del(.pkg_format) | .[].name' repo.json); do
           dp_file="deleted_${repo}_packages.txt"
-          if [[ -f pkgs/$dp_file ]]; then
-            path_dp_file=pkgs/${{ github.sha }}_${dp_file}
-            mv pkgs/${dp_file} ${path_dp_file}
+          if [[ -f ${pkgsarch}/${dp_file} ]]; then
+            path_dp_file=${pkgsarch}/${{ github.sha }}_${dp_file}
+            mv ${pkgsarch}/${dp_file} ${path_dp_file}
             sfuf "${path_dp_file}"
           fi
-          for name_pkg in $(cat ./pkgs/built_${repo}_packages.txt); do
-            for list_pkg in pkgs/*.pkg.*; do
-              dir_pkg_sp=(${list_pkg//// })
-              for static in "" "-static"; do
-                if [[ $(echo "${name_pkg}${static}" | sed 's/+/0/g') = $(get_name ${dir_pkg_sp[-1]}) ]]; then
-                  sfuf "$list_pkg"
-                fi
-              done
-            done
+          if [ ! -f ${pkgsarch}/built_${repo}_packages.txt ]; then
+            continue
+          fi
+          pkgslist=$(cat ${pkgsarch}/built_${repo}_packages.txt | awk '{printf $1 "\n" $1 "-static\n"}')
+          for pkgfile in ${pkgsarch}/*.pkg.* $(ls $(echo -e "aarch64\narm\nx86_64\ni686" | sed '/${{ matrix.arch }}/d' | awk '{printf "pkgs-" $1 "/*-any.pkg.* "}') 2> /dev/null); do
+            dir_pkg_sp=(${pkgfile//// })
+            if [ "${dir_pkg_sp[0]}" != "${pkgsarch}" ] && [ -f "${pkgsarch}/${dir_pkg_sp[-1]}" ]; then
+              continue
+            fi
+            if grep -q "^$(get_name ${dir_pkg_sp[-1]})$" <<< "${pkgslist}"; then
+              sfuf "$pkgfile"
+            fi
           done
         done
