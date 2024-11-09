@@ -296,7 +296,7 @@ jobs:
           if [ ! -f ${pkgsarch}/built_${repo}_packages.txt ]; then
             continue
           fi
-          pkgslist=$(cat ${pkgsarch}/built_${repo}_packages.txt | awk '{printf $1 "\n" $1 "-static\n"}')
+          pkgslist=$(cat ${pkgsarch}/built_${repo}_packages.txt | sed 's/+/0/g' | awk '{printf $1 "\n" $1 "-static\n"}')
           for pkgfile in ${pkgsarch}/*.pkg.* $(ls $(echo -e "aarch64\narm\nx86_64\ni686" | sed '/${{ matrix.arch }}/d' | awk '{printf "pkgs-" $1 "/*-any.pkg.* "}') 2> /dev/null); do
             dir_pkg_sp=(${pkgfile//// })
             if [ "${dir_pkg_sp[0]}" != "${pkgsarch}" ] && [ -f "${pkgsarch}/${dir_pkg_sp[-1]}" ]; then
