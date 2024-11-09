@@ -28,4 +28,3 @@ termux_step_post_make_install() {
 	install -m700 -t "$TERMUX_PREFIX"/lib \
 		toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/"${TERMUX_HOST_PLATFORM}"/libc++_shared.so
 }
-
