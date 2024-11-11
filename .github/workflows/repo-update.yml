@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target_repo: [main-aarch64, main-arm, main-i686, main-x86_64, x11-aarch64, x11-arm, x11-i686, x11-x86_64, root-aarch64, root-arm, root-i686, root-x86_64]
+        target_repo: [main@aarch64, main@arm, main@i686, main@x86_64, x11@aarch64, x11@arm, x11@i686, x11@x86_64, root@aarch64, root@arm, root@i686, root@x86_64]
       fail-fast: false
     steps:
     - name: Clone check-tools
@@ -27,18 +27,19 @@ jobs:
     - name: Clone termux-packages
       run: |
         cd check-tools
-        git clone https://github.com/termux-pacman/termux-packages
+        bash ./clone_repos.sh
     - name: Running a scan
       run: |
         target_repo='${{ matrix.target_repo }}'
-        REPO="${target_repo%%-*}"
-        ARCH="${target_repo#*-}"
+        REPO="${target_repo%%@*}"
+        ARCH="${target_repo#*@}"
         TOTAL="RESULT.${REPO}.${ARCH}"
 
+        DIR_REPO="termux-packages-repo/"
         case "$REPO" in
-          "main") DIR_REPO="termux-packages/packages";;
-          "x11") DIR_REPO="termux-packages/x11-packages";;
-          "root") DIR_REPO="termux-packages/root-packages";;
+          "main") DIR_REPO+="packages";;
+          "x11") DIR_REPO+="x11-packages";;
+          "root") DIR_REPO+="root-packages";;
           *)
             echo "Error: repo '${REPO}' is unknown"
             exit 0;;
