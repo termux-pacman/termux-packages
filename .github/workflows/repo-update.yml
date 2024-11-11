@@ -53,8 +53,15 @@ jobs:
 
         bash ./check_pkgs_by_repo.sh "$REPO" "$ARCH" "$DIR_REPO"
 
-        # Packages should be removed as they do not support the architecture
-        if [ -f "./output/NOTSUPPORTARCH.${REPO}.${ARCH}" ]; then
+        # Removing packages...
+        DELETED_FILE="./output/$(date +%s)-deleted_termux-${REPO}_packages.txt"
+        for reason in NOTSUPPORTARCH UNKNOWN; do
+          infofile="./output/${reason}.${REPO}.${ARCH}"
+          if [ -f "${infofile}" ]; then
+            cat "${infofile}" >> "${DELETED_FILE}"
+          fi
+        done
+        if [ -f "${DELETED_FILE}" ]; then
           # Install aws-cli
           git clone https://github.com/termux-pacman/aws-cli-action
           ./aws-cli-action/setup.sh '${{ secrets.AWS_ACCESS_KEY_ID }}' '${{ secrets.AWS_ACCESS_KEY }}' '${{ secrets.AWS_REGION }}'
@@ -66,8 +73,7 @@ jobs:
           rm -fr gk
 
           # Upload file
-          DELETED_FILE="./output/$(date +%s)-deleted_termux-${REPO}_packages.txt"
-          mv "./output/NOTSUPPORTARCH.${REPO}.${ARCH}" "${DELETED_FILE}"
+          echo "$(sed '/^[[:space:]]*$/d' ${DELETED_FILE} | sort | uniq)" > "${DELETED_FILE}"
           gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "${DELETED_FILE}"
           for format_file in "" ".sig"; do
             aws s3 cp "${DELETED_FILE}${format_file}" s3://'${{ secrets.SFPU }}'/${REPO}/${ARCH}/"${DELETED_FILE##*/}${format_file}"
@@ -156,7 +162,7 @@ jobs:
         list_files=" "
         for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
           dir_sp=(${i//// })
-          if ! $(echo "$list_files" | grep -q " ${dir_sp[0]}/${dir_sp[1]} "); then
+          if ! grep -q " ${dir_sp[0]}/${dir_sp[1]} " <<< "$list_files"; then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
             source_build="${dir_sp[0]}/${dir_sp[1]}/build.sh"
             if $(grep -q '^'${source_build}'$' ../REBUILD-LIST-BUILD); then
@@ -225,24 +231,24 @@ jobs:
           cd ../termux-packages
           commit_file="$(git show -s --format=%B ${i_sp[0]})"
           cd ../termux-packages-pacman
-          git add $(echo ${i_sp[1]} | sed 's/&&/ /g')
+          git add $(sed 's/&&/ /g' <<< "${i_sp[1]}")
           {
             if $needbuild; then
-              git commit -m "$(echo $commit_file | sed 's/%ci:no-build//g; s/\[skip ci\]//g')"
+              git commit -m "$(sed 's/%ci:no-build//g; s/\[skip ci\]//g' <<< $commit_file)"
             else
               git commit -m "$commit_file"
             fi
             git push origin master
           } || true
-          for j in $(echo ${i_sp[1]} | sed 's/&&/ /g'); do
+          for j in $(sed 's/&&/ /g' <<< "${i_sp[1]}"); do
             while read LINE; do
-              USER=$(echo "$LINE" | awk -F ' // ' '{printf $1}')
-              STATE=$(echo "$LINE" | awk -F ' // ' '{printf $2}')
-              TITLE=$(echo "$LINE" | awk -F ' // ' '{printf $4}')
+              USER=$(awk -F ' // ' '{printf $1}' <<< "$LINE")
+              STATE=$(awk -F ' // ' '{printf $2}' <<< "$LINE")
+              TITLE=$(awk -F ' // ' '{printf $4}' <<< "$LINE")
               if [ $STATE != "open" ] || [ $USER != "termux-pacman-bot" ] || [[ $TITLE != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
                 continue
               fi
-              NUMBER=$(echo "$LINE" | awk -F ' // ' '{printf $3}')
+              NUMBER=$(awk -F ' // ' '{printf $3}' <<< "$LINE")
               GH_TOKEN="${{ secrets.TOKEN }}" gh issue close ${NUMBER} \
                 -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
               install_list_issues
