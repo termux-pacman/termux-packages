@@ -26,4 +26,3 @@ termux_step_pre_configure() {
 	export INIT_D_PATH=$TERMUX_PREFIX/etc/init.d
 	./makeconf.sh
 }
-
