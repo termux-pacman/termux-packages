@@ -16,4 +16,3 @@ termux_step_post_get_source() {
 		-e 's/\([^A-Za-z0-9_]ANDROID\)\([^A-Za-z0-9_]\)/\1_NO_TERMUX\2/g' \
 		-e 's/\([^A-Za-z0-9_]ANDROID\)$/\1_NO_TERMUX/g'
 }
-
