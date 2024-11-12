@@ -8,3 +8,4 @@ TERMUX_PKG_SRCURL=https://archive.xfce.org/src/panel-plugins/xfce4-wavelan-plugi
 TERMUX_PKG_SHA256=61c0c2f56cb70872d403b770dd76349df9ff24c0dbe905ee1b4f913c34d8f72b
 TERMUX_PKG_DEPENDS="atk, gdk-pixbuf, glib, gtk3, harfbuzz, libcairo, libxfce4ui, libxfce4util, pango, xfce4-panel"
 TERMUX_PKG_BUILD_IN_SRC=true
+

@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://xcb.freedesktop.org/dist/xcb-util-keysyms-${TERMUX_PKG
 TERMUX_PKG_SHA256=7c260a5294412aed429df1da2f8afd3bd07b7cba3fec772fba15a613a6d5c638
 TERMUX_PKG_DEPENDS="libxcb"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
+
