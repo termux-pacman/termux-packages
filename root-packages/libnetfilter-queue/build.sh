@@ -7,4 +7,3 @@ TERMUX_PKG_REVISION=3
 TERMUX_PKG_SRCURL=http://ftp.netfilter.org/pub/libnetfilter_queue/libnetfilter_queue-${TERMUX_PKG_VERSION}.tar.bz2
 TERMUX_PKG_SHA256=f9ff3c11305d6e03d81405957bdc11aea18e0d315c3e3f48da53a24ba251b9f5
 TERMUX_PKG_DEPENDS="libnfnetlink, libmnl"
-
