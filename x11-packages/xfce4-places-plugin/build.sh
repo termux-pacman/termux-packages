@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://archive.xfce.org/src/panel-plugins/xfce4-places-plugin
 TERMUX_PKG_SHA256=f11d0e6d03f22ab02c2e6b507d365b5a918532e8819e50647ee1860eca60c743
 TERMUX_PKG_DEPENDS="atk, exo, gdk-pixbuf, glib, gtk3, harfbuzz, libcairo, libice, libnotify, libsm, libx11, libxfce4ui, libxfce4util, pango, xfce4-panel, xfconf"
 TERMUX_PKG_BUILD_IN_SRC=true
-
