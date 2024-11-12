@@ -17,4 +17,3 @@ termux_step_make () {
 		LDFLAGS="$LDFLAGS -fPIE -pie" \
 		PREFIX="${TERMUX_PREFIX}"
 }
-
