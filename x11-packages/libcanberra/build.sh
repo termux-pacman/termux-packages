@@ -22,4 +22,3 @@ termux_step_post_get_source() {
 	find src -name 'Makefile.*' -o -name '*.c' | xargs -n 1 \
 		sed -i 's/malloc\.h/malloc-private.h/g'
 }
-
