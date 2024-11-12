@@ -12,4 +12,3 @@ TERMUX_PKG_CONFLICTS="libexo"
 TERMUX_PKG_REPLACES="libexo"
 TERMUX_PKG_PROVIDES="libexo"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-gtk-doc-html=no"
-
