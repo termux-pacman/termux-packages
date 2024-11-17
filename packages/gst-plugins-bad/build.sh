@@ -45,4 +45,3 @@ termux_step_configure() {
 		$TERMUX_PKG_EXTRA_CONFIGURE_ARGS \
 		|| (termux_step_configure_meson_failure_hook && false)
 }
-
