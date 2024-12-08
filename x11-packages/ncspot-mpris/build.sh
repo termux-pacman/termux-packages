@@ -30,3 +30,4 @@ termux_step_pre_configure() {
 
 	export TARGET_CMAKE_GENERATOR="Ninja"
 }
+
