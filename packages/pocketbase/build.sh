@@ -28,3 +28,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -m700 examples/base/pocketbase.bin "${TERMUX_PREFIX}"/bin/pocketbase
 }
+
