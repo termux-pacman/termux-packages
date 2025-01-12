@@ -26,4 +26,3 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -Wl,-rpath=${TERMUX_PREFIX}/lib/lxqt-panel"
 	export LDFLAGS
 }
-
