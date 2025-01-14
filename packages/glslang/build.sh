@@ -22,4 +22,3 @@ termux_step_post_make_install() {
 	termux_step_make
 	termux_step_make_install
 }
-
