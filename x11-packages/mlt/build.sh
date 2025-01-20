@@ -25,4 +25,3 @@ termux_step_pre_configure() {
 		patch --silent -p1 -d "$TERMUX_PKG_SRCDIR" < "$TERMUX_PKG_BUILDER_DIR/32-bit-symbol.diff"
 	fi
 }
-
