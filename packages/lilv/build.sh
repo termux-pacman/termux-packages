@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="libsndfile, libzix, lv2, serd, sord, sratom"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dbindings_py=disabled
 "
-
