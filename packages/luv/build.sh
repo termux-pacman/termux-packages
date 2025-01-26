@@ -32,3 +32,4 @@ termux_step_post_get_source() {
 termux_step_pre_configure() {
 	export LDFLAGS+=" -L$TERMUX_PREFIX/lib/lua/5.1"
 }
+
