@@ -61,4 +61,3 @@ termux_step_pre_configure() {
 	chmod +x $TERMUX_PKG_TMPDIR/_fake_bin/"$(basename ${CC})"
 	export PATH="$TERMUX_PKG_TMPDIR/_fake_bin:$PATH"
 }
-
