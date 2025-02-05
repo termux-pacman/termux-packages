@@ -14,4 +14,3 @@ termux_step_pre_configure() {
 	TERMUX_PKG_SRCDIR+="/crates/jql"
 	TERMUX_PKG_BUILDDIR="$TERMUX_PKG_SRCDIR"
 }
-
