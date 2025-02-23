@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="zlib"
 TERMUX_PKG_BREAKS="libpng-dev"
 TERMUX_PKG_REPLACES="libpng-dev"
 TERMUX_PKG_RM_AFTER_INSTALL="bin/png-fix-itxt bin/pngfix"
-
