@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	# can't understand "-Oz".
 	CFLAGS="${CFLAGS/-Oz/-Os}"
 }
-
