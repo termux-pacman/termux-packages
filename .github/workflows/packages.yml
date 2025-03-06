@@ -35,6 +35,8 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 1000
+    - name: Set process id limit for 32-bit builds depending on aosp-libs
+      run: echo 65535 | sudo tee /proc/sys/kernel/pid_max
     - name: Gather build summary
       id: build-info
       env:
@@ -224,9 +226,9 @@ jobs:
         done
 
         if [ "$DOCKER_BUILD" == 'false' ]; then
-          NDK=$ANDROID_NDK ANDROID_HOME=$ANDROID_SDK_ROOT ./build-package.sh --format pacman -I -a ${{ matrix.target_arch }} $packages
+          NDK=$ANDROID_NDK ANDROID_HOME=$ANDROID_SDK_ROOT ./build-package.sh --format pacman -I -C -a ${{ matrix.target_arch }} $packages
         elif [ -n "$packages" ]; then
-          ./scripts/run-docker.sh ./build-package.sh --format pacman -I -a ${{ matrix.target_arch }} $packages
+          ./scripts/run-docker.sh ./build-package.sh --format pacman -I -C -a ${{ matrix.target_arch }} $packages
         fi
 
     - name: Generate build artifacts
