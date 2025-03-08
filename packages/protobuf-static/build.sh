@@ -65,4 +65,3 @@ termux_step_post_massage() {
 		-exec rm -f '{}' \;
 	find . -type d -empty -delete
 }
-
