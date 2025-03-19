@@ -78,4 +78,3 @@ termux_step_post_make_install() {
 		(make -C contrib/${contrib} -s -j ${TERMUX_PKG_MAKE_PROCESSES} install)
 	done
 }
-
