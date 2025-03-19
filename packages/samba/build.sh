@@ -169,4 +169,3 @@ termux_step_post_massage() {
 	# 755 - as opposed to 700 - because testparm throws up a warning otherwise
 	chmod 755 "var/lock/samba" "var/lib/samba" "var/cache/samba"
 }
-
