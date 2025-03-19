@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	autoreconf -fi
 	CXXFLAGS+=" -DNCURSES_WIDECHAR -U_XOPEN_SOURCE"
 }
-
