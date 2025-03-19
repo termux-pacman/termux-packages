@@ -9,4 +9,3 @@ TERMUX_PKG_SHA256=04d93f66b939f937df2c941af517966128d4c9872b707f9ed192177fe51364
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++, libcurl, libicu, libmicrohttpd, libpugixml, libxapian, libzim, zlib"
 TERMUX_PKG_BUILD_DEPENDS="googletest, kainjow-mustache"
-
