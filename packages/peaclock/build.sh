@@ -8,4 +8,3 @@ TERMUX_PKG_SRCURL=https://github.com/octobanana/peaclock/archive/${TERMUX_PKG_VE
 TERMUX_PKG_SHA256=3de32486e45ddf6a62c591619b5373d23c8eaf885975441ae581ca7241c48012
 TERMUX_PKG_DEPENDS="libc++, libicu"
 TERMUX_PKG_AUTO_UPDATE=false
-
