@@ -37,3 +37,4 @@ termux_step_make_install() {
 			$TERMUX_PREFIX/share/bash-completion/completions/${c}
 	done
 }
+

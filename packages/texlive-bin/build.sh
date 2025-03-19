@@ -123,3 +123,4 @@ termux_step_pre_configure() {
 		-e "s%@YEAR@%${TERMUX_PKG_VERSION:0:4}%g" \
 		"$TERMUX_PKG_BUILDER_DIR"/texk-kpathsea-texmf.cnf.diff | patch --silent -p1
 }
+

@@ -40,3 +40,4 @@ termux_step_pre_configure() {
 	# Fix build against FFmpeg 6.0:
 	CPPFLAGS+=" -DCODEC_CAP_TRUNCATED=0"
 }
+

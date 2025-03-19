@@ -32,3 +32,4 @@ termux_step_pre_configure() {
 	fi
 	CXXFLAGS+=" -DU_USING_ICU_NAMESPACE=1"
 }
+

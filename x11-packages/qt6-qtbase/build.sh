@@ -137,3 +137,4 @@ termux_step_post_make_install() {
 		-exec echo "{}" \; \
 		-exec cat "{}" \;
 }
+
