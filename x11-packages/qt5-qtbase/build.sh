@@ -210,4 +210,3 @@ termux_step_create_debscripts() {
 	cp -f "${TERMUX_PKG_BUILDER_DIR}/postinst" ./
 	sed -i "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" ./postinst
 }
-
