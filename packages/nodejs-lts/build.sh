@@ -125,4 +125,3 @@ termux_step_create_debscripts() {
 	npm config set foreground-scripts true
 	EOF
 }
-
