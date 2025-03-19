@@ -49,4 +49,3 @@ termux_step_post_configure() {
 		-I"${TERMUX_PKG_BUILDDIR}/include" -I"${TERMUX_PKG_BUILDDIR}/winpr/include" -I"${TERMUX_PKG_SRCDIR}/winpr/include"
 	PATH+=":${TERMUX_PKG_TMPDIR}/bin"
 }
-
