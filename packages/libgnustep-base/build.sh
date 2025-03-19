@@ -94,4 +94,3 @@ termux_step_post_massage() {
 		rm -f $_tool
 	done
 }
-
