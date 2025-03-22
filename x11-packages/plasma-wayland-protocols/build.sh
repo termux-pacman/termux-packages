@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL="https://download.kde.org/stable/plasma-wayland-protocols/plas
 TERMUX_PKG_SHA256=cbd44b440e6b7cc76b650da93a870897e5a94adf7882b19fdf8fe222d4f74a4f
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_DEPENDS="extra-cmake-modules, qt6-qtbase"
-
