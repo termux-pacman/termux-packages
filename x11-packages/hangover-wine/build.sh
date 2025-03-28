@@ -186,3 +186,4 @@ termux_step_post_make_install() {
 	curl -L https://raw.githubusercontent.com/AndreRH/hangover/refs/tags/hangover-${_REAL_VERSION}/LICENSE \
 		-o "$TERMUX_PREFIX"/share/doc/hangover/copyright
 }
+
