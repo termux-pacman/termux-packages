@@ -102,3 +102,4 @@ termux_step_create_debscripts() {
 		alist completion fish > ${TERMUX_PREFIX}/share/fish/vendor_completions.d/alist.fish
 	EOF
 }
+
