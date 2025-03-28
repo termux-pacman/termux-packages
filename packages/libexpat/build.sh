@@ -38,3 +38,4 @@ termux_step_post_massage() {
 		termux_error_exit "SONAME for libexpat.so is not properly set."
 	fi
 }
+
