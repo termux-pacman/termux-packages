@@ -40,3 +40,4 @@ termux_step_make_install() {
 		--prefix "${TERMUX_PREFIX}" \
 		--verbose
 }
+
