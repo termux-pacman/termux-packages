@@ -13,4 +13,3 @@ TERMUX_PKG_BREAKS="profanity-dev"
 TERMUX_PKG_REPLACES="profanity-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS=" --enable-plugins --without-xscreensaver"
 TERMUX_PKG_BUILD_IN_SRC=true
-
