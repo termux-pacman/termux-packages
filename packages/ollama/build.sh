@@ -18,3 +18,4 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/lib/ollama
 	cp -fv $TERMUX_PKG_BUILDDIR/lib/ollama/* $TERMUX_PREFIX/lib/ollama/
 }
+

@@ -61,3 +61,4 @@ termux_step_make_install() {
 	install -Dm700 -t "${TERMUX_PREFIX}/bin" ./gw
 	install -Dm600 ./.gw.ini "${TERMUX_PREFIX}/share/doc/gw/gw.ini"
 }
+

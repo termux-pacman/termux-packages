@@ -27,3 +27,4 @@ termux_step_pre_configure() {
 	export PATH="$TERMUX_PKG_CACHEDIR/ispc-v$ISPC_VERSION-linux/bin:$PATH"
 	LDFLAGS+=" -llog"
 }
+

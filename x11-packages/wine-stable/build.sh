@@ -148,3 +148,4 @@ exec $TERMUX_PREFIX/opt/wine-stable/bin/wine "\$@"
 EOF
 	chmod +x $TERMUX_PREFIX/bin/wine-stable
 }
+

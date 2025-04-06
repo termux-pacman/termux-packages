@@ -42,3 +42,4 @@ termux_step_make_install() {
 	HERE
 	chmod u+x "$TERMUX_PREFIX/bin/marksman"
 }
+

@@ -309,3 +309,4 @@ termux_step_post_make_install() {
 	# Remove the dummy files
 	rm $TERMUX_PREFIX/lib/lib{{pthread,resolv,ffi_pic}.a,rt.so}
 }
+

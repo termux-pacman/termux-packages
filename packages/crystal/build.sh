@@ -48,3 +48,4 @@ termux_step_make_install() {
 	LLVM_CONFIG="$TERMUX_PREFIX/bin/llvm-config" make install PREFIX="$TERMUX_PREFIX"
 	cd shards && make install PREFIX="$TERMUX_PREFIX"
 }
+

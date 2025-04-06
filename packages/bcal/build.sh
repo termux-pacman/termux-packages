@@ -10,3 +10,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 
 # 64-bit archs only, check https://github.com/jarun/bcal/issues/4
 TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
+

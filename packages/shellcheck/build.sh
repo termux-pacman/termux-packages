@@ -17,3 +17,4 @@ termux_step_pre_configure() {
 	chmod u+x ./striptests
 	./striptests
 }
+

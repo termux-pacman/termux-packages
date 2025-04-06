@@ -24,3 +24,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 "${TERMUX_PKG_SRCDIR}"/bridge "${TERMUX_PREFIX}"/bin/proton-bridge
 }
+
