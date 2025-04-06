@@ -36,4 +36,3 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 -T target/${CARGO_TARGET_NAME}/release/repl $TERMUX_PREFIX/bin/locustdb
 }
-
