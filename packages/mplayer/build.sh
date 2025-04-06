@@ -39,4 +39,3 @@ termux_step_configure_autotools() {
 		--prefix=$TERMUX_PREFIX \
 		$TERMUX_PKG_EXTRA_CONFIGURE_ARGS
 }
-
