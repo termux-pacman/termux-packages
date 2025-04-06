@@ -30,4 +30,3 @@ lib/libarpack.so.2
 		fi
 	done
 }
-
