@@ -15,4 +15,3 @@ TERMUX_PKG_EXCLUDED_ARCHES="arm"
 termux_step_pre_configure() {
 	autoreconf -fi
 }
-
