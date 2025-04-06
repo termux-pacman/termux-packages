@@ -28,4 +28,3 @@ lib/libqrupdate.so.1
 		fi
 	done
 }
-
