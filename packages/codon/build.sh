@@ -177,4 +177,3 @@ termux_step_post_massage() {
 	# Remove libfmt.a
 	rm -rf lib
 }
-
