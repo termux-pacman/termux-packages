@@ -69,4 +69,3 @@ termux_step_make() {
 	make
 	rm -f $_PREFIX_FOR_BUILD/bin/gcc
 }
-
