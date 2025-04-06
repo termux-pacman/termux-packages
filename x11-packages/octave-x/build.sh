@@ -68,4 +68,3 @@ termux_step_pre_configure() {
 
 	export PATH="$TERMUX_PREFIX/opt/qt6/cross/bin:$PATH"
 }
-
