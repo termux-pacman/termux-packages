@@ -68,4 +68,3 @@ termux_step_make_install() {
 	install -Dm755 target/${CARGO_TARGET_NAME}/release/libmatrix.so \
 		"$TERMUX_PREFIX/lib/weechat/plugins/matrix.so"
 }
-
