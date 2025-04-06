@@ -37,4 +37,3 @@ termux_step_pre_configure() {
 # ^             ~~~~~~~~~~~~~~~~~~~~~
 #
 # Applying -malign-double will unblock i686 build at the expense of breaking something
-
