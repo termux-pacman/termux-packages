@@ -41,4 +41,3 @@ termux_step_create_debscripts() {
 		pandoc --bash-completion > ${TERMUX_PREFIX}/share/bash-completion/completions/pandoc
 	EOF
 }
-
