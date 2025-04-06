@@ -23,4 +23,3 @@ termux_step_pre_configure() {
 		popd
 	fi
 }
-
