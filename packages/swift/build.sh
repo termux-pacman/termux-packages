@@ -179,4 +179,3 @@ termux_step_make_install() {
 		rm $TERMUX_PREFIX/swiftpm-android-$SWIFT_ARCH.json
 	fi
 }
-
