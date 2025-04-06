@@ -54,4 +54,3 @@ termux_step_configure() {
 		--enable-gmp=system \
 		--enable-boehm=system
 }
-
