@@ -110,3 +110,4 @@ termux_step_post_massage() {
 	find . -type f \( -name "*.so" -o -name "*.a" \) -exec "$STRIP" --strip-unneeded {} \;
 	find "$ghclibs_dir"/bin -type f -exec "$STRIP" {} \;
 }
+
