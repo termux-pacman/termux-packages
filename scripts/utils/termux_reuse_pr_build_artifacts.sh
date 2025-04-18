@@ -40,8 +40,17 @@ ci_artifact_url() {
 	|| return $?
 }
 
+mask_output() {
+	# Print output only in the case of error
+	local output status
+	if ! output=$("$@" 2>&1); then
+		echo "$output"
+		return 1
+	fi
+}
 
-git fetch origin "$OLD_COMMIT:ref/tmp/$OLD_COMMIT" || infoexit "failed to fetch $OLD_COMMIT from origin, not performing CI fast path"
+
+mask_output git fetch origin "$OLD_COMMIT:ref/tmp/$OLD_COMMIT" || infoexit "failed to fetch $OLD_COMMIT from origin, not performing CI fast path"
 readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" || :) || :
 
 (( ${#COMMITS[*]} == 0 )) && infoexit "Unable to obtain full commit history. Not performing CI fast path."
@@ -82,10 +91,11 @@ readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" ||
 	(( ${#PRS[*]}	> 1 )) && infoexit "push contains commits from more than one PR, not performing CI fast path"
 
 	read -rd' ' PR_BASE_COMMIT PR_HEAD_COMMIT PR_COMMIT_TITLE PR_COMMIT_BODY < <(jq -r '
-		.data.repository | to_entries[0].value.associatedPullRequests.nodes[0].baseRefOid,
-		.data.repository | to_entries[0].value.associatedPullRequests.nodes[0].headRefOid,
-		.data.repository | to_entries[0].value.associatedPullRequests.edges[0].node.title,
-		.data.repository | to_entries[0].value.associatedPullRequests.edges[0].node.body' <<< "$RESPONSE" || :)
+		.data.repository[].associatedPullRequests |
+			(.nodes[0].baseRefOid,
+			 .nodes[0].headRefOid,
+			 .edges[0].node.title,
+			 .edges[0].node.body)' <<< "$RESPONSE" || :)
 	[[ -n "${PR_BASE_COMMIT:-}" ]] || infoexit "failed to read associated PR base commit, not performing CI fast path"
 	[[ -n "${PR_HEAD_COMMIT:-}" ]] || infoexit "failed to read associated PR head commit, not performing CI fast path"
 
@@ -107,8 +117,8 @@ readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" ||
 	DIRS_REGEX="$(paste -sd'|' <<< "${TERMUX_PACKAGE_DIRECTORIES[@]}")" || exit 0
 
 	# fetch PR commit tree
-	git fetch origin "$PR_BASE_COMMIT:ref/tmp/$PR_BASE_COMMIT" || infoexit "failed to fetch PR base tree, not performing CI fast path"
-	git fetch origin "$PR_HEAD_COMMIT:ref/tmp/$PR_HEAD_COMMIT" || infoexit "failed to fetch PR head tree, not performing CI fast path"
+	mask_output git fetch origin "$PR_BASE_COMMIT:ref/tmp/$PR_BASE_COMMIT" || infoexit "failed to fetch PR base tree, not performing CI fast path"
+	mask_output git fetch origin "$PR_HEAD_COMMIT:ref/tmp/$PR_HEAD_COMMIT" || infoexit "failed to fetch PR head tree, not performing CI fast path"
 
 	# Here we compare changes from PR with changes from push
 	# this is to make sure nobody injected additional changes to PR branch after CI was invoked
@@ -138,13 +148,13 @@ readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" ||
 
 	# obtain list of all buildsystem files changed since this PR diverged
 	readarray -t PR_BASE_TO_HEAD_CHANGED_BUILDSYSTEM_FILES < <(
-		grep -e "^scripts/" -e "^ndk-patches/" -e "^build-package.sh$" <<< "$PR_BASE_TO_HEAD_CHANGED_FILES"
+		grep -e "^scripts/" -e "^ndk-patches/" -e "^build-package.sh$" <<< "${PR_BASE_TO_HEAD_CHANGED_FILES[@]}"
 	) || :
 	echo "Buildsystem files changed since PR divergence: ${PR_BASE_TO_HEAD_CHANGED_BUILDSYSTEM_FILES[*]:-none}"
 
 	# obtain list of all packages changes since this PR diverged
 	readarray -t PR_BASE_TO_HEAD_CHANGED_PACKAGES < <(
-		echo "$PR_BASE_TO_HEAD_CHANGED_FILES" \
+		echo "${PR_BASE_TO_HEAD_CHANGED_FILES[@]}" \
 			| grep -E "^($DIRS_REGEX)/[^/]+/" \
 			| sed -E "s#^(($DIRS_REGEX)/[^/]+)/.*#\1#" \
 			| sort -u
@@ -154,7 +164,7 @@ readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" ||
 	# obtain the set of all dependencies of packages changed by this PR
 	readarray -t PR_CHANGED_PACKAGES_DEPS < <(
 		for dep in "${PR_CHANGED_PACKAGES[@]:-}"; do
-			./scripts/buildorder.py "$dep" "${TERMUX_PACKAGE_DIRECTORIES[@]}" | awk '{print $NF}'
+			./scripts/buildorder.py "$dep" "${TERMUX_PACKAGE_DIRECTORIES[@]}" 2>/dev/null | awk '{print $NF}'
 		done | sort -u
 	) || :
 	echo "Dependencies changed by this PR: ${PR_CHANGED_PACKAGES_DEPS[*]:-none}"
@@ -167,8 +177,7 @@ readarray -t COMMITS < <(git rev-list --no-merges "$OLD_COMMIT..$HEAD_COMMIT" ||
 	) || :
 	echo "Dependencies of these packages changed since PR divergence: ${PR_BASE_TO_HEAD_CHANGED_DEPS[*]:-none}"
 
-
-	if (( ${#PR_BASE_TO_HEAD_CHANGED_BUILDSYSTEM_FILES[*]:-} + ${#PR_BASE_TO_HEAD_CHANGED_DEPS[*]:-} + PR_CI_REUSE )); then
+	if (( ${#PR_BASE_TO_HEAD_CHANGED_BUILDSYSTEM_FILES[*]} + ${#PR_BASE_TO_HEAD_CHANGED_DEPS[*]} + PR_CI_REUSE )); then
 
 		# The same commit can be used in more than one PR or even push
 		WORKFLOW_PR_QUERY="
