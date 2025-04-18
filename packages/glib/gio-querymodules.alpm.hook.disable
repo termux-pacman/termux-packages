@@ -1,0 +1,11 @@
+[Trigger]
+Type = Path
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Target = @TERMUX_PREFIX_TARGET@/lib/gio/modules/*.so
+
+[Action]
+Description = Updating GIO module cache...
+When = PostTransaction
+Exec = @TERMUX_PREFIX@/bin/gio-querymodules @TERMUX_PREFIX@/lib/gio/modules
