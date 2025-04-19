@@ -5,11 +5,14 @@ on:
     - master
     paths:
     - '.github/workflows/repo-update.yml'
+  pull_request:
+    paths:
+    - '.github/workflows/repo-update.yml'
   schedule:
     - cron:  '0,30 0-23 * * *'
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -116,9 +119,9 @@ jobs:
         touch ./REBUILD-LIST-BUILD
         cd termux-packages-pacman
         for i in $(sort ../total/RESULT.* | uniq); do
-          BUILD_SOURCE=$(ls */${i}/build.sh 2> /dev/null) || true
+          BUILD_SOURCE="$(ls */${i}/build.sh 2> /dev/null)" || true
           if [ -z "${BUILD_SOURCE}" ]; then
-            BUILD_SOURCE=$(ls */*/${i}.subpackage.sh 2> /dev/null) || true
+            BUILD_SOURCE="$(ls */*/${i}.subpackage.sh 2> /dev/null)" || true
             if [ -n "${BUILD_SOURCE}" ]; then
               BUILD_SOURCE="$(dirname ${BUILD_SOURCE})/build.sh"
             else
@@ -126,7 +129,7 @@ jobs:
               continue
             fi
           fi
-          if ! $(grep -q '^'${BUILD_SOURCE}'$' ../REBUILD-LIST-BUILD) && [ $(($(expr $(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE}))) / 3600) > 8)) = 1 ]; then
+          if ! grep -q '^'${BUILD_SOURCE}'$' ../REBUILD-LIST-BUILD && [ $(($(expr $(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE}))) / 3600) > 8)) = 1 ]; then
             echo "${BUILD_SOURCE}" >> ../REBUILD-LIST-BUILD
           fi
         done
@@ -134,6 +137,9 @@ jobs:
     - name: Clone root repository
       run: git clone https://github.com/termux/termux-packages.git
     - name: Update repo
+      env:
+        GITHUB_EVENT: ${{ github.event_name }}
+        GH_TOKEN: ${{ secrets.TOKEN }}
       run: |
         info() {
           echo "==> $1"
@@ -148,14 +154,14 @@ jobs:
           curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
             "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
         }
-        
+
         # Edit
         info "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
         cp -r * ../termux-packages-pacman
-        
+
         # Get list pkg
         info "Get list pkg"
         cd ../termux-packages-pacman
@@ -165,13 +171,13 @@ jobs:
           if ! grep -q " ${dir_sp[0]}/${dir_sp[1]} " <<< "$list_files"; then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
             source_build="${dir_sp[0]}/${dir_sp[1]}/build.sh"
-            if $(grep -q '^'${source_build}'$' ../REBUILD-LIST-BUILD); then
+            if grep -q '^'${source_build}'$' ../REBUILD-LIST-BUILD; then
               sed -i "/^${source_build////'\/'}$/d" ../REBUILD-LIST-BUILD
             fi
           fi
         done
         list_files=($list_files)
-        
+
         # Sort list pkg
         info "Sort list pkg"
         cd ../termux-packages
@@ -179,9 +185,9 @@ jobs:
         list_sort=""
         list_sha=""
         for i in ${list_files[@]}; do
-          sha_file=$(git log -n 1 --pretty=format:%H -- $i)
+          sha_file="$(git log -n 1 --pretty=format:%H -- $i)"
           value="$(git rev-list --count $sha_file)"
-          list_values[${value}]=$((${list_values[${value}]}+1))
+          list_values[${value}]="$((${list_values[${value}]}+1))"
           list_sort+="${value}-${list_values[${value}]} "
           list_sha+="${sha_file} "
         done
@@ -197,7 +203,7 @@ jobs:
         }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          index=$(search_index "$i")
+          index="$(search_index "$i")"
           if [[ "${i#*-}" = "1" ]]; then
             sort_list_files+=" ${list_sha[$index]}###"
           else
@@ -205,12 +211,12 @@ jobs:
           fi
           sort_list_files+="${list_files[$index]}"
         done
-        
+
         # Start upload
         info "Start upload"
         cd ../termux-packages-pacman
         needbuild=false
-        if $(git log -1 --pretty=%B | grep -q '%needbuild'); then
+        if git log -1 --pretty=%B | grep -q '%needbuild'; then
           needbuild=true
         fi
         git config --global user.name "termux-pacman-bot"
@@ -221,7 +227,9 @@ jobs:
         git reset packages root-packages x11-packages README.md SECURITY.md repo.json
         {
           git commit -m "Update repo"
-          git push origin master
+          if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+            git push origin master
+          fi
         } || true
         commit "Update repo packages"
         install_list_issues
@@ -238,19 +246,23 @@ jobs:
             else
               git commit -m "$commit_file"
             fi
-            git push origin master
+            if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+              git push origin master
+            fi
           } || true
           for j in $(sed 's/&&/ /g' <<< "${i_sp[1]}"); do
             while read LINE; do
-              USER=$(awk -F ' // ' '{printf $1}' <<< "$LINE")
-              STATE=$(awk -F ' // ' '{printf $2}' <<< "$LINE")
-              TITLE=$(awk -F ' // ' '{printf $4}' <<< "$LINE")
-              if [ $STATE != "open" ] || [ $USER != "termux-pacman-bot" ] || [[ $TITLE != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
+              if [[ "$(awk -F ' // ' '{printf $1}' <<< "$LINE")" != "termux-pacman-bot" || \
+                "$(awk -F ' // ' '{printf $2}' <<< "$LINE")" != "open" || \
+                "$(awk -F ' // ' '{printf $4}' <<< "$LINE")" != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
                 continue
               fi
-              NUMBER=$(awk -F ' // ' '{printf $3}' <<< "$LINE")
-              GH_TOKEN="${{ secrets.TOKEN }}" gh issue close ${NUMBER} \
-                -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
+              NUMBER="$(awk -F ' // ' '{printf $3}' <<< "$LINE")"
+              commit "Close the issue \#${NUMBER} on ${pkgdir}"
+              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                gh issue close "${NUMBER}" \
+                  -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
+              fi
               install_list_issues
               break
             done <<< $(jq -r '.[] | "\(.user.login) \("//") \(.state) \("//") \(.number) \("//") \(.title)"' ../LIST-ISSUES)
@@ -264,16 +276,19 @@ jobs:
           for i in $(cat ../REBUILD-LIST-BUILD); do
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
-            if [[ $(git log -n 1 --format=%B -- "${i}") = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ]] && \
-              [[ $(git log -n 1 --format=%an -- "${i}") = "termux-pacman-bot" ]] && \
-              [[ $(git log -n 1 --format=%ae -- "${i}") = "termux-pacman-bot@outlook.com" ]]; then
-              if ! $(jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*$(dirname ${i})$"); then
-                commit "Create an issue on $(dirname ${i})"
-                GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
-                  --title "[AUTO-CHECK]: failed to recompile $(dirname ${i})" \
-                  --body "$(echo -e "This issue was automatically generated because the '$(dirname ${i})' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
-                  --label "auto recompilation failed" \
-                  --assignee Maxython
+            pkgdir="$(dirname ${i})"
+            if [[ "$(git log -n 1 --format=%B -- "${i}")" = "rebuild(${pkgdir}): auto check by @termux-pacman-bot" && \
+              "$(git log -n 1 --format=%an -- "${i}")" = "termux-pacman-bot" && \
+              "$(git log -n 1 --format=%ae -- "${i}")" = "termux-pacman-bot@outlook.com" ]]; then
+              if ! jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*${pkgdir}$"; then
+                commit "Create an issue on ${pkgdir}"
+                if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                  gh issue create \
+                    --title "[AUTO-CHECK]: failed to recompile ${pkgdir}" \
+                    --body "$(echo -e "This issue was automatically generated because the '${pkgdir}' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
+                    --label "auto recompilation failed" \
+                    --assignee Maxython
+                fi
               fi
               continue
             fi
@@ -283,12 +298,18 @@ jobs:
           done
           if [ -n "${listchanged}" ]; then
             git commit -m "$(echo -e "termux-pacman/auto-check-repo: preparing to recompile packages\n[skip ci]")"
-            git push origin master
+            if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+              git push origin master
+            fi
             for i in ${listchanged}; do
+              pkgdir="$(dirname ${i})"
+              commit "Rebuild ${pkgdir}"
               sed -i '$d' ./${i}
               git add ./${i}
-              git commit -m "rebuild($(dirname ${i})): auto check by @termux-pacman-bot"
-              git push origin master
+              git commit -m "rebuild(${pkgdir}): auto check by @termux-pacman-bot"
+              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                git push origin master
+              fi
             done
           fi
         fi
