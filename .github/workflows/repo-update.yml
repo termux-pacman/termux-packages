@@ -116,9 +116,9 @@ jobs:
         touch ./REBUILD-LIST-BUILD
         cd termux-packages-pacman
         for i in $(sort ../total/RESULT.* | uniq); do
-          BUILD_SOURCE=$(ls */${i}/build.sh 2> /dev/null) || true
+          BUILD_SOURCE="$(ls */${i}/build.sh 2> /dev/null)" || true
           if [ -z "${BUILD_SOURCE}" ]; then
-            BUILD_SOURCE=$(ls */*/${i}.subpackage.sh 2> /dev/null) || true
+            BUILD_SOURCE="$(ls */*/${i}.subpackage.sh 2> /dev/null)" || true
             if [ -n "${BUILD_SOURCE}" ]; then
               BUILD_SOURCE="$(dirname ${BUILD_SOURCE})/build.sh"
             else
@@ -148,14 +148,14 @@ jobs:
           curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
             "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
         }
-        
+
         # Edit
         info "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
         cp -r * ../termux-packages-pacman
-        
+
         # Get list pkg
         info "Get list pkg"
         cd ../termux-packages-pacman
@@ -171,7 +171,7 @@ jobs:
           fi
         done
         list_files=($list_files)
-        
+
         # Sort list pkg
         info "Sort list pkg"
         cd ../termux-packages
@@ -179,9 +179,9 @@ jobs:
         list_sort=""
         list_sha=""
         for i in ${list_files[@]}; do
-          sha_file=$(git log -n 1 --pretty=format:%H -- $i)
+          sha_file="$(git log -n 1 --pretty=format:%H -- $i)"
           value="$(git rev-list --count $sha_file)"
-          list_values[${value}]=$((${list_values[${value}]}+1))
+          list_values[${value}]="$((${list_values[${value}]}+1))"
           list_sort+="${value}-${list_values[${value}]} "
           list_sha+="${sha_file} "
         done
@@ -197,7 +197,7 @@ jobs:
         }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          index=$(search_index "$i")
+          index="$(search_index "$i")"
           if [[ "${i#*-}" = "1" ]]; then
             sort_list_files+=" ${list_sha[$index]}###"
           else
@@ -205,7 +205,7 @@ jobs:
           fi
           sort_list_files+="${list_files[$index]}"
         done
-        
+
         # Start upload
         info "Start upload"
         cd ../termux-packages-pacman
@@ -242,13 +242,13 @@ jobs:
           } || true
           for j in $(sed 's/&&/ /g' <<< "${i_sp[1]}"); do
             while read LINE; do
-              USER=$(awk -F ' // ' '{printf $1}' <<< "$LINE")
-              STATE=$(awk -F ' // ' '{printf $2}' <<< "$LINE")
-              TITLE=$(awk -F ' // ' '{printf $4}' <<< "$LINE")
-              if [ $STATE != "open" ] || [ $USER != "termux-pacman-bot" ] || [[ $TITLE != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
+              USER="$(awk -F ' // ' '{printf $1}' <<< "$LINE")"
+              STATE="$(awk -F ' // ' '{printf $2}' <<< "$LINE")"
+              TITLE="$(awk -F ' // ' '{printf $4}' <<< "$LINE")"
+              if [ "$STATE" != "open" ] || [ "$USER" != "termux-pacman-bot" ] || [[ "$TITLE" != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
                 continue
               fi
-              NUMBER=$(awk -F ' // ' '{printf $3}' <<< "$LINE")
+              NUMBER="$(awk -F ' // ' '{printf $3}' <<< "$LINE")"
               GH_TOKEN="${{ secrets.TOKEN }}" gh issue close ${NUMBER} \
                 -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
               install_list_issues
@@ -264,9 +264,9 @@ jobs:
           for i in $(cat ../REBUILD-LIST-BUILD); do
             # It is necessary to create an issue because the package has
             # a compilation error even after recompilation.
-            if [[ $(git log -n 1 --format=%B -- "${i}") = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ]] && \
-              [[ $(git log -n 1 --format=%an -- "${i}") = "termux-pacman-bot" ]] && \
-              [[ $(git log -n 1 --format=%ae -- "${i}") = "termux-pacman-bot@outlook.com" ]]; then
+            if [[ "$(git log -n 1 --format=%B -- "${i}")" = "rebuild($(dirname ${i})): auto check by @termux-pacman-bot" ]] && \
+              [[ "$(git log -n 1 --format=%an -- "${i}")" = "termux-pacman-bot" ]] && \
+              [[ "$(git log -n 1 --format=%ae -- "${i}")" = "termux-pacman-bot@outlook.com" ]]; then
               if ! $(jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*$(dirname ${i})$"); then
                 commit "Create an issue on $(dirname ${i})"
                 GH_TOKEN="${{ secrets.TOKEN }}" gh issue create \
