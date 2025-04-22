@@ -3,6 +3,7 @@ TERMUX_SUBPKG_PLATFORM_INDEPENDENT=true
 TERMUX_SUBPKG_INCLUDE="
 bin/update-info-dir
 share/man/man8/update-info-dir.8.gz
+share/libalpm/hooks/texinfo-update-info-dir.hook
 "
 
 termux_step_create_subpkg_debscripts() {
@@ -19,6 +20,7 @@ termux_step_create_subpkg_debscripts() {
 	fi
 	exit
 	EOF
+	[[ "$TERMUX_PACKAGE_FORMAT" != "pacman" ]] || echo "post_install" > postupg
 
 	cat <<- EOF > ./prerm
 	#!$TERMUX_PREFIX/bin/sh
