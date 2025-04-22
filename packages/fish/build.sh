@@ -64,4 +64,3 @@ termux_step_post_make_install() {
 termux_step_post_massage() {
 	rm -rf "$CARGO_HOME"/registry/src/*/libc-*
 }
-
