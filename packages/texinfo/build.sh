@@ -88,4 +88,3 @@ termux_step_post_make_install() {
 	install -Dm644 -t $TERMUX_PREFIX/share/man/man8 update-info-dir.8
 	popd
 }
-
