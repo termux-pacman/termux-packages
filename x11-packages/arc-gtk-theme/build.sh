@@ -14,4 +14,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dcinnamon_version=5.6
 -Dgnome_shell_version=43
 "
-
