@@ -17,4 +17,3 @@ termux_step_create_debscripts() {
 	done
 	unset i
 }
-
