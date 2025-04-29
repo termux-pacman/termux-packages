@@ -47,4 +47,3 @@ termux_step_create_debscripts() {
 		} > postinst
 	fi
 }
-
