@@ -13,3 +13,4 @@ TERMUX_PKG_AUTO_UPDATE=true
 termux_step_pre_configure() {
 	termux_setup_glib_cross_pkg_config_wrapper
 }
+
