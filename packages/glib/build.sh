@@ -174,4 +174,3 @@ termux_step_create_debscripts() {
 	fi
 	chmod 644 ./triggers
 }
-
