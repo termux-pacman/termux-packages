@@ -33,4 +33,3 @@ termux_step_pre_configure() {
 	termux_setup_ninja
 	termux_setup_pkg_config_wrapper "${TERMUX_PREFIX}/opt/glib/cross/lib/x86_64-linux-gnu/pkgconfig:${TERMUX_PREFIX}/opt/libwayland/cross/lib/x86_64-linux-gnu/pkgconfig"
 }
-
