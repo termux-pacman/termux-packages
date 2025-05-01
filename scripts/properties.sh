@@ -195,17 +195,17 @@ fi
 # - `TERMUX__PREFIX` and alternates.
 # - `TERMUX_ANDROID_HOME` and alternates.
 # - `TERMUX_APP__NAME` and `TERMUX_APP__LNAME`.
-# - `TERMUX_APP__IDENTIFIER`.
+# - `TERMUX_APP__APP_IDENTIFIER`.
 # - `TERMUX_APP__NAMESPACE`.
-# - `TERMUX_APP__SHELL_ACTIVITY__*`.
-# - `TERMUX_APP__SHELL_SERVICE__*`.
-# - `TERMUX_APP__RUN_COMMAND_SERVICE__*`.
-# - `TERMUX_APP__DATA_SENDER_BROADCASTRECEIVER__*`.
+# - `TERMUX_APP__SHELL_API__SHELL_API_ACTIVITY__*`.
+# - `TERMUX_APP__SHELL_API__SHELL_API_SERVICE__*`.
+# - `TERMUX_APP__RUN_COMMAND_API__RUN_COMMAND_API_SERVICE__*`.
+# - `TERMUX_APP__DATA_SENDER_API__DATA_SENDER_API_RECEIVER__*`.
 # - `TERMUX_API_APP__PACKAGE_NAME`.
 # - `TERMUX_API_APP__NAME`.
-# - `TERMUX_API_APP__IDENTIFIER`.
+# - `TERMUX_API_APP__APP_IDENTIFIER`.
 # - `TERMUX_API_APP__NAMESPACE`.
-# - `TERMUX_API_APP__API_RECEIVER_BROADCASTRECEIVER__*`.
+# - `TERMUX_API_APP__ANDROID_API__ANDROID_API_RECEIVER__*`.
 # - `TERMUX_AM_APP__NAMESPACE`.
 ###
 
@@ -292,7 +292,7 @@ TERMUX__REPOS_HOST_ORG_URL="https://github.com/$TERMUX__REPOS_HOST_ORG_NAME"
 
 ##
 # Termux app package name used for `TERMUX_APP__DATA_DIR` and
-# `TERMUX_APP__*_(ACTIVITY|BROADCASTRECEIVER|SERVICE)__*` variables.
+# `TERMUX_APP__*_(ACTIVITY|RECEIVER|SERVICE)__*` variables.
 #
 # Ideally package name should be `<= 21` characters and max `33`
 # characters. If package name has not yet been chosen, then it would
@@ -300,8 +300,9 @@ TERMUX__REPOS_HOST_ORG_URL="https://github.com/$TERMUX__REPOS_HOST_ORG_NAME"
 # https://github.com/termux/termux-packages/wiki/Termux-file-system-layout#file-path-limits
 # for why.
 #
-# See also `TERMUX_APP__NAMESPACE`.
-#
+# **See Also:**
+# - `TERMUX_APP__NAMESPACE`.
+# - https://developer.android.com/build/configure-app-module#set-application-id
 # - https://github.com/termux/termux-packages/wiki/Termux-file-system-layout#termux-private-app-data-directory
 #
 # Default value: `com.termux`
@@ -410,9 +411,9 @@ __termux_build_props__add_variables_validator_actions "TERMUX__CORE_DIR" "safe_a
 ##
 # Termux subdirectory path for `TERMUX__APPS_DIR`.
 #
-# Constant value: `apps`
+# Constant value: `app`
 ##
-TERMUX__APPS_SUBDIR="apps"
+TERMUX__APPS_SUBDIR="app"
 
 ##
 # Termux apps directory path under `TERMUX__PROJECT_DIR`.
@@ -424,7 +425,7 @@ TERMUX__APPS_SUBDIR="apps"
 #
 # - https://github.com/termux/termux-packages/wiki/Termux-file-system-layout#termux-apps-directory
 #
-# Default value: `/data/data/com.termux/termux/apps`
+# Default value: `/data/data/com.termux/termux/app`
 ##
 TERMUX__APPS_DIR="$TERMUX__PROJECT_DIR/$TERMUX__APPS_SUBDIR"
 __termux_build_props__add_variables_validator_actions "TERMUX__APPS_DIR" "safe_absolute_path"
@@ -463,7 +464,7 @@ TERMUX__APPS_DIR_BY_IDENTIFIER_SUBDIR="i"
 ##
 # Termux apps directory path by app identifier under `TERMUX__APPS_DIR`.
 #
-# Default value: `/data/data/com.termux/termux/apps/i`
+# Default value: `/data/data/com.termux/termux/app/i`
 ##
 TERMUX__APPS_DIR_BY_IDENTIFIER="$TERMUX__APPS_DIR/$TERMUX__APPS_DIR_BY_IDENTIFIER_SUBDIR"
 
@@ -474,7 +475,7 @@ TERMUX__APPS_DIR_BY_IDENTIFIER="$TERMUX__APPS_DIR/$TERMUX__APPS_DIR_BY_IDENTIFIE
 #
 # The app identifier must only contain characters in the range
 # `[a-zA-Z0-9]` as segments, with `[._-]` as separators between
-# segments, and with the first segment containing at least 3
+# segments, and with the first segment containing at least `3`
 # characters. The max length `10` as per
 # `TERMUX__APPS_APP_IDENTIFIER___MAX_LEN` is not checked by this regex
 # and must be checked separately.
@@ -510,7 +511,7 @@ TERMUX__APPS_DIR_BY_UID_SUBDIR="u"
 # Termux apps directory path by app uid (user_id + app_id) under
 # `TERMUX__APPS_DIR`.
 #
-# Default value: `/data/data/com.termux/termux/apps/u`
+# Default value: `/data/data/com.termux/termux/app/u`
 ##
 TERMUX__APPS_DIR_BY_UID="$TERMUX__APPS_DIR/$TERMUX__APPS_DIR_BY_UID_SUBDIR"
 
@@ -594,11 +595,20 @@ __termux_build_props__add_variables_validator_actions "TERMUX__ROOTFS_SUBDIR" "a
 # design. Make sure to update `TERMUX__CACHE_SUBDIR` above as well.
 
 ##
+# Termux subdirectory path for parent directory of all Termux rootfses
+# including `TERMUX__ROOTFS`.
+#
+# Default value: `termux/rootfs`
+##
+#TERMUX__ROOTFSES_SUBDIR="$TERMUX__PROJECT_SUBDIR/rootfs"
+###########
+
+##
 # Termux subdirectory path for `TERMUX__ROOTFS`.
 #
 # Default value: `termux/rootfs/0`
 ##
-#TERMUX__ROOTFS_SUBDIR="$TERMUX__PROJECT_SUBDIR/rootfs/$TERMUX__ROOTFS_ID"
+#TERMUX__ROOTFS_SUBDIR="$TERMUX__ROOTFSES_SUBDIR/$TERMUX__ROOTFS_ID"
 ###########
 
 
@@ -674,11 +684,11 @@ __termux_build_props__add_variables_validator_actions "TERMUX__HOME" "safe_absol
 TERMUX_ANDROID_HOME="$TERMUX__HOME" # Deprecated alternative variable for `TERMUX__HOME`
 
 ##
-# Termux data directory path under `TERMUX__HOME`.
+# Termux legacy project user config directory path under `TERMUX__HOME`.
 #
 # Default value: `/data/data/com.termux/files/home/.termux`
 ##
-TERMUX__DATA_HOME="$TERMUX__HOME/.termux"
+TERMUX__LEGACY_PROJECT_USER_CONFIG_DIR="$TERMUX__HOME/.termux"
 
 
 
@@ -836,8 +846,8 @@ TERMUX__PREFIX__BIN_DIR___MAX_LEN="$((TERMUX__PREFIX_DIR___MAX_LEN + 1 + 3))" # 
 #
 # **See Also:**
 # - https://github.com/termux/termux-packages/wiki/Termux-file-system-layout#file-path-limits
-# - https://github.com/termux/termux-core-package/blob/master/lib/termux-core_nos_c_tre/include/termux/termux_core__nos__c/v1/termux/file/TermuxFile.h
-# - https://github.com/termux/termux-exec-package/blob/master/lib/termux-exec_nos_c_tre/include/termux/termux_exec__nos__c/v1/termux/api/termux_exec/ld_preload/direct/exec/ExecIntercept.h
+# - https://github.com/termux/termux-core-package/blob/master/lib/termux-core_nos_c/tre/include/termux/termux_core__nos__c/v1/termux/file/TermuxFile.h
+# - https://github.com/termux/termux-exec-package/blob/master/lib/termux-exec_nos_c/tre/include/termux/termux_exec__nos__c/v1/termux/api/termux_exec/service/ld_preload/direct/exec/ExecIntercept.h
 #
 # Constant value: `127`
 ##
@@ -847,7 +857,7 @@ TERMUX__PREFIX__BIN_FILE___SAFE_MAX_LEN="$((TERMUX__PREFIX__BIN_DIR___MAX_LEN + 
 # The max length for entire shebang line for `termux-exec`.
 #
 # **See Also:**
-# - https://github.com/termux/termux-exec-package/blob/master/lib/termux-exec_nos_c_tre/include/termux/termux_exec__nos__c/v1/termux/api/termux_exec/exec/ExecIntercept.h
+# - https://github.com/termux/termux-exec-package/blob/master/lib/termux-exec_nos_c/tre/include/termux/termux_exec__nos__c/v1/termux/api/termux_exec/service/ld_preload/direct/exec/ExecIntercept.h
 #
 # Default value: `340`
 ##
@@ -998,11 +1008,11 @@ TERMUX__PREFIX__PROFILE_D_DIR="$TERMUX__PREFIX__ETC_DIR/profile.d"
 
 
 ##
-# Termux data directory path under `TERMUX__PREFIX__ETC_DIR`.
+# Termux project system config directory path under `TERMUX__PREFIX__ETC_DIR`.
 #
 # Default value: `/data/data/com.termux/files/usr/etc/termux`
 ##
-TERMUX__PREFIX__TERMUX_DATA_ETC_DIR="$TERMUX__PREFIX__ETC_DIR/termux"
+TERMUX__PROJECT_SYSTEM_CONFIG_DIR="$TERMUX__PREFIX__ETC_DIR/$TERMUX__INTERNAL_NAME"
 
 
 
@@ -1032,7 +1042,7 @@ TERMUX__CACHE_SUBDIR="cache"
 #
 # Default value: `cache/termux/rootfs/0`
 ##
-#TERMUX__CACHE_SUBDIR="cache/termux/rootfs/$TERMUX__ROOTFS_ID"
+#TERMUX__CACHE_SUBDIR="cache/$TERMUX__INTERNAL_NAME/rootfs/$TERMUX__ROOTFS_ID"
 ###########
 
 ##
@@ -1060,15 +1070,38 @@ TERMUX_CACHE_DIR="$TERMUX__CACHE_DIR" # Deprecated alternative variable for `TER
 
 
 ####
-# Variables for the Termux bootstraps.
+# Variables for the Termux bootstrap.
 ####
 
 ##
-# Termux bootstrap config directory path under `TERMUX__PREFIX__TERMUX_DATA_ETC_DIR`.
+# Termux bootstrap system config directory path under `TERMUX__PROJECT_SYSTEM_CONFIG_DIR`.
 #
-# Default value: `/data/data/com.termux/files/usr/etc/termux/bootstrap`
+# Default value: `/data/data/com.termux/files/usr/etc/termux/termux-bootstrap`
 ##
-TERMUX_BOOTSTRAPS__BOOTSTRAP_CONFIG_DIR="$TERMUX__PREFIX__TERMUX_DATA_ETC_DIR/bootstrap"
+TERMUX_BOOTSTRAP__BOOTSTRAP_SYSTEM_CONFIG_DIR="$TERMUX__PROJECT_SYSTEM_CONFIG_DIR/termux-bootstrap"
+
+
+##
+# Termux subdirectory path for `TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_DIR`.
+#
+# Constant value: `second-stage`
+##
+TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_SUBDIR="second-stage"
+
+##
+# Termux bootstrap second stage directory path under `TERMUX_BOOTSTRAP__BOOTSTRAP_SYSTEM_CONFIG_DIR`.
+#
+# Default value: `/data/data/com.termux/files/usr/etc/termux/termux-bootstrap/second-stage`
+##
+TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_DIR="$TERMUX_BOOTSTRAP__BOOTSTRAP_SYSTEM_CONFIG_DIR/$TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_SUBDIR"
+
+
+##
+# Termux bootstrap second stage entry point subfile path path under `TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_DIR`.
+#
+# Default value: `termux-bootstrap-second-stage.sh`
+##
+TERMUX_BOOTSTRAP__BOOTSTRAP_SECOND_STAGE_ENTRY_POINT_SUBFILE="termux-bootstrap-second-stage.sh"
 
 
 
@@ -1472,7 +1505,7 @@ TERMUX_APP__LNAME="${TERMUX_APP__NAME,,}"
 # Validation regex: `TERMUX__APPS_APP_IDENTIFIER_REGEX`
 # Max length: `TERMUX__APPS_APP_IDENTIFIER___MAX_LEN`
 ##
-TERMUX_APP__IDENTIFIER="termux"
+TERMUX_APP__APP_IDENTIFIER="termux"
 
 
 
@@ -1495,12 +1528,12 @@ TERMUX_APP__REPO_URL="$TERMUX__REPOS_HOST_ORG_URL/$TERMUX_APP__REPO_NAME"
 ##
 # Termux app namespace, i.e the Java package name under which Termux
 # classes exists used for `TERMUX_APP__*_CLASS__*` and
-# `TERMUX_APP__*_(ACTIVITY|BROADCASTRECEIVER|SERVICE)__*`variables.
+# `TERMUX_APP__*_(ACTIVITY|RECEIVER|SERVICE)__*` variables.
 #
-# - https://github.com/termux/termux-app/tree/master/app/src/main/java/com/termux
+# **See Also:**
+# - `TERMUX_APP__PACKAGE_NAME`.
 # - https://developer.android.com/build/configure-app-module#set-namespace
-#
-# See also `TERMUX_APP__PACKAGE_NAME`.
+# - https://github.com/termux/termux-app/tree/master/app/src/main/java/com/termux
 #
 # Default value: `com.termux`
 ##
@@ -1513,113 +1546,92 @@ __termux_build_props__add_variables_validator_actions "TERMUX_APP__NAMESPACE" "a
 ##
 # Termux app apps directory path under `TERMUX__APPS_DIR_BY_IDENTIFIER`.
 #
-# Default value: `/data/data/com.termux/termux/apps/i/termux`
+# Default value: `/data/data/com.termux/termux/app/i/termux`
 ##
-TERMUX_APP__APPS_DIR="$TERMUX__APPS_DIR_BY_IDENTIFIER/$TERMUX_APP__IDENTIFIER"
-__termux_build_props__add_variables_validator_actions "TERMUX_APP__APPS_DIR" "safe_absolute_path"
+TERMUX_APP__APP_DIR="$TERMUX__APPS_DIR_BY_IDENTIFIER/$TERMUX_APP__APP_IDENTIFIER"
+__termux_build_props__add_variables_validator_actions "TERMUX_APP__APP_DIR" "safe_absolute_path"
 
 
 
 ##
-# Termux app shell `Activity` class name that hosts the shell/terminal views.
+# Termux app shell API `Activity` class name that hosts the
+# shell/terminal views.
 #
+# **See Also:**
 # - https://github.com/termux/termux-app/blob/master/app/src/main/java/com/termux/app/TermuxActivity.java
 #
 # Default value: `com.termux.app.TermuxActivity`
 ##
-TERMUX_APP__SHELL_ACTIVITY__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxActivity"
+TERMUX_APP__SHELL_API__SHELL_API_ACTIVITY__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxActivity"
+
+
 
 ##
-# Termux app shell `Activity` component name for `TERMUX_APP__SHELL_ACTIVITY__CLASS_NAME`.
+# Termux app shell API `Service` class name that hosts the
+# shell/terminal sessions.
 #
-# Default value: `com.termux/com.termux.app.TermuxActivity`
-##
-TERMUX_APP__SHELL_ACTIVITY__COMPONENT_NAME="$TERMUX_APP__PACKAGE_NAME/$TERMUX_APP__SHELL_ACTIVITY__CLASS_NAME"
-
-
-
-##
-# Termux app shell `Service` class name that manages the shells.
-#
+# **See Also:**
 # - https://github.com/termux/termux-app/blob/master/app/src/main/java/com/termux/app/TermuxService.java
 #
 # Default value: `com.termux.app.TermuxService`
 ##
-TERMUX_APP__SHELL_SERVICE__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxService"
+TERMUX_APP__SHELL_API__SHELL_API_SERVICE__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxService"
+
+
 
 ##
-# Termux app shell `Service` component name for `TERMUX_APP__SHELL_SERVICE__CLASS_NAME`.
+# Termux app `RUN_COMMAND` API `Service` class name that receives
+# commands sent by 3rd party apps via intents.
 #
-# Default value: `com.termux/com.termux.app.TermuxService`
-##
-TERMUX_APP__SHELL_SERVICE__COMPONENT_NAME="$TERMUX_APP__PACKAGE_NAME/$TERMUX_APP__SHELL_SERVICE__CLASS_NAME"
-
-
-
-##
-# Termux app RUN_COMMAND `Service` class name that receives commands via intents.
-#
+# **See Also:**
 # - https://github.com/termux/termux-app/blob/master/app/src/main/java/com/termux/app/RunCommandService.java
 # - https://github.com/termux/termux-app/wiki/RUN_COMMAND-Intent
 #
 # Default value: `com.termux.app.RunCommandService`
 ##
-TERMUX_APP__RUN_COMMAND_SERVICE__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.RunCommandService"
+TERMUX_APP__RUN_COMMAND_API__RUN_COMMAND_API_SERVICE__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.RunCommandService"
+
+
 
 ##
-# Termux app shell `Service` component name for `TERMUX_APP__RUN_COMMAND_SERVICE__CLASS_NAME`.
+# Termux app data sender API `BroadcastReceiver` class name that
+# receives data view broadcasts and sends the data with `ACTION_SEND`
+# and `ACTION_VIEW` intents to other apps, like by `termux-open`.
 #
-# Default value: `com.termux/com.termux.app.RunCommandService`
-##
-TERMUX_APP__RUN_COMMAND_SERVICE__COMPONENT_NAME="$TERMUX_APP__PACKAGE_NAME/$TERMUX_APP__RUN_COMMAND_SERVICE__CLASS_NAME"
-
-
-
-##
-# Termux app data sender `BroadcastReceiver` class name that receives
-# data view broadcasts and sends the data with `ACTION_SEND` and
-# `ACTION_VIEW` intents to other apps, like by `termux-open`.
-#
+# **See Also:**
 # - https://github.com/termux/termux-app/blob/master/app/src/main/java/com/termux/app/TermuxOpenReceiver.java
 # - https://github.com/termux/termux-tools/blob/master/scripts/termux-open.in
 #
 # Default value: `com.termux.app.TermuxOpenReceiver`
 ##
-TERMUX_APP__DATA_SENDER_BROADCASTRECEIVER__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxOpenReceiver"
+TERMUX_APP__DATA_SENDER_API__DATA_SENDER_API_RECEIVER__CLASS_NAME="$TERMUX_APP__NAMESPACE.app.TermuxOpenReceiver"
+
+
+
+
 
 ##
-# Termux app data sender `BroadcastReceiver` component name for `TERMUX_APP__DATA_SENDER_BROADCASTRECEIVER__CLASS_NAME`.
+# Termux apps info environment file path for the Termux app under `TERMUX_APP__APP_DIR`.
 #
-# Default value: `com.termux/com.termux.app.TermuxOpenReceiver`
+# Default value: `/data/data/com.termux/termux/app/i/termux/termux-apps-info.env`
 ##
-TERMUX_APP__DATA_SENDER_BROADCASTRECEIVER__COMPONENT_NAME="$TERMUX_APP__PACKAGE_NAME/$TERMUX_APP__DATA_SENDER_BROADCASTRECEIVER__CLASS_NAME"
-
-
-
-
-
-##
-# Termux apps info environment file path for the Termux app under `TERMUX_APP__APPS_DIR`.
-#
-# Default value: `/data/data/com.termux/termux/apps/i/termux/termux-apps-info.env`
-##
-TERMUX_APP__CORE__APPS_INFO_ENV_FILE="$TERMUX_APP__APPS_DIR/$TERMUX_CORE__APPS_INFO_ENV_SUBFILE"
+TERMUX_APP__CORE__APPS_INFO_ENV_FILE="$TERMUX_APP__APP_DIR/$TERMUX_CORE__APPS_INFO_ENV_SUBFILE"
 __termux_build_props__add_variables_validator_actions "TERMUX_APP__CORE__APPS_INFO_ENV_FILE" "safe_absolute_path"
 
 ##
-# Termux apps info json file path for the Termux app under `TERMUX_APP__APPS_DIR`.
+# Termux apps info json file path for the Termux app under `TERMUX_APP__APP_DIR`.
 #
-# Default value: `/data/data/com.termux/termux/apps/i/termux/termux-apps-info.json`
+# Default value: `/data/data/com.termux/termux/app/i/termux/termux-apps-info.json`
 ##
-TERMUX_APP__CORE__APPS_INFO_JSON_FILE="$TERMUX_APP__APPS_DIR/$TERMUX_CORE__APPS_INFO_JSON_SUBFILE"
+TERMUX_APP__CORE__APPS_INFO_JSON_FILE="$TERMUX_APP__APP_DIR/$TERMUX_CORE__APPS_INFO_JSON_SUBFILE"
 __termux_build_props__add_variables_validator_actions "TERMUX_APP__CORE__APPS_INFO_JSON_FILE" "safe_absolute_path"
 
 ##
-# `termux-am-socket` server file path for the Termux app under `TERMUX_APP__APPS_DIR`.
+# `termux-am-socket` server file path for the Termux app under `TERMUX_APP__APP_DIR`.
 #
-# Default value: `/data/data/com.termux/termux/apps/i/termux/termux-am`
+# Default value: `/data/data/com.termux/termux/app/i/termux/termux-am`
 ##
-TERMUX_APP__AM_SOCKET__SERVER_SOCKET_FILE="$TERMUX_APP__APPS_DIR/$TERMUX_AM_SOCKET__SERVER_SOCKET_SUBFILE"
+TERMUX_APP__AM_SOCKET__SERVER_SOCKET_FILE="$TERMUX_APP__APP_DIR/$TERMUX_AM_SOCKET__SERVER_SOCKET_SUBFILE"
 __termux_build_props__add_variables_validator_actions "TERMUX_APP__AM_SOCKET__SERVER_SOCKET_FILE" "safe_absolute_path unix_path_max"
 
 
@@ -1634,9 +1646,12 @@ __termux_build_props__add_variables_validator_actions "TERMUX_APP__AM_SOCKET__SE
 
 ##
 # Termux:API app package name used for
-# `TERMUX_API_APP__*_(ACTIVITY|BROADCASTRECEIVER|SERVICE)__*` variables.
+# `TERMUX_API_APP__*_(ACTIVITY|RECEIVER|SERVICE)__*` variables.
 #
-# See also `TERMUX_API_APP__NAMESPACE`.
+# **See Also:**
+# - `TERMUX_API_APP__NAMESPACE`.
+# - https://developer.android.com/build/configure-app-module#set-application-id
+# - https://github.com/termux/termux-packages/wiki/Termux-file-system-layout#termux-private-app-data-directory
 #
 # Default value: `com.termux.api`
 ##
@@ -1660,7 +1675,7 @@ TERMUX_API_APP__NAME="$TERMUX__NAME:API"
 # Validation regex: `TERMUX__APPS_APP_IDENTIFIER_REGEX`
 # Max length: `TERMUX__APPS_APP_IDENTIFIER___MAX_LEN`
 ##
-TERMUX_API_APP__IDENTIFIER="termuxapi"
+TERMUX_API_APP__APP_IDENTIFIER="termuxapi"
 
 
 
@@ -1683,12 +1698,12 @@ TERMUX_API_APP__REPO_URL="$TERMUX__REPOS_HOST_ORG_URL/$TERMUX_API_APP__REPO_NAME
 ##
 # Termux:API app namespace, i.e the Java package name under which
 # Termux:API classes exists used for `TERMUX_API_APP__*_CLASS__*` and
-# `TERMUX_API_APP__*_(ACTIVITY|BROADCASTRECEIVER|SERVICE)__*`variables.
+# `TERMUX_API_APP__*_(ACTIVITY|RECEIVER|SERVICE)__*` variables.
 #
-# - https://github.com/termux/termux-api/tree/master/app/src/main/java/com/termux/api
+# **See Also:**
+# - `TERMUX_API_APP__PACKAGE_NAME`.
 # - https://developer.android.com/build/configure-app-module#set-namespace
-#
-# See also `TERMUX_API_APP__PACKAGE_NAME`.
+# - https://github.com/termux/termux-api/tree/master/app/src/main/java/com/termux/api
 #
 # Default value: `com.termux.api`
 ##
@@ -1701,31 +1716,25 @@ __termux_build_props__add_variables_validator_actions "TERMUX_API_APP__NAMESPACE
 ##
 # Termux:API app apps directory path under `TERMUX__APPS_DIR_BY_IDENTIFIER`.
 #
-# Default value: `/data/data/com.termux/termux/apps/i/termuxapi`
+# Default value: `/data/data/com.termux/termux/app/i/termuxapi`
 ##
-TERMUX_API_APP__APPS_DIR="$TERMUX__APPS_DIR_BY_IDENTIFIER/$TERMUX_API_APP__IDENTIFIER"
-__termux_build_props__add_variables_validator_actions "TERMUX_API_APP__APPS_DIR" "safe_absolute_path"
+TERMUX_API_APP__APP_DIR="$TERMUX__APPS_DIR_BY_IDENTIFIER/$TERMUX_API_APP__APP_IDENTIFIER"
+__termux_build_props__add_variables_validator_actions "TERMUX_API_APP__APP_DIR" "safe_absolute_path"
 
 
 
 ##
-# Termux:API app API `BroadcastReceiver` class name that receives
-# and processes API requests from command line via `termux-api` native
-# library.
+# Termux:API app Android API `BroadcastReceiver` class name that
+# receives and processes API requests from command line via `termux-api`
+# native exec entry point.
 #
+# **See Also:**
 # - https://github.com/termux/termux-api/blob/master/app/src/main/java/com/termux/api/TermuxApiReceiver.java
 # - https://github.com/termux/termux-api-package/blob/master/termux-api.c
 #
 # Default value: `com.termux.api.TermuxApiReceiver`
 ##
-TERMUX_API_APP__API_RECEIVER_BROADCASTRECEIVER__CLASS_NAME="$TERMUX_API_APP__NAMESPACE.TermuxApiReceiver"
-
-##
-# Termux:API app API `BroadcastReceiver` component name for `TERMUX_API_APP__API_RECEIVER_BROADCASTRECEIVER__CLASS_NAME`.
-#
-# Default value: `com.termux.api/com.termux.api.TermuxApiReceiver`
-##
-TERMUX_API_APP__API_RECEIVER_BROADCASTRECEIVER__COMPONENT_NAME="$TERMUX_API_APP__PACKAGE_NAME/$TERMUX_API_APP__API_RECEIVER_BROADCASTRECEIVER__CLASS_NAME"
+TERMUX_API_APP__ANDROID_API__ANDROID_API_RECEIVER__CLASS_NAME="$TERMUX_API_APP__NAMESPACE.TermuxApiReceiver"
 
 
 
@@ -1813,8 +1822,9 @@ TERMUX_AM_PKG__REPO_URL="$TERMUX__REPOS_HOST_ORG_URL/$TERMUX_AM_PKG__REPO_NAME"
 # This must not be changed unless the classes in the `TermuxAm` repo
 # are moved to a different Java package name (in forks).
 #
-# - https://github.com/termux/TermuxAm/tree/master/app/src/main/java/com/termux/termuxam
+# **See Also:**
 # - https://developer.android.com/build/configure-app-module#set-namespace
+# - https://github.com/termux/TermuxAm/tree/master/app/src/main/java/com/termux/termuxam
 #
 # Constant value: `com.termux.termuxam`
 ##
@@ -2016,7 +2026,7 @@ TERMUX_REGEX__APP_DATA_DIR_PATH='^(((/data/data)|(/data/user/[0-9]+)|(/mnt/expan
 TERMUX_REPO_APP__PACKAGE_NAME="com.termux"
 TERMUX_REPO_APP__DATA_DIR="/data/data/com.termux"
 TERMUX_REPO__CORE_DIR="/data/data/com.termux/termux/core"
-TERMUX_REPO__APPS_DIR="/data/data/com.termux/termux/apps"
+TERMUX_REPO__APPS_DIR="/data/data/com.termux/termux/app"
 TERMUX_REPO__ROOTFS="/data/data/com.termux/files"
 TERMUX_REPO__HOME="/data/data/com.termux/files/home"
 TERMUX_REPO__PREFIX="/data/data/com.termux/files/usr"
@@ -2291,16 +2301,16 @@ including the null \`\0\` terminator." 1>&2
     fi
 
 
-    if [[ ! "$TERMUX_APP__IDENTIFIER" =~ ${TERMUX__APPS_APP_IDENTIFIER_REGEX:?} ]]; then
-        echo "The TERMUX_APP__IDENTIFIER '$TERMUX_APP__IDENTIFIER' with length ${#TERMUX_APP__IDENTIFIER} is invalid." 1>&2
+    if [[ ! "$TERMUX_APP__APP_IDENTIFIER" =~ ${TERMUX__APPS_APP_IDENTIFIER_REGEX:?} ]]; then
+        echo "The TERMUX_APP__APP_IDENTIFIER '$TERMUX_APP__APP_IDENTIFIER' with length ${#TERMUX_APP__APP_IDENTIFIER} is invalid." 1>&2
         echo "Check 'TERMUX__APPS_APP_IDENTIFIER_REGEX' variable docs for info on what is a valid app identifier." 1>&2
         return 1
     fi
 
     if [[ "$__TERMUX_BUILD_PROPS__VALIDATE_PATHS_MAX_LEN" == "true" ]] && \
-            [ "${#TERMUX_APP__IDENTIFIER}" -gt ${TERMUX__APPS_APP_IDENTIFIER___MAX_LEN:?} ]; then
-        echo "The TERMUX_APP__IDENTIFIER '$TERMUX_APP__IDENTIFIER' with length ${#TERMUX_APP__IDENTIFIER} is invalid." 1>&2
-        echo "The TERMUX_APP__IDENTIFIER must have max length \
+            [ "${#TERMUX_APP__APP_IDENTIFIER}" -gt ${TERMUX__APPS_APP_IDENTIFIER___MAX_LEN:?} ]; then
+        echo "The TERMUX_APP__APP_IDENTIFIER '$TERMUX_APP__APP_IDENTIFIER' with length ${#TERMUX_APP__APP_IDENTIFIER} is invalid." 1>&2
+        echo "The TERMUX_APP__APP_IDENTIFIER must have max length \
 \`<= TERMUX__APPS_APP_IDENTIFIER___MAX_LEN ($TERMUX__APPS_APP_IDENTIFIER___MAX_LEN)\`." 1>&2
         return 1
     fi
