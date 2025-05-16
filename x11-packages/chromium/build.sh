@@ -446,4 +446,3 @@ termux_step_post_make_install() {
 # seccomp-bpf sandbox work properly on Android. I've tried many times but I
 # can't make it. If your are willing to work on this, feel free to submit a PR.
 # #############################################################################
-
