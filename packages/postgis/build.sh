@@ -16,3 +16,4 @@ termux_step_pre_configure() {
 	CPPFLAGS+=" -D_GNU_SOURCE" # for preadv and pwritev
 	CXXFLAGS+=" -std=c++14"
 }
+
