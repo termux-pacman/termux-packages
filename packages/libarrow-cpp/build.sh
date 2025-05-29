@@ -6,6 +6,7 @@ TERMUX_PKG_VERSION="20.0.0"
 TERMUX_PKG_SRCURL=https://github.com/apache/arrow/archive/refs/tags/apache-arrow-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=67e31a4f46528634b8c3cbb0dc60ac8f85859d906b400d83d0b6f732b0c5b0e3
 TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_VERSION_SED_REGEXP="s/apache-arrow-//"
 TERMUX_PKG_DEPENDS="abseil-cpp, apache-orc, libandroid-execinfo, libc++, liblz4, libprotobuf, libre2, libsnappy, thrift, utf8proc, zlib, zstd"
 TERMUX_PKG_BUILD_DEPENDS="boost, boost-headers, rapidjson"
 TERMUX_PKG_PYTHON_COMMON_DEPS="build, Cython, numpy, setuptools, setuptools-scm, wheel"
@@ -26,6 +27,18 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DZLIB_HOME=$TERMUX_PREFIX
 -DZSTD_HOME=$TERMUX_PREFIX
 "
+
+termux_step_post_get_source() {
+	# Do not forget to bump revision of reverse dependencies and rebuild them
+	# after SOVERSION is changed.
+	local _EXPECTED_SOVERSION=2000
+
+	# From cpp/CMakeLists.txt: ARROW_SO_VERSION = "${ARROW_VERSION_MAJOR} * 100 + ${ARROW_VERSION_MINOR}"
+	local _ACTUAL_SOVERSION=$(echo "$TERMUX_PKG_VERSION" | awk -F'.' '{print $1 * 100 + $2}')
+	if [ ! "${_ACTUAL_SOVERSION}" ] || [ "${_EXPECTED_SOVERSION}" != "$(( "${_ACTUAL_SOVERSION}" ))" ]; then
+		termux_error_exit "SOVERSION changed: expected=$_EXPECTED_SOVERSION, actual=$_ACTUAL_SOVERSION"
+	fi
+}
 
 termux_step_pre_configure() {
 	termux_setup_protobuf
