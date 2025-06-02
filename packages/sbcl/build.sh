@@ -110,3 +110,4 @@ termux_step_make() {
 termux_step_make_install() {
 	INSTALL_ROOT="$TERMUX_PREFIX" sh install.sh
 }
+
