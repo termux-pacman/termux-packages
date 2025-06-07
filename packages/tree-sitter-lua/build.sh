@@ -19,4 +19,3 @@ termux_step_post_make_install() {
 	install -d "${TERMUX_PREFIX}"/lib/tree_sitter
 	ln -sf "${TERMUX_PREFIX}"/lib/libtree-sitter-lua.so "${TERMUX_PREFIX}"/lib/tree_sitter/lua.so
 }
-
