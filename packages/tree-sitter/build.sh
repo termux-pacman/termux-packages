@@ -66,3 +66,4 @@ termux_step_post_make_install() {
 	cargo run -- complete --shell  elvish > "${TERMUX_PREFIX}/share/elvish/lib/${TERMUX_PKG_NAME}.elv"
 	cargo run -- complete --shell nushell > "${TERMUX_PREFIX}/share/nushell/vendor/autoload/${TERMUX_PKG_NAME}.nu"
 }
+
