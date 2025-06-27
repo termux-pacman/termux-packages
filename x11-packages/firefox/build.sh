@@ -140,3 +140,4 @@ termux_step_post_make_install() {
 		termux_error_exit "DT_RELR is unsupported on Android 8.x and older\n${r}"
 	fi
 }
+
