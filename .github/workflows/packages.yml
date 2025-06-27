@@ -42,32 +42,32 @@ jobs:
       env:
         MANUAL_INPUT_PACKAGES: ${{ github.event.inputs.packages }}
       run: |
+        # We are intentionally not using .commits[0].id and .commits[-1].id as github seems to
+        # only send 20 commits in the payload for github action runs instead of the 2048 documented
+        # limit. Perhaps 2048 is the limit just for webhooks, where they haven't documented
+        # properly that the limit for github actions is only 20:
+        #
+        # https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
+        OLD_COMMIT="${{ github.event.before }}"
+        HEAD_COMMIT="${{ github.event.after }}"
         if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-          BASE_COMMIT=$(jq --raw-output .pull_request.base.sha "$GITHUB_EVENT_PATH")
-          # We are intentionally not using .commits[0].id and .commits[-1].id as github seems to
-          # only send 20 commits in the payload for github action runs instead of the 2048 documented
-          # limit. Perhaps 2048 is the limit just for webhooks, where they haven't documented
-          # properly that the limit for github actions is only 20:
-          #
-          # https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
-          OLD_COMMIT=$(jq --raw-output .before "$GITHUB_EVENT_PATH")
-          HEAD_COMMIT=$(jq --raw-output .after "$GITHUB_EVENT_PATH")
-          if [ "$BASE_COMMIT" = "null" ]; then
-            if ! git log "$OLD_COMMIT" 2> /dev/null; then
+          BASE_REF="${{ github.event.pull_request.base.ref }}"
+          git fetch origin "${BASE_REF:-master}" 2>/dev/null
+          BASE_COMMIT="$(git merge-base "origin/${BASE_REF:-master}" "HEAD")"
+          if [ -z "${{ github.event.pull_request.base.sha }}" ]; then
+            if ! git log "$OLD_COMMIT" > /dev/null; then
               if [ "$(git branch --show-current)" = "master" ]; then
                 echo "Force push detected on master branch. Unable to proceed."
                 exit 1
               else
-                echo "::warning:: Force push detected on non-master branch. Trying to proceed at any cost but may not work as expected."
-                OLD_COMMIT=$(jq --raw-output .commits[0].id "$GITHUB_EVENT_PATH")
-                echo "::warning:: OLD_COMMIT is set to $OLD_COMMIT which may not be correct if you have pushed more than 20 commits."
+                OLD_COMMIT=$(git fetch origin master >&2; git merge-base origin/master $HEAD_COMMIT)
               fi
             fi
             echo "Processing commit range: ${OLD_COMMIT}..${HEAD_COMMIT}"
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "${OLD_COMMIT}" "${HEAD_COMMIT}")
           else
             # Pull requests.
-            echo "Processing pull request #$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH"): ${BASE_COMMIT}..HEAD"
+            echo "Processing pull request #${{ github.event.pull_request.number }}: ${BASE_COMMIT}..HEAD"
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "${BASE_COMMIT}" "HEAD")
           fi
         fi
@@ -210,14 +210,13 @@ jobs:
         fi
 
     - name: Free additional disk space (if needed)
-      env:
-        DOCKER_BUILD: ${{ steps.build-info.outputs.docker-build }}
+      if: ${{ steps.build-info.outputs.docker-build == 'false' }}
       run: |
-        if [ "$DOCKER_BUILD" == 'false' ]; then
-          ./scripts/setup-ubuntu.sh
-          sudo apt install ninja-build
-          ./scripts/free-space.sh
-        fi
+        ./scripts/setup-ubuntu.sh
+        ./scripts/setup-android-sdk.sh
+        rm -f ${HOME}/lib/ndk-*.zip ${HOME}/lib/sdk-*.zip
+        sudo apt install ninja-build
+        ./scripts/free-space.sh
 
     - name: Build packages
       env:
@@ -235,7 +234,7 @@ jobs:
 
         if [[ "${#packages[@]}" -gt 0 ]]; then
           if [ "$DOCKER_BUILD" == 'false' ]; then
-            NDK="$ANDROID_NDK" ANDROID_HOME="$ANDROID_SDK_ROOT" ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
+            ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
           else
             ./scripts/run-docker.sh ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
           fi
