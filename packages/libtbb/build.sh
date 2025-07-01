@@ -19,4 +19,3 @@ termux_step_pre_configure() {
 	# See https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=274337
 	LDFLAGS+=" -Wl,--undefined-version"
 }
-
