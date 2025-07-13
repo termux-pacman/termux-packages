@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      run: git clone https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
+      run: git clone -b "${{ github.head_ref || github.ref_name }}" https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
     - name: Get RESULT.* files
       uses: actions/download-artifact@v4.1.7
       with:
@@ -129,7 +129,8 @@ jobs:
               continue
             fi
           fi
-          if ! grep -q '^'${BUILD_SOURCE}'$' ../REBUILD-LIST-BUILD && [ $(($(expr $(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE}))) / 3600) > 8)) = 1 ]; then
+          if ! grep -q "^${BUILD_SOURCE}$" ../REBUILD-LIST-BUILD && \
+            [ $(($(expr $(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE}))) / 3600) > 8)) = 1 ]; then
             echo "${BUILD_SOURCE}" >> ../REBUILD-LIST-BUILD
           fi
         done
@@ -153,6 +154,7 @@ jobs:
           fi
           curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
             "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
+          cat ../LIST-ISSUES
         }
 
         # Edit
@@ -168,10 +170,10 @@ jobs:
         list_files=" "
         for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
           dir_sp=(${i//// })
-          if ! grep -q " ${dir_sp[0]}/${dir_sp[1]} " <<< "$list_files"; then
+          if ! grep -q " ${dir_sp[0]}/${dir_sp[1]} " <<< "$list_files" && ! grep -q "^${dir_sp[1]}$" ./pkgignore; then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
             source_build="${dir_sp[0]}/${dir_sp[1]}/build.sh"
-            if grep -q '^'${source_build}'$' ../REBUILD-LIST-BUILD; then
+            if grep -q "^${source_build}$" ../REBUILD-LIST-BUILD; then
               sed -i "/^${source_build////'\/'}$/d" ../REBUILD-LIST-BUILD
             fi
           fi
@@ -224,7 +226,7 @@ jobs:
         git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages.git"
         commit "Update system repo"
         git add .
-        git reset packages root-packages x11-packages README.md SECURITY.md repo.json
+        git reset packages root-packages x11-packages README.md SECURITY.md repo.json pkgignore
         {
           git commit -m "Update repo"
           if [ "${GITHUB_EVENT}" != "pull_request" ]; then
