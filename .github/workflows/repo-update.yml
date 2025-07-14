@@ -272,48 +272,48 @@ jobs:
             done <<< $(jq -r '.[] | "\(.user.login) \("//") \(.state) \("//") \(.number) \("//") \(.title)"' ../LIST-ISSUES)
           done
         done
+        git checkout -f
+        git clean -fd
 
         # Recompile packages if necessary
-        if [ -n "$(cat ../REBUILD-LIST-BUILD)" ]; then
-          info "Rebuild packages"
-          listchanged=""
-          for i in $(cat ../REBUILD-LIST-BUILD); do
-            # It is necessary to create an issue because the package has
-            # a compilation error even after recompilation.
-            pkgdir="$(dirname ${i})"
-            if [[ "$(git log -n 1 --format=%B -- "${i}")" = "rebuild(${pkgdir}): auto check by @termux-pacman-bot" && \
-              "$(git log -n 1 --format=%an -- "${i}")" = "termux-pacman-bot" && \
-              "$(git log -n 1 --format=%ae -- "${i}")" = "termux-pacman-bot@outlook.com" ]]; then
-              if ! jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*${pkgdir}$"; then
-                commit "Create an issue on ${pkgdir}"
-                if [ "${GITHUB_EVENT}" != "pull_request" ]; then
-                  gh issue create \
-                    --title "[AUTO-CHECK]: failed to recompile ${pkgdir}" \
-                    --body "$(echo -e "This issue was automatically generated because the '${pkgdir}' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
-                    --label "auto recompilation failed" \
-                    --assignee Maxython
-                fi
+        info "Rebuild packages"
+        listchanged=""
+        for i in $(cat ../REBUILD-LIST-BUILD); do
+          # It is necessary to create an issue because the package has
+          # a compilation error even after recompilation.
+          pkgdir="$(dirname ${i})"
+          if [[ "$(git log -n 1 --format=%B -- "${i}")" = "rebuild(${pkgdir}): auto check by @termux-pacman-bot" && \
+            "$(git log -n 1 --format=%an -- "${i}")" = "termux-pacman-bot" && \
+            "$(git log -n 1 --format=%ae -- "${i}")" = "termux-pacman-bot@outlook.com" ]]; then
+            if ! jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*${pkgdir}$"; then
+              commit "Create an issue on ${pkgdir}"
+              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                gh issue create \
+                  --title "[AUTO-CHECK]: failed to recompile ${pkgdir}" \
+                  --body "$(echo -e "This issue was automatically generated because the '${pkgdir}' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
+                  --label "auto recompilation failed" \
+                  --assignee Maxython
               fi
-              continue
             fi
-            echo "" >> ./${i}
+            continue
+          fi
+          echo "" >> ./${i}
+          git add ./${i}
+          listchanged+=" ${i}"
+        done
+        if [ -n "${listchanged}" ]; then
+          git commit -m "$(echo -e "termux-pacman/auto-check-repo: preparing to recompile packages\n[skip ci]")"
+          if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+            git push origin master
+          fi
+          for i in ${listchanged}; do
+            pkgdir="$(dirname ${i})"
+            commit "Rebuild ${pkgdir}"
+            sed -i '$d' ./${i}
             git add ./${i}
-            listchanged+=" ${i}"
-          done
-          if [ -n "${listchanged}" ]; then
-            git commit -m "$(echo -e "termux-pacman/auto-check-repo: preparing to recompile packages\n[skip ci]")"
+            git commit -m "rebuild(${pkgdir}): auto check by @termux-pacman-bot"
             if [ "${GITHUB_EVENT}" != "pull_request" ]; then
               git push origin master
             fi
-            for i in ${listchanged}; do
-              pkgdir="$(dirname ${i})"
-              commit "Rebuild ${pkgdir}"
-              sed -i '$d' ./${i}
-              git add ./${i}
-              git commit -m "rebuild(${pkgdir}): auto check by @termux-pacman-bot"
-              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
-                git push origin master
-              fi
-            done
-          fi
+          done
         fi
