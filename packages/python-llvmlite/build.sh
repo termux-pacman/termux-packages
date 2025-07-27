@@ -172,3 +172,4 @@ termux_step_make_install() {
 	export LLVMLITE_SKIP_BUILD_LIBRARY=1
 	pip install . --prefix="$TERMUX_PREFIX" -vv --no-build-isolation --no-deps
 }
+
