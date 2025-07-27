@@ -19,4 +19,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_pre_configure(){
 	CXXFLAGS+=' -Wno-c++11-narrowing'
 }
-
