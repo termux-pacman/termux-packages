@@ -64,3 +64,4 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/share/nvim/runtime/plugin
 	cp $TERMUX_PKG_SRCDIR/plugin/fzf.vim $TERMUX_PREFIX/share/nvim/runtime/plugin/
 }
+

@@ -21,3 +21,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm755 -t "${TERMUX_PREFIX}"/bin ${TERMUX_PKG_SRCDIR}/wakatime-cli
 }
+
