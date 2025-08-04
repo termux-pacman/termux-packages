@@ -103,4 +103,3 @@ termux_step_create_debscripts() {
 	rm -f "${prefix_lib}"
 	EOF
 }
-
