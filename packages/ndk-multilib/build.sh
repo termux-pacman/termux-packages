@@ -103,4 +103,3 @@ termux_step_create_debscripts() {
 		$TERMUX_PKG_BUILDER_DIR/postinst-alien.in >> prerm
 	chmod 0700 postinst prerm
 }
-
