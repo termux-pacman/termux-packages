@@ -17,4 +17,3 @@ termux_step_make() {
 	"${CC}" -shared -fPIC -o "${TERMUX_PREFIX}/lib/libmediandk.so" "$TERMUX_PKG_BUILDER_DIR/libmediandk-wrapper.c" -Wno-deprecated-declarations
 	"${CC}" -shared -fPIC -o "${TERMUX_PREFIX}/lib/libOpenSLES.so" "$TERMUX_PKG_BUILDER_DIR/libOpenSLES-wrapper.c" -Wno-deprecated-declarations
 }
-
