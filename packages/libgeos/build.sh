@@ -12,3 +12,4 @@ TERMUX_PKG_BREAKS="libgeos-dev"
 TERMUX_PKG_REPLACES="libgeos-dev"
 TERMUX_PKG_GROUPS="science"
 TERMUX_PKG_FORCE_CMAKE=true
+
