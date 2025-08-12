@@ -337,4 +337,3 @@ termux_step_create_debscripts() {
 
 	chmod 0755 prerm
 }
-
