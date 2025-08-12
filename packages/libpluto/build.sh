@@ -46,3 +46,4 @@ termux_step_make_install() {
 	install -Dm644 -t "${TERMUX_PREFIX}/lib" src/libpluto{.so,static.a}
 	install -Dm644 -t "${TERMUX_PREFIX}/include/pluto" src/{lua,lauxlib,lualib,luaconf}.h src/lua.hpp
 }
+
