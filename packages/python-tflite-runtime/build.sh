@@ -10,13 +10,14 @@ TERMUX_PKG_UPDATE_TAG_TYPE="latest-release-tag"
 TERMUX_PKG_PYTHON_COMMON_DEPS="setuptools, wheel, pybind11"
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCMAKE_POLICY_VERSION_MINIMUM=3.5
 -DTFLITE_HOST_TOOLS_DIR=$TERMUX_PKG_HOSTBUILD_DIR
 "
 
 termux_step_host_build() {
 	termux_setup_cmake
 
-	cmake "$TERMUX_PKG_SRCDIR"/tensorflow/lite
+	cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 "$TERMUX_PKG_SRCDIR"/tensorflow/lite
 	cmake --build . --verbose -j $TERMUX_PKG_MAKE_PROCESSES -t flatbuffers-flatc
 }
 
