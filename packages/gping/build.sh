@@ -36,3 +36,4 @@ termux_step_post_massage() {
 	rm -f lib/libz.so.1
 	rm -f lib/libz.so
 }
+
