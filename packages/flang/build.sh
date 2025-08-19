@@ -93,4 +93,3 @@ termux_step_create_debscripts() {
 		"$TERMUX_PKG_BUILDER_DIR/prerm.sh.in" > ./prerm
 	chmod +x ./prerm
 }
-
