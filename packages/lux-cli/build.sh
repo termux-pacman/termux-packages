@@ -167,4 +167,3 @@ termux_step_make_install() {
 	install -Dm644 -t "$TERMUX_PREFIX/share/zsh/site-functions" "$_completions_dir/_lx"
 	install -Dm644 -t "$TERMUX_PREFIX/share/fish/vendor_completions.d" "$_completions_dir/lx.fish"
 }
-
