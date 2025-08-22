@@ -31,4 +31,3 @@ termux_step_pre_configure() {
 
 	export LDFLAGS+=" -landroid-shmem"
 }
-
