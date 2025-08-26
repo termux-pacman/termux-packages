@@ -30,3 +30,4 @@ bin/kill share/man/man1/kill.1
 bin/slabtop share/man/man1/slabtop.1
 bin/w share/man/man1/w.1
 "
+

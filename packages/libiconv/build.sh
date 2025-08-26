@@ -11,3 +11,4 @@ TERMUX_PKG_REPLACES="libandroid-support (<= 24), libiconv-dev, libandroid-suppor
 
 # Enable extra encodings (such as CP437) needed by some programs:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-extra-encodings"
+
