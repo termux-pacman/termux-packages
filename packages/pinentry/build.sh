@@ -13,4 +13,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-pinentry-tty
 --without-libcap
 "
-
