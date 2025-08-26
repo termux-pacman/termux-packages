@@ -31,3 +31,4 @@ termux_step_make_install() {
 	cargo run -- --gen-completions    fish > "${TERMUX_PREFIX}/share/fish/vendor_completions.d/${TERMUX_PKG_NAME}.fish"
 	cargo run -- --gen-completions  elvish > "${TERMUX_PREFIX}/share/elvish/lib/${TERMUX_PKG_NAME}.elv"
 }
+
