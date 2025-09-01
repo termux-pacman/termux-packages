@@ -3,9 +3,9 @@ TERMUX_PKG_DESCRIPTION="Ambitious Vim-fork focused on extensibility and agility 
 TERMUX_PKG_LICENSE="Apache-2.0, VIM License"
 TERMUX_PKG_LICENSE_FILE="LICENSE.txt"
 TERMUX_PKG_MAINTAINER="Joshua Kahn @TomJo2000"
-TERMUX_PKG_VERSION="0.11.3"
+TERMUX_PKG_VERSION="0.11.4"
 TERMUX_PKG_SRCURL=https://github.com/neovim/neovim/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=7f1ce3cc9fe6c93337e22a4bc16bee71e041218cc9177078bd288c4a435dbef0
+TERMUX_PKG_SHA256=83cf9543bedab8bec8c11cd50ccd9a4bf1570420a914b9a28f83ad100ca6d524
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="^\d+\.\d+\.\d+$"
 TERMUX_PKG_DEPENDS="libiconv, libuv, luv, libmsgpack, libvterm (>= 1:0.3-0), libluajit, libunibilium, libandroid-support, lua51-lpeg, tree-sitter, tree-sitter-parsers, utf8proc"
@@ -73,6 +73,19 @@ termux_step_host_build() {
 
 termux_step_pre_configure() {
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DLUA_MATH_LIBRARY=$TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_API_LEVEL/libm.so"
+
+	# neovim has a weird CMake file that attempts to preprocess generated headers
+	# using the NDK Clang, but without ever adding the necessary --target argument
+	# to its commands for cross-preprocessing, so that must be done manually
+	local target="$CCTERMUX_HOST_PLATFORM"
+	if [[ "$TERMUX_ARCH" == "arm" ]]; then
+		target="armv7a-linux-androideabi$TERMUX_PKG_API_LEVEL"
+	fi
+	patch="$TERMUX_PKG_BUILDER_DIR/add-target-to-gen-preprocessing.diff"
+	echo "Applying patch: $(basename "$patch")"
+	test -f "$patch" && sed \
+		-e "s%\@TARGET\@%${target}%g" \
+		"$patch" | patch --silent -p1
 }
 
 termux_step_post_make_install() {
