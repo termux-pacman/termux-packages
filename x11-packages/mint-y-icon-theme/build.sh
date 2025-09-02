@@ -12,4 +12,3 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_make_install() {
 	cp -r $TERMUX_PKG_SRCDIR/usr/* $TERMUX_PREFIX/
 }
-
