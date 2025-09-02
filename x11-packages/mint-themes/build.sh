@@ -27,4 +27,3 @@ termux_step_make() {
 termux_step_make_install() {
 	cp -r $TERMUX_PKG_SRCDIR/usr/share/themes/* $TERMUX_PREFIX/share/themes/
 }
-
