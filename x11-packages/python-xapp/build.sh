@@ -17,3 +17,4 @@ termux_step_configure() {
 	$TERMUX_MESON setup "$TERMUX_PKG_BUILDDIR" "$TERMUX_PKG_SRCDIR" \
 		-Dpython.purelibdir="$PYTHON_SITELIB"
 }
+
