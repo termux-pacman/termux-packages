@@ -45,3 +45,4 @@ termux_step_post_configure() {
 termux_step_make() {
 	cabal --config="$TERMUX_CABAL_CONFIG" build exe:hledger-ui
 }
+
