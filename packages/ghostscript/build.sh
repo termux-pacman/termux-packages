@@ -50,4 +50,3 @@ termux_step_make() {
 termux_step_post_make_install() {
 	mv $TERMUX_PREFIX/bin/gs{c,}
 }
-
