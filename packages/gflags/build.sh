@@ -41,4 +41,3 @@ termux_step_post_make_install() {
 	ln -sfr "$TERMUX_PREFIX"/lib/pkgconfig/gflags.pc \
 		"$TERMUX_PREFIX"/lib/pkgconfig/libgflags.pc
 }
-
