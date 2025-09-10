@@ -20,3 +20,4 @@ termux_step_pre_configure() {
 	fi
 
 }
+

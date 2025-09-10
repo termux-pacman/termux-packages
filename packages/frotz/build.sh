@@ -20,3 +20,4 @@ termux_step_pre_configure () {
 termux_step_post_make_install () {
 	install -m755 $TERMUX_PKG_BUILDER_DIR/zgames $TERMUX_PREFIX/bin/zgames
 }
+
