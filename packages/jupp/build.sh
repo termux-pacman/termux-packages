@@ -19,4 +19,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_post_get_source() {
 	chmod +x "$TERMUX_PKG_SRCDIR/configure"
 }
-
