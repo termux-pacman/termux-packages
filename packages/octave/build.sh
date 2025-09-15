@@ -65,3 +65,4 @@ termux_step_pre_configure() {
 	# put -l:$_libgcc_name only in $LIBS instead of $LDFLAGS
 	export LIBS="-landroid-complex-math -L$_libgcc_path -l:$_libgcc_name"
 }
+
