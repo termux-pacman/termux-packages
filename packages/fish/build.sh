@@ -46,3 +46,4 @@ termux_step_post_make_install() {
 	status test-feature keyboard-protocols && set -U fish_features no-keyboard-protocols
 	EOF
 }
+
