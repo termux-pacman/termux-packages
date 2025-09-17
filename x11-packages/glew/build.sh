@@ -13,4 +13,3 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="SYSTEM=linux-egl"
 termux_step_pre_configure() {
 	LD=$CC
 }
-
