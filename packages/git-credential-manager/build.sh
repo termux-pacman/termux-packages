@@ -43,3 +43,4 @@ termux_step_make_install() {
 	# Remove duplicate license
 	rm "${TERMUX_PREFIX}/lib/${TERMUX_PKG_NAME}/NOTICE"
 }
+
