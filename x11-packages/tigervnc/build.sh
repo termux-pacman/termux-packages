@@ -75,3 +75,4 @@ termux_step_post_make_install() {
 termux_step_post_massage() {
 	find lib -name '*.la' -delete
 }
+
