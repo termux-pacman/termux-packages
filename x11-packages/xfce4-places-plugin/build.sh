@@ -11,3 +11,4 @@ TERMUX_PKG_DEPENDS="exo, gdk-pixbuf, glib, gtk3, libcairo, libnotify, libxfce4ui
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dlibnotify=enabled
 "
+

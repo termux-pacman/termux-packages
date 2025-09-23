@@ -16,3 +16,4 @@ termux_step_pre_configure() {
 	export GLIB_COMPILE_RESOURCES=$(command -v glib-compile-resources)
 	export GDBUS_CODEGEN=$(command -v gdbus-codegen)
 }
+

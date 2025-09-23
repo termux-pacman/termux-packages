@@ -12,3 +12,4 @@ TERMUX_PKG_DEPENDS="glib, gtk3, libandroid-glob, libc++, libcairo, libxfce4ui, l
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob"
 }
+

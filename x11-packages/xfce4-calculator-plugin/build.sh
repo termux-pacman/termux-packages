@@ -12,3 +12,4 @@ TERMUX_PKG_BUILD_DEPENDS="xfce4-dev-tools"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtests=false
 "
+
