@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="glib, gtk3, libxfce4ui, libxfce4util, xfce4-panel"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtests=false
 "
-
