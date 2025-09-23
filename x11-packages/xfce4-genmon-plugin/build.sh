@@ -9,4 +9,3 @@ TERMUX_PKG_SHA256=077197911d84e5ba22e7bb895ce6c038dbbd8e8e0067ed6f4e48502b7167a2
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="glib, gtk3, pango, libxfce4ui, libxfce4util, xfce4-panel, xfconf"
 TERMUX_PKG_RECOMMENDS="hicolor-icon-theme"
-
