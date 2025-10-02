@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://nodejs.org/
 TERMUX_PKG_DESCRIPTION="Open Source, cross-platform JavaScript runtime environment"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="Yaksh Bariya <thunder-coding@termux.dev>"
-TERMUX_PKG_VERSION=24.7.0
+TERMUX_PKG_VERSION=24.9.0
 TERMUX_PKG_SRCURL=https://nodejs.org/dist/v${TERMUX_PKG_VERSION}/node-v${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=cf74a77753b629ffebd2e38fb153a21001b2b7a3c365c0ec7332b120b98c7251
+TERMUX_PKG_SHA256=f17bc4cb01f59098c34a288c1bb109a778867c14eeb0ebbd608d0617b1193bbf
 # thunder-coding: don't try to autoupdate nodejs, that thing takes 2 whole hours to build for a single arch, and requires a lot of patch updates everytime. Also I run tests everytime I update it to ensure least bugs
 TERMUX_PKG_AUTO_UPDATE=false
 # Note that we do not use a shared libuv to avoid an issue with the Android
@@ -116,14 +116,18 @@ termux_step_configure() {
 		termux_error_exit "Unsupported arch '$TERMUX_ARCH'"
 	fi
 
+	# Do not enable by default as it has severe performance degradations.
+	# Causes upto 10x performance degradations
+	#
 	# V8 uses a lot of inlining for optimization results.
 	# Although those optimizations are very much desired, during debugging it can
 	# cause problems as it prevents debuggers from hooking in properly at all code
 	# paths
-	if [ "${TERMUX_DEBUG_BUILD}" = "true" ]; then
-		CFLAGS+=" -fno-inline"
-		CXXFLAGS+=" -fno-inline"
-	fi
+	#
+	# if [ "${TERMUX_DEBUG_BUILD}" = "true" ]; then
+	# 	CFLAGS+=" -fno-inline"
+	# 	CXXFLAGS+=" -fno-inline"
+	# fi
 
 	export GYP_DEFINES="host_os=linux"
 	if [ "$TERMUX_ARCH_BITS" = "64" ]; then
