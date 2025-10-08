@@ -50,3 +50,4 @@ termux_step_make_install() {
 	# Remove *.la files
 	find "${TERMUX_PREFIX}/lib" -iname \*.la -delete
 }
+
