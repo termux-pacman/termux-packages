@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 1000
     - name: Set process id limit for 32-bit builds depending on aosp-libs
@@ -213,6 +213,7 @@ jobs:
       if: ${{ steps.build-info.outputs.docker-build == 'false' }}
       run: |
         ./scripts/setup-ubuntu.sh
+        unset NDK ANDROID_HOME
         ./scripts/setup-android-sdk.sh
         rm -f ${HOME}/lib/ndk-*.zip ${HOME}/lib/sdk-*.zip
         sudo apt install ninja-build
@@ -221,6 +222,7 @@ jobs:
     - name: Build packages
       env:
         DOCKER_BUILD: ${{ steps.build-info.outputs.docker-build }}
+        TERMUX_DOCKER__CONTAINER_EXEC_COMMAND__PRE_CHECK_IF_WILL_BUILD_PACKAGES: "true"
       run: |
         declare -a packages=()
         for repo_path in $(jq --raw-output 'del(.pkg_format) | keys | .[]' repo.json); do
@@ -234,6 +236,7 @@ jobs:
 
         if [[ "${#packages[@]}" -gt 0 ]]; then
           if [ "$DOCKER_BUILD" == 'false' ]; then
+            unset NDK ANDROID_HOME
             ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
           else
             ./scripts/run-docker.sh ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
@@ -289,9 +292,9 @@ jobs:
       fail-fast: false
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Get *.pkg.* files
-      uses: actions/download-artifact@v4.1.7
+      uses: actions/download-artifact@v5
       with:
         path: ./
     - name: Install aws-cli
