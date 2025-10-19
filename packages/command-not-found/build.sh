@@ -12,4 +12,3 @@ termux_step_pre_configure() {
 	export TERMUX_SCRIPTDIR
 	termux_setup_nodejs
 }
-
