@@ -30,3 +30,4 @@ termux_step_post_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/fish/vendor_completions.d \
 		"$TERMUX_PKG_SRCDIR"/scripts/fish/task.fish
 }
+
