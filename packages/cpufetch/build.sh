@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/Dr-Noob/cpufetch/archive/refs/tags/v${TERMU
 TERMUX_PKG_SHA256=dc3ec8f9c9d41d8434702a778cc150b196d5d178fd768a964f57d22f268a2c17
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
-
