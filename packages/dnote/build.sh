@@ -39,4 +39,3 @@ termux_pkg_auto_update() {
 		echo "WARNING: Skipping auto-update: Not a CLI release($tag)"
 	fi
 }
-
