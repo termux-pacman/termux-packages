@@ -2,6 +2,8 @@
 
 set -e -u
 
+start_time="$(date +%10s.%3N)"
+
 TERMUX_SCRIPTDIR=$(realpath "$(dirname "$0")/../")
 . "$TERMUX_SCRIPTDIR/scripts/properties.sh"
 
@@ -73,7 +75,7 @@ check_indentation() {
 	local pkg_script="$1"
 	local line='' heredoc_terminator='' in_array=0 i=0
 	local -a issues=('' '') bad_lines=('FAILED')
-	local heredoc_regex="[^\(/%#]<{2}-?\s*(['\"]?(\w*(\\\.)?)*['\"]?)"
+	local heredoc_regex="[^\(/%#]<{2}-?[[:space:]]*(['\"]?([[:alnum:]_]*(\\\.)?)*['\"]?)"
 	# We don't wanna hit version constraints "(<< x.y.z)" with this, so don't match "(<<".
 	# We also wouldn't wanna hit parameter expansions "${var/<<}", ${var%<<}, ${var#<<}
 
@@ -94,7 +96,12 @@ check_indentation() {
 			(( ${#heredoc_terminator} )) && continue
 		fi
 
-		# check for mixed indentation
+		# Check for mixed indentation.
+		# We do this after the heredoc checks because space indentation
+		# is significant for languages like Haskell or Nim.
+		# Those probably shouldn't get inlined as heredocs,
+		# but the Haskell `cabal.project.local` overrides currently are.
+		# So let's not break builds for that.
 		[[ "$line" =~ ^($'\t'+ +| +$'\t'+) ]] && {
 			issues[0]='Mixed indentation'
 			bad_lines[i]="${pkg_script}:${i}:$line"
@@ -121,12 +128,19 @@ check_indentation() {
 	return 0
 }
 
-# We'll need the 'origin/master' as a base commit when running the version check.
-# So try fetching it now if it doesn't exist.
-if ! base_commit="HEAD~$(git rev-list --count FETCH_HEAD..)"; then
-	git fetch https://github.com/termux/termux-packages.git
-	base_commit="HEAD~$(git rev-list --count FETCH_HEAD..)"
-fi
+{
+	# We'll need the termux/termux-packages master@HEAD commit as a base commit when running the version check.
+	# So try fetching it now.
+	git fetch https://github.com/termux/termux-packages.git || {
+		echo "ERROR: Unable to fetch 'https://github.com/termux/termux-packages.git'"
+		echo "Falling back to HEAD~1"
+	}
+	base_commit="HEAD~$(git rev-list --count FETCH_HEAD.. -- || printf 1)"
+} 2> /dev/null
+
+# Also figure out if we have a `%ci:no-build` trailer in the commit range,
+# we may skip some checks later if yes.
+no_build="$(git log --fixed-strings --grep '%ci:no-build' --pretty=format:%H "$base_commit")"
 
 check_version() {
 	local package_dir="${1%/*}"
@@ -140,23 +154,16 @@ check_version() {
 	} >&2
 
 	# If TERMUX_PKG_VERSION is an array that changes the formatting.
-	local version i=-1 error=0 is_array="${TERMUX_PKG_VERSION@a}"
+	local version i=0 error=0 is_array="${TERMUX_PKG_VERSION@a}"
 	printf '%s' "${is_array:+$'ARRAY\n'}"
 
 	for version in "${TERMUX_PKG_VERSION[@]}"; do
 		printf '%s' "${is_array:+$'\t'}"
-		(( i++ ))
 
 		# Is this version valid?
 		dpkg --validate-version "${version}" &> /dev/null || {
 			printf 'INVALID %s\n' "$(dpkg --validate-version "${version}" 2>&1)"
 			(( error++ ))
-			continue
-		}
-
-		# Was the package modified in this branch?
-		git diff --exit-code "${base_commit}" -- "${package_dir}" &> /dev/null && {
-			printf '%s\n' "PASS - ${version} (not modified in this branch)"
 			continue
 		}
 
@@ -166,26 +173,43 @@ check_version() {
 			unset TERMUX_PKG_VERSION TERMUX_PKG_REVISION
 			# shellcheck source=/dev/null
 			. <(git -P show "${base_commit}:${package_dir}/build.sh" 2> /dev/null)
-			if [[ -n "$is_array" ]]; then
-				echo "${TERMUX_PKG_VERSION[$i]:-0}-${TERMUX_PKG_REVISION:-0}"
-			else
-				echo "${TERMUX_PKG_VERSION:-0}-${TERMUX_PKG_REVISION:-0}"
-			fi
+			# ${TERMUX_PKG_VERSION[0]} also works fine for non-array versions.
+			# Since those resolve in 1 iteration, no higher index is ever attempted to be called.
+			echo "${TERMUX_PKG_VERSION[$i]:-0}-${TERMUX_PKG_REVISION:-0}"
 		)
 
 		# Is ${version_old} valid?
 		local version_old_is_bad=""
 		dpkg --validate-version "${version_old}" &> /dev/null || version_old_is_bad="0~invalid"
 
+		# The rest of the checks aren't useful past the first index when $TERMUX_PKG_VERSION is an array
+		# since that is the index that determines the actual version.
+		if (( i++ > 0 )); then
+			echo "PASS - ${version_old%-0}${version_old_is_bad:+" (INVALID)"} -> ${version_new%-0}"
+			continue
+		fi
+
+		# Was the package modified in this branch?
+		git diff --no-merges --exit-code "${base_commit}" -- "${package_dir}" &> /dev/null && {
+			printf '%s\n' "PASS - ${version_new%-0} (not modified in this branch)"
+			return 0
+		}
+
+		[[ -n "$no_build" ]] && {
+			echo "SKIP - ${version_new%-0} ('%ci:no-build' trailer detected on commit ${no_build::7})"
+			return 0
+		}
+
 		# If ${version_new} isn't greater than "$version_old" that's an issue.
 		# If ${version_old} isn't valid this check is a no-op.
 		if dpkg --compare-versions "$version_new" le "${version_old_is_bad:-$version_old}"; then
 			printf '%s\n' \
-				"FAILED" \
+				"FAILED ${version_old_is_bad:-$version_old} -> ${version_new}" \
 				"" \
 				"Version of '$package_name' has not been incremented." \
 				"Either 'TERMUX_PKG_VERSION' or 'TERMUX_PKG_REVISION'" \
-				"need to be modified in the build.sh when changing a package build."
+				"need to be modified in the build.sh when changing a package build." \
+				"You can use ./scripts/bin/revbump '$package_name' to do this automatically."
 
 			# If the version decreased throw in a suggestion for how to downgrade packages
 			dpkg --compare-versions "$version_new" lt "$version_old" && \
@@ -217,9 +241,7 @@ check_version() {
 			continue
 		# If that check passed the TERMUX_PKG_VERSION must have changed,
 		# in which case TERMUX_PKG_REVISION should be reset to 0.
-		# This check isn't useful past the first index when $TERMUX_PKG_VERSION is an array
-		# since the main version of such a package may remain unchanged when another is changed.
-		elif [[ "${version_new%-*}" != "${version_old%-*}" && "$new_revision" != "0" && "$i" == 0 ]]; then
+		elif [[ "${version_new%-*}" != "${version_old%-*}" && "$new_revision" != "0" ]]; then
 			(( error++ )) # Not reset
 			printf '%s\n' \
 				"FAILED - $version_old -> $version_new" \
@@ -684,6 +706,18 @@ linter_main() {
 	echo "================================================================"
 	return
 }
+
+time_elapsed() {
+	local start="$1" end="$(date +%10s.%3N)"
+	local elapsed="$(( ${end/.} - ${start/.} ))"
+	echo "[INFO]: Finished linting build scripts ($(date -d "@$end" --utc '+%Y-%m-%dT%H:%M:%SZ' 2>&1))"
+	printf '[INFO]: Time elapsed: %s\n' \
+		"$(sed 's/0m //;s/0s //' <<< "$(( elapsed % 3600000 / 60000 ))m$(( elapsed % 60000 / 1000 ))s$(( elapsed % 1000 ))ms")"
+}
+
+echo "[INFO]: Starting build script linter ($(date -d "@$start_time" --utc '+%Y-%m-%dT%H:%M:%SZ' 2>&1))"
+echo "[INFO]: $base_commit ($(git rev-parse "$base_commit"))"
+trap 'time_elapsed "$start_time"' EXIT
 
 package_counter=0
 if (( $# )); then
