@@ -43,3 +43,4 @@ termux_step_post_make_install() {
 	cp $TERMUX_PREFIX/lib/cmake/protobuf/protobuf-targets{,-release}.cmake \
 		$TERMUX_PREFIX/opt/protobuf-cmake/shared/
 }
+
