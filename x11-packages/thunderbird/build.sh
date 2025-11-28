@@ -3,13 +3,19 @@ TERMUX_PKG_DESCRIPTION="Unofficial Thunderbird email client"
 TERMUX_PKG_LICENSE="MPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION="145.0"
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL="https://archive.mozilla.org/pub/thunderbird/releases/${TERMUX_PKG_VERSION}/source/thunderbird-${TERMUX_PKG_VERSION}.source.tar.xz"
 TERMUX_PKG_SHA256=4c24f99c45ac909e79f71072549ffcc2866097a6f5fab1dfd41c51918978b9b1
 TERMUX_PKG_DEPENDS="botan3, ffmpeg, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libandroid-shmem, libandroid-spawn, libc++, libcairo, libevent, libffi, libice, libicu, libjpeg-turbo, libnspr, libnss, libotr, libpixman, libsm, libvpx, libwebp, libx11, libxcb, libxcomposite, libxdamage, libxext, libxfixes, libxrandr, libxtst, pango, pulseaudio, zlib"
 TERMUX_PKG_BUILD_DEPENDS="libcpufeatures, libice, libsm"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
+
+# NOTE:
+# Most of Thunderbird's patches are shared with Firefox.
+# To avoid issues and reduce duplication the shared 00XX-${topic}.patch files
+# are symlinks to the patches in x11-packages/firefox
+# Thunderbird specific patches should start at 1001-${topic}.patch
 
 termux_pkg_auto_update() {
 	# https://archive.mozilla.org/pub/thunderbird/releases/latest/README.txt
