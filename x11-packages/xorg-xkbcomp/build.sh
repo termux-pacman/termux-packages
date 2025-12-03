@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/app/xkbcomp-$
 TERMUX_PKG_SHA256=2ac31f26600776db6d9cd79b3fcd272263faebac7eb85fb2f33c7141b8486060
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libx11, libxkbfile"
+
