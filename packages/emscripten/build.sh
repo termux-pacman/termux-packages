@@ -399,4 +399,3 @@ termux_step_create_debscripts() {
 
 	chmod u+x postinst postrm
 }
-
