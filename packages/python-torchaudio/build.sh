@@ -24,4 +24,3 @@ termux_step_configure() {
 termux_step_make_install() {
 	pip -v install --no-build-isolation --no-deps --prefix "$TERMUX_PREFIX" "$TERMUX_PKG_SRCDIR"
 }
-
