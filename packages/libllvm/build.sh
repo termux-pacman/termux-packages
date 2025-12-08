@@ -173,4 +173,3 @@ termux_step_pre_massage() {
 	[[ "$TERMUX_PACKAGE_FORMAT" != "pacman" ]] && return
 	sed -i "s|@LLVM_MAJOR_VERSION@|${TERMUX_PKG_VERSION%%.*}|g" ./share/libalpm/scripts/update-libcompiler-rt
 }
-
