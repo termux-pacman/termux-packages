@@ -19,4 +19,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_pre_configure() {
 	termux_setup_gir
 }
-
