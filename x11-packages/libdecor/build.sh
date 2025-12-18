@@ -14,4 +14,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dinstall_demo=false
 -Dgtk=enabled
 "
-
