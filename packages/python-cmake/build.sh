@@ -18,3 +18,4 @@ termux_step_configure() {
 	echo 'cmake_minimum_required(VERSION 4.0)' > CMakeLists.txt
 	echo 'install(DIRECTORY empty DESTINATION "${CMAKE_INSTALL_PREFIX}")' >> CMakeLists.txt
 }
+
