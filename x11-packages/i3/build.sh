@@ -18,4 +18,3 @@ i3/config.keycodes
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-glob -landroid-wordexp"
 }
-
