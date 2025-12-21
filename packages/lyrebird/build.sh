@@ -31,4 +31,3 @@ termux_step_post_make_install() {
 	rm -f "${TERMUX_PREFIX}/bin/obfs4proxy"
 	ln -s "${TERMUX_PREFIX}/bin/lyrebird" "${TERMUX_PREFIX}/bin/obfs4proxy"
 }
-
