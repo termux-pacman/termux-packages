@@ -28,4 +28,3 @@ termux_step_pre_configure() {
 	# Use meson instead of autotools.
 	rm -f "$TERMUX_PKG_SRCDIR"/configure
 }
-
