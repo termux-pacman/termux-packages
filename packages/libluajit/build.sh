@@ -98,4 +98,3 @@ termux_step_make_install () {
 	mkdir -p "$TERMUX_LUAJIT_DIR"
 	cp "$TERMUX_PKG_SRCDIR"/src/jit/*lua "$TERMUX_LUAJIT_DIR"
 }
-
