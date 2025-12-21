@@ -47,3 +47,4 @@ termux_step_post_make_install() {
 	install -m600 examples/errorfiles/*.http \
 		"$TERMUX_PREFIX"/share/haproxy/examples/errorfiles/
 }
+
