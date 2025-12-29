@@ -22,3 +22,4 @@ termux_step_pre_configure() {
 
 	LDFLAGS+=" -Wl,-rpath=$TERMUX__PREFIX__LIB_DIR/$TERMUX_PKG_NAME"
 }
+
