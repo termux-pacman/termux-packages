@@ -1,4 +1,9 @@
 termux_step_create_pacman_package() {
+	if [ "$TERMUX_PKG_METAPACKAGE" = "true" ]; then
+		# Metapackage doesn't have data inside.
+		rm -rf data
+	fi
+
 	local TERMUX_PKG_INSTALLSIZE
 	TERMUX_PKG_INSTALLSIZE=$(du -bs . | cut -f 1)
 
@@ -37,8 +42,15 @@ termux_step_create_pacman_package() {
 
 	local PACMAN_FILE=$TERMUX_OUTPUT_DIR/${TERMUX_PKG_NAME}${DEBUG}-${TERMUX_PKG_FULLVERSION_FOR_PACMAN}-${TERMUX_ARCH}.pkg.tar.${PKG_FORMAT}
 
-	local BUILD_DATE
-	BUILD_DATE=$(date +%s)
+	if [ "$TERMUX_GLOBAL_LIBRARY" = "true" ] && [ "$TERMUX_PACKAGE_LIBRARY" = "glibc" ]; then
+		test ! -z "$TERMUX_PKG_DEPENDS" && TERMUX_PKG_DEPENDS=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_DEPENDS")
+		test ! -z "$TERMUX_PKG_BREAKS" && TERMUX_PKG_BREAKS=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_BREAKS")
+		test ! -z "$TERMUX_PKG_CONFLICTS" && TERMUX_PKG_CONFLICTS=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_CONFLICTS")
+		test ! -z "$TERMUX_PKG_RECOMMENDS" && TERMUX_PKG_RECOMMENDS=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_RECOMMENDS")
+		test ! -z "$TERMUX_PKG_REPLACES" && TERMUX_PKG_REPLACES=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_REPLACES")
+		test ! -z "$TERMUX_PKG_PROVIDES" && TERMUX_PKG_PROVIDES=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_PROVIDES")
+		test ! -z "$TERMUX_PKG_SUGGESTS" && TERMUX_PKG_SUGGESTS=$(termux_package__add_prefix_glibc_to_package_list "$TERMUX_PKG_SUGGESTS")
+	fi
 
 	# Package metadata.
 	{
@@ -47,7 +59,7 @@ termux_step_create_pacman_package() {
 		echo "pkgver = $TERMUX_PKG_FULLVERSION_FOR_PACMAN"
 		echo "pkgdesc = $(echo "$TERMUX_PKG_DESCRIPTION" | tr '\n' ' ')"
 		echo "url = $TERMUX_PKG_HOMEPAGE"
-		echo "builddate = $BUILD_DATE"
+		echo "builddate = $SOURCE_DATE_EPOCH"
 		echo "packager = $TERMUX_PKG_MAINTAINER"
 		echo "size = $TERMUX_PKG_INSTALLSIZE"
 		echo "arch = $TERMUX_ARCH"
@@ -89,7 +101,7 @@ termux_step_create_pacman_package() {
 		fi
 
 		if [ -n "$TERMUX_PKG_CONFFILES" ]; then
-			tr ',' '\n' <<< "$TERMUX_PKG_CONFFILES" | awk '{ printf "backup = '"${TERMUX_PREFIX:1}"'/%s\n", $1 }'
+			tr ',' '\n' <<< "$TERMUX_PKG_CONFFILES" | awk '{ printf "backup = '"${TERMUX_PREFIX_CLASSICAL:1}"'/%s\n", $1 }'
 		fi
 
 		if [ -n "$TERMUX_PKG_GROUPS" ]; then
@@ -105,12 +117,18 @@ termux_step_create_pacman_package() {
 		echo "pkgver = $TERMUX_PKG_FULLVERSION_FOR_PACMAN"
 		echo "pkgarch = $TERMUX_ARCH"
 		echo "packager = $TERMUX_PKG_MAINTAINER"
-		echo "builddate = $BUILD_DATE"
+		echo "builddate = $SOURCE_DATE_EPOCH"
 	} > .BUILDINFO
 
 	# Write installation hooks.
 	termux_step_create_debscripts
+	# Process `update-alternatives` entries from `.alternatives` files
+	# These need to be merged into the `.postinst` and `.prerm` files, so after those are created.
+	termux_step_update_alternatives
 	termux_step_create_pacman_install_hook
+
+	# ensure all elements of the package have the same mtime
+	find . -exec touch -h -d @$SOURCE_DATE_EPOCH {} +
 
 	# Create package
 	shopt -s dotglob globstar
@@ -118,6 +136,7 @@ termux_step_create_pacman_package() {
 		--options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' \
 		--null --files-from - --exclude .MTREE | \
 		gzip -c -f -n > .MTREE
+	touch -d @$SOURCE_DATE_EPOCH .MTREE
 	printf '%s\0' **/* | bsdtar --no-fflags -cnf - --null --files-from - | \
 		$COMPRESS > "$PACMAN_FILE"
 	shopt -u dotglob globstar

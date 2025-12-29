@@ -1,4 +1,7 @@
 # Termux packages for pacman - official git repo mirror
+![GitHub repo size](https://img.shields.io/github/repo-size/termux-pacman/termux-packages)
+![Packages last build status](https://github.com/termux-pacman/termux-packages/workflows/Packages/badge.svg)
+![Repo last update status](https://github.com/termux-pacman/termux-packages/workflows/Update%20repo/badge.svg)  
 [More about the repository](https://github.com/termux/termux-packages/blob/master/README.md)
 
 ### Code for connecting repository:
@@ -14,16 +17,14 @@ Server = https://service.termux-pacman.dev/x11/$arch
 ```
 root:
 ```
-[rott]
+[root]
 Server = https://service.termux-pacman.dev/root/$arch
 ```
 
 ### Other information:
  - Android support: 7+
  - Architecture support: all (aarch64, arm, x86_64, i686)
- - Security level: not complete (db and only a few packages are protected by signature)
  - Signature: termux-pacman organization gpg key
  - Powered by aws
- - Mirrors: does not exist
  - Root repository: https://github.com/termux/termux-packages
  - Organization maintaining the root repository: [termux](https://github.com/termux)

@@ -3,10 +3,10 @@ TERMUX_PKG_DESCRIPTION="A command-line streaming music client/server for Linux"
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=0.22.0
-TERMUX_PKG_REVISION=12
+TERMUX_PKG_REVISION=20
 TERMUX_PKG_SRCURL=https://github.com/tizonia/tizonia-openmax-il/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=0750cae23ed600fb4b4699a392f43a5e03dcd0870383d64da4b8c28ea94a82f8
-TERMUX_PKG_DEPENDS="boost, dbus, libandroid-wordexp, libc++, libcurl, libflac, liblog4c, libmad, libmediainfo, libmp3lame, liboggz, libopus, libsndfile, libsqlite, libuuid, libvpx, mpg123, opusfile, pulseaudio, python, taglib"
+TERMUX_PKG_DEPENDS="boost, dbus, libandroid-wordexp, libc++, libcurl, libflac, liblog4c, libmad, libmediainfo, libmp3lame, liboggz, libopus, libsndfile, libsqlite, libuuid, libvpx, libmpg123, opusfile, pulseaudio, python, taglib"
 TERMUX_PKG_BUILD_DEPENDS="boost-headers, libev"
 TERMUX_PKG_HOSTBUILD=true
 
@@ -17,13 +17,13 @@ termux_step_host_build() {
 	local srcdir="$TERMUX_PKG_SRCDIR"/3rdparty/dbus-cplusplus
 	autoreconf -fi "$srcdir"
 	"$srcdir"/configure --prefix=$_PREFIX_FOR_BUILD
-	make -j $TERMUX_MAKE_PROCESSES
+	make -j $TERMUX_PKG_MAKE_PROCESSES
 	make install
 }
 
 termux_step_pre_configure() {
 	local _PREFIX_FOR_BUILD=$TERMUX_PKG_HOSTBUILD_DIR/prefix
-	
+
 	install -Dm700 $TERMUX_PKG_BUILDER_DIR/exe_wrapper $_PREFIX_FOR_BUILD/bin/
 	PATH=$_PREFIX_FOR_BUILD/bin:$PATH
 

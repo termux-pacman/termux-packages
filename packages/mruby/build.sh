@@ -2,11 +2,14 @@ TERMUX_PKG_HOMEPAGE=https://mruby.org/
 TERMUX_PKG_DESCRIPTION="Lightweight implementation of the Ruby language"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=3.2.0
-TERMUX_PKG_SRCURL=https://github.com/mruby/mruby/archive/${TERMUX_PKG_VERSION}.zip
-TERMUX_PKG_SHA256=64a0dd8b65825f2e7cdac6699e818648dc73bfdfc68aa1bfd58417a35315e5cc
+TERMUX_PKG_VERSION="3.4.0"
+TERMUX_PKG_REVISION=1
+TERMUX_PKG_SRCURL=https://github.com/mruby/mruby/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=183711c7a26d932b5342e64860d16953f1cc6518d07b2c30a02937fb362563f8
 TERMUX_PKG_DEPENDS="libandroid-complex-math, readline"
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_METHOD=repology
 
 termux_step_make() {
 	export CC_FOR_TARGET="$CC"

@@ -2,10 +2,11 @@ TERMUX_PKG_HOMEPAGE=https://github.com/neutrinolabs/xrdp
 TERMUX_PKG_DESCRIPTION="An open source remote desktop protocol (RDP) server"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.9.22.1
+TERMUX_PKG_VERSION="0.10.4.1"
 TERMUX_PKG_SRCURL=https://github.com/neutrinolabs/xrdp/releases/download/v${TERMUX_PKG_VERSION}/xrdp-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=6dd320cfe9594a2aaa78f90adfe1bb550f9ce3f58bd9fc312dd30d003cb7f3cb
-TERMUX_PKG_DEPENDS="libandroid-shmem, libx11, libxfixes, libxrandr, openssl, procps, tigervnc"
+TERMUX_PKG_SHA256=52eadf3e86c57be0de0b9d5c184b52a7946a070746d3eb04b5089dd6d42f8f5f
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="libandroid-shmem, libcrypt, libx11, libxfixes, libxrandr, openssl, procps, tigervnc"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-pam
@@ -17,6 +18,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 TERMUX_PKG_CONFFILES="
 etc/xrdp/cert.pem
 etc/xrdp/key.pem
+etc/xrdp/km-00000405.ini
 etc/xrdp/km-00000406.ini
 etc/xrdp/km-00000407.ini
 etc/xrdp/km-00000409.ini

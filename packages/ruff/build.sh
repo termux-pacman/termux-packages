@@ -1,39 +1,50 @@
 TERMUX_PKG_HOMEPAGE="https://github.com/charliermarsh/ruff"
 TERMUX_PKG_DESCRIPTION="An extremely fast Python linter, written in Rust"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_LICENSE_FILE="../../LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="0.0.284"
-TERMUX_PKG_SRCURL="https://github.com/charliermarsh/ruff/archive/refs/tags/v$TERMUX_PKG_VERSION.tar.gz"
-TERMUX_PKG_SHA256=841e55268ffd5d3d3113d5f32590f46a974aab5811736ed01542340f80a42901
+TERMUX_PKG_VERSION="0.14.10"
+TERMUX_PKG_SRCURL="https://github.com/charliermarsh/ruff/archive/refs/tags/$TERMUX_PKG_VERSION.tar.gz"
+TERMUX_PKG_SHA256=9294a2ff12994e710aa01fe37d22159b4d6d45ed309af7a9d10e71ca7313e0b8
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_PYTHON_COMMON_DEPS="maturin"
 
 termux_step_pre_configure() {
-	TERMUX_PKG_SRCDIR+="/crates/ruff_cli"
-	TERMUX_PKG_BUILDDIR="${TERMUX_PKG_SRCDIR}"
+	termux_setup_rust
 
-	cd $TERMUX_PKG_BUILDDIR
 	rm -rf _lib
 	mkdir -p _lib
 	cd _lib
 	$CC $CPPFLAGS $CFLAGS -fvisibility=hidden \
-		-c $TERMUX_PKG_BUILDER_DIR/ctermid.c 
+		-c $TERMUX_PKG_BUILDER_DIR/ctermid.c
 	$AR cru libctermid.a ctermid.o
 
-	RUSTFLAGS+=" -C link-arg=$TERMUX_PKG_BUILDDIR/_lib/libctermid.a"
+	local env_host="$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)"
+	export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$TERMUX_PKG_BUILDDIR/_lib/libctermid.a"
+}
 
-	termux_setup_rust
+termux_step_make() {
+	# --skip-auditwheel workaround for Maturin error
+	# 'Cannot repair wheel, because required library libdl.so could not be located.'
+	# found here in Termux-specific upstream discussion: https://github.com/PyO3/pyo3/issues/2324
+	maturin build --locked --skip-auditwheel --release --all-features --target "$CARGO_TARGET_NAME" --strip
+}
 
-	: "${CARGO_HOME:=$HOME/.cargo}"
-	export CARGO_HOME
+termux_step_make_install() {
+	install -Dm755 -t "$TERMUX_PREFIX/bin" "target/$CARGO_TARGET_NAME/release/ruff"
 
-	cd $TERMUX_PKG_SRCDIR
-	cargo fetch --target "${CARGO_TARGET_NAME}"
-
-	local _patch=$TERMUX_PKG_BUILDER_DIR/tikv-jemalloc-sys-0.5.3+5.3.0-patched-src-lib.rs.diff
-	local d
-	for d in $CARGO_HOME/registry/src/*/tikv-jemalloc-sys-*; do
-		patch --silent -p1 -d ${d} < ${_patch} || :
-	done
+	# ERROR: ruff-0.11.9-py3-none-linux_armv7l.whl is not a supported wheel on this platform.
+	# seems to be resolved by renaming the .whl file in this way
+	if [[ "${TERMUX_ARCH}" == "arm" ]]; then
+		local _whl_arch="armv7l"
+	else
+		local _whl_arch="$TERMUX_ARCH"
+	fi
+	local _whl="ruff-$TERMUX_PKG_VERSION-py3-none-linux_$_whl_arch.whl"
+	if [[ "${TERMUX_ARCH}" == "arm" ]]; then
+		local _dest_whl="ruff-$TERMUX_PKG_VERSION-py3-none-linux_$TERMUX_ARCH.whl"
+		mv "target/wheels/$_whl" "target/wheels/$_dest_whl"
+		_whl="$_dest_whl"
+	fi
+	pip install --no-deps --prefix=$TERMUX_PREFIX --force-reinstall "target/wheels/$_whl"
 }

@@ -2,9 +2,11 @@ TERMUX_PKG_HOMEPAGE=https://www.nginx.org
 TERMUX_PKG_DESCRIPTION="Lightweight HTTP server"
 TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=1.25.1
+TERMUX_PKG_VERSION="1.29.4"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://nginx.org/download/nginx-$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=f09071ac46e0ea3adc0008ef0baca229fc6b4be4533baef9bbbfba7de29a8602
+TERMUX_PKG_SHA256=5a7d37eee505866fbab5810fa9f78247d6d5d9157a595c4e7a72043141ddab25
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libandroid-glob, libcrypt, pcre2, openssl, zlib"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_SERVICE_SCRIPT=("nginx" "mkdir -p $TERMUX_ANDROID_HOME/.nginx\nif [ -f \"$TERMUX_ANDROID_HOME/.nginx/nginx.conf\" ]; then CONFIG=\"$TERMUX_ANDROID_HOME/.nginx/nginx.conf\"; else CONFIG=\"$TERMUX_PREFIX/etc/nginx/nginx.conf\"; fi\nexec nginx -p ~/.nginx -g \"daemon off;\" -c \$CONFIG 2>&1")
@@ -28,6 +30,9 @@ termux_step_pre_configure() {
 
 	CPPFLAGS="$CPPFLAGS -DIOV_MAX=1024"
 	LDFLAGS="$LDFLAGS -landroid-glob"
+
+	# for cpu_set_t
+	CPPFLAGS+=" -D__USE_GNU=1"
 
 	# remove config from previous installs
 	rm -rf "$TERMUX_PREFIX/etc/nginx"
@@ -60,10 +65,13 @@ termux_step_configure() {
 		--with-http_auth_request_module \
 		--with-http_ssl_module \
 		--with-http_v2_module \
+		--with-http_v3_module \
 		--with-http_gunzip_module \
 		--with-http_sub_module \
+		--with-http_dav_module \
 		--with-stream \
 		--with-stream_ssl_module \
+		--with-stream_ssl_preread_module \
 		$DEBUG_FLAG
 }
 
@@ -77,8 +85,7 @@ termux_step_post_make_install() {
 	rm "$TERMUX_PREFIX"/etc/nginx/*.default
 
 	# move default html dir
-	sed -e "44s|html|$TERMUX_PREFIX/share/nginx/html|" \
-		-e "54s|html|$TERMUX_PREFIX/share/nginx/html|" \
+	sed -e "s| html;| $TERMUX_PREFIX/share/nginx/html;|" \
 		-i "$TERMUX_PREFIX/etc/nginx/nginx.conf"
 	rm -rf "$TERMUX_PREFIX/share/nginx"
 	mkdir -p "$TERMUX_PREFIX/share/nginx"

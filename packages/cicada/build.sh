@@ -1,22 +1,25 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/mitnk/cicada
 TERMUX_PKG_DESCRIPTION="A bash like Unix shell"
-TERMUX_PKG_MAINTAINER="Hugo Wang <w@mitnk.com>"
+TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_VERSION="0.9.36"
-TERMUX_PKG_SRCURL=https://github.com/mitnk/cicada/archive/v$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=f9baa7f6240182a388934756a0dcb98923ca9ab0be35524f07cc484e350bcfa1
+TERMUX_PKG_VERSION="1.1.4"
+TERMUX_PKG_SRCURL=https://github.com/mitnk/cicada/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=7e67a9e716dcef33b566077d0264eafc2dfca7f80cee8dc3118abebfeb99e670
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
-TERMUX_PKG_BLACKLISTED_ARCHES="arm, i686"
+TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
 
 termux_step_pre_configure() {
+	termux_setup_rust
+
 	rm -f Makefile
 
 	if [ "$TERMUX_ARCH" == "x86_64" ]; then
 		local libdir=target/x86_64-linux-android/release/deps
 		mkdir -p $libdir
 		pushd $libdir
-		RUSTFLAGS+=" -C link-arg=$($CC -print-libgcc-file-name)"
+		local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+		export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$(${CC} -print-libgcc-file-name)"
 		echo "INPUT(-l:libunwind.a)" > libgcc.so
 		popd
 	fi

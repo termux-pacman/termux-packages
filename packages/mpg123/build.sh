@@ -1,8 +1,0 @@
-TERMUX_PKG_HOMEPAGE=https://mpg123.org/
-TERMUX_PKG_DESCRIPTION="Fast console MPEG Audio Player and decoder library"
-TERMUX_PKG_LICENSE="LGPL-2.1"
-TERMUX_PKG_MAINTAINER="Thibault Meyer <meyer.thibault@gmail.com>"
-TERMUX_PKG_VERSION=1.31.3
-TERMUX_PKG_SRCURL=https://mpg123.org/download/mpg123-${TERMUX_PKG_VERSION}.tar.bz2
-TERMUX_PKG_SHA256=1ca77d3a69a5ff845b7a0536f783fee554e1041139a6b978f6afe14f5814ad1a
-TERMUX_PKG_DEPENDS="pulseaudio"

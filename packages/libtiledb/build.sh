@@ -2,22 +2,27 @@ TERMUX_PKG_HOMEPAGE=https://tiledb.com/
 TERMUX_PKG_DESCRIPTION="A powerful engine for storing and accessing dense and sparse multi-dimensional arrays"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2.14.0
+TERMUX_PKG_VERSION="2.30.0"
 TERMUX_PKG_SRCURL=https://github.com/TileDB-Inc/TileDB/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=e161d7988fa6e4e2e6238e25cbc0941bb2ed5eb375257d96ad7ce518864cd7f4
-TERMUX_PKG_DEPENDS="ca-certificates, file, libbz2, libc++, liblz4, libspdlog, openssl, zlib, zstd"
-TERMUX_PKG_BUILD_DEPENDS="clipp, fmt"
+TERMUX_PKG_SHA256=c5f94da6de0e0f93925f7ad107bd80fef0615f9b3d111a5bae245f75b1fcc173
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="ca-certificates, file, fmt, libblosc2, libbz2, libc++, liblz4, libspdlog, openssl, zlib, zstd"
+TERMUX_PKG_BUILD_DEPENDS="clipp, nlohmann-json"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCOMPILER_SUPPORTS_AVX2=OFF
+-DTILEDB_DISABLE_AUTO_VCPKG=ON
 -DTILEDB_SUPERBUILD=OFF
 -DTILEDB_WERROR=OFF
 -DTILEDB_STATS=OFF
 -DTILEDB_TESTS=OFF
 -DTILEDB_WEBP=OFF
--DHAVE_AVX2_EXITCODE=1
--DHAVE_AVX2_EXITCODE__TRYRUN_OUTPUT=
 -DTILEDB_LIBMAGIC_EP_BUILT=ON
 -Dlibmagic_INCLUDE_DIR=$TERMUX_PREFIX/include
 -Dlibmagic_LIBRARIES=$TERMUX_PREFIX/lib/libmagic.so
 -Dlibmagic_FOUND=ON
 -Dlibmagic_DICTIONARY=$TERMUX_PREFIX/share/misc/magic.mgc
 "
+
+# XXX: TileDB assumes that `std::string_view::size_type` == `std::uint64_t`,
+# XXX: but this is not true on 32-bit Android.
+TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"

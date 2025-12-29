@@ -1,24 +1,21 @@
 TERMUX_PKG_HOMEPAGE=https://www.vim.org
 TERMUX_PKG_DESCRIPTION="Vi IMproved - enhanced vi editor"
 TERMUX_PKG_LICENSE="VIM License"
-TERMUX_PKG_MAINTAINER="@termux"
-
-# vim should only be updated every 50 releases on multiples of 50.
-# Update all of vim, vim-python and vim-gtk to the same version in one PR.
-TERMUX_PKG_VERSION=9.0.1650
-TERMUX_PKG_SRCURL=https://github.com/vim/vim/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=4ff45a7ae77f0a3d9d548f965020021576ff33668f67fb78c4ab62f37d810648
-
-TERMUX_PKG_DEPENDS="gdk-pixbuf, glib, gtk3, libcairo, libcanberra, libice, libiconv, liblua52, libsm, libx11, libxt, ncurses, pango, python"
-TERMUX_PKG_CONFLICTS="vim, vim-python, vim-runtime"
+TERMUX_PKG_MAINTAINER="Joshua Kahn @TomJo2000"
+TERMUX_PKG_BUILD_DEPENDS="libluajit, perl, python, ruby, tcl"
+TERMUX_PKG_DEPENDS="gdk-pixbuf, glib, gtk3, libcairo, libcanberra, libice, libiconv, libsm, libx11, libxt, ncurses, pango"
+TERMUX_PKG_SUGGESTS="libluajit, perl, python, ruby, tcl"
+TERMUX_PKG_RECOMMENDS="diffutils, xxd"
+TERMUX_PKG_CONFLICTS="vim"
+TERMUX_PKG_BREAKS="vim-python"
+TERMUX_PKG_REPLACES="vim-python"
+TERMUX_PKG_PROVIDES="vim-python"
+TERMUX_PKG_VERSION="9.1.2000"
+TERMUX_PKG_SRCURL="https://github.com/vim/vim/archive/v${TERMUX_PKG_VERSION}.tar.gz"
+TERMUX_PKG_SHA256=fce301c7d6b2fb703a5ecc891f1c1131e32b74f983a5825c69a3426a81ae8975
 TERMUX_PKG_BUILD_IN_SRC=true
-
+TERMUX_PKG_CONFFILES="share/vim/vimrc"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
-ac_cv_small_wchar_t=no
-ac_cv_path_vi_cv_path_plain_lua=lua5.2
-vi_cv_path_python3_pfx=$TERMUX_PREFIX
-vi_cv_var_python3_abiflags=
-vi_cv_var_python3_version=${TERMUX_PYTHON_VERSION}
 vim_cv_getcwd_broken=no
 vim_cv_memmove_handles_overlap=yes
 vim_cv_stat_ignores_slash=no
@@ -26,47 +23,113 @@ vim_cv_terminfo=yes
 vim_cv_tgetent=zero
 vim_cv_toupper_broken=no
 vim_cv_tty_group=world
---enable-cscope
---enable-gui=gtk3
---enable-multibyte
---enable-luainterp
---enable-python3interp
+ac_cv_small_wchar_t=no
 --with-features=huge
---with-lua-prefix=$TERMUX_PREFIX
---with-python3-config-dir=$TERMUX_PYTHON_HOME/config-${TERMUX_PYTHON_VERSION}/
+--enable-netbeans=no
 --with-tlib=ncursesw
---with-x"
-
-TERMUX_PKG_RM_AFTER_INSTALL="
-share/vim/vim90/spell/en.ascii*
-share/vim/vim90/print
-share/vim/vim90/tools
+--enable-multibyte
+--with-compiledby=Termux
+--enable-python3interp=dynamic
+--with-python3-config-dir=$TERMUX_PYTHON_HOME/config-${TERMUX_PYTHON_VERSION}/
+vi_cv_path_python3_pfx=$TERMUX_PREFIX
+vi_cv_path_python3_include=${TERMUX_PREFIX}/include/python${TERMUX_PYTHON_VERSION}
+vi_cv_path_python3_platinclude=${TERMUX_PREFIX}/include/python${TERMUX_PYTHON_VERSION}
+vi_cv_var_python3_abiflags=
+vi_cv_var_python3_version=${TERMUX_PYTHON_VERSION}
+--enable-luainterp=dynamic
+--with-lua-prefix=$TERMUX_PREFIX
+--with-luajit
+--enable-perlinterp=dynamic
+--with-xsubpp=$TERMUX_PREFIX/bin/xsubpp
+--enable-rubyinterp=dynamic
+--enable-tclinterp=dynamic
+--enable-gui=gtk3
+--with-x
 "
 
-TERMUX_PKG_CONFFILES="share/vim/vimrc"
+# Avoid overlap with the `xxd` subpackage of `vim` by removing it from vim-gtk
+TERMUX_PKG_RM_AFTER_INSTALL="
+bin/xxd
+share/man/man1/xxd.1
+share/vim/vim91/spell/en.ascii*
+share/vim/vim91/print
+share/vim/vim91/tools
+"
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag" # Vim doesn't use release tags
+
+termux_pkg_auto_update() {
+	# This auto_update function is shared by `vim` and `vim-gtk`
+	# If you make changes to one of them,
+	# remember to apply that change to the other as well.
+	local latest_tag current_patch latest_patch
+	latest_tag="$(termux_github_api_get_tag)"
+	latest_patch="${latest_tag##*.}"
+	current_patch="${TERMUX_PKG_VERSION##*.}"
+
+	# Vim releases nearly every commit as a new tag.
+	# To avoid auto update spam, we only update Vim every 50th patch.
+	# To do that, floor each version to the last 50th.
+	(( current_patch -= current_patch % 50 ))
+	((  latest_patch -=  latest_patch % 50 ))
+
+	if (( current_patch == latest_patch )); then
+		echo "INFO: Skipping ${latest_tag#v}, no new 50th patch since $TERMUX_PKG_VERSION."
+		return
+	fi
+
+	termux_pkg_upgrade_version "${latest_tag%.*}.${latest_patch}"
+}
 
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-shmem"
 
-	# Version guard
-	local ver_v=$(. $TERMUX_SCRIPTDIR/packages/vim/build.sh; echo ${TERMUX_PKG_VERSION#*:})
-	local ver_p=$(. $TERMUX_SCRIPTDIR/packages/vim-python/build.sh; echo ${TERMUX_PKG_VERSION#*:})
-	local ver_g=$(. $TERMUX_SCRIPTDIR/x11-packages/vim-gtk/build.sh; echo ${TERMUX_PKG_VERSION#*:})
-	if [ "${ver_v}" != "${ver_p}" ] || [ "${ver_p}" != "${ver_g}" ]; then
-		termux_error_exit "Version mismatch between vim, vim-python and vim-gtk."
-	fi
-
 	make distclean
 
 	# Remove eventually existing symlinks from previous builds so that they get re-created.
-	for link in eview evim ex gview gvim gvimdiff rgview rgvim rview rvim view vimdiff; do
-		rm -f $TERMUX_PREFIX/bin/$link
-		rm -f $TERMUX_PREFIX/share/man/man1/${link}.1*
+	local -a VIM_BINARIES=('eview' 'evim' 'ex' 'rview' 'rvim' 'view' 'vimdiff')
+	local -a VIM_GTK_BINARIES=('gview' 'gvim' 'gvimdiff' 'rgview' 'rgvim')
+	for sym in "${VIM_BINARIES[@]}" "${VIM_GTK_BINARIES[@]}"; do
+		rm -f "${TERMUX_PREFIX}/bin/${sym}"
+		rm -f "$TERMUX_PREFIX/share/man/man1/${sym}.1"*
 	done
+
+	# Vim doesn't support cross-compilation for Perl, Ruby and Tcl
+	# out of the box, so we need to patch the configure script to make it work.
+	local perl_version ruby_major_version tcl_major_version
+	perl_version="$(. "$TERMUX_SCRIPTDIR/packages/perl/build.sh"; echo "${TERMUX_PKG_VERSION[0]}")"
+	ruby_major_version="$(. "$TERMUX_SCRIPTDIR/packages/ruby/build.sh"; echo "${TERMUX_PKG_VERSION%\.*}")"
+	tcl_major_version="$(. "$TERMUX_SCRIPTDIR/packages/tcl/build.sh"; echo "${TERMUX_PKG_VERSION%\.*}")"
+
+	patch="$TERMUX_PKG_BUILDER_DIR/configure-perl-ruby-tcl-cross-compiling.diff"
+	echo "Applying patch: $(basename "$patch")"
+	test -f "$patch" && sed \
+		-e "s%\@PERL_VERSION\@%${perl_version}%g" \
+		-e "s%\@RUBY_MAJOR_VERSION\@%${ruby_major_version}%g" \
+		-e "s%\@TCL_MAJOR_VERSION\@%${tcl_major_version}%g" \
+		-e "s%\@PERL_PLATFORM\@%${TERMUX_ARCH}-android%g" \
+		-e "s%\@RUBY_PLATFORM\@%${TERMUX_HOST_PLATFORM}%g" \
+		-e "s%\@TERMUX_PREFIX\@%${TERMUX_PREFIX}%g" \
+		"$patch" | patch --silent -p1
 }
 
 termux_step_post_make_install() {
-	install -Dm600 $TERMUX_PKG_BUILDER_DIR/vimrc $TERMUX_PREFIX/share/vim/vimrc
-	sed -i "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|g" $TERMUX_PREFIX/share/vim/vimrc
-	ln -sfr $TERMUX_PREFIX/bin/vim $TERMUX_PREFIX/bin/vi
+	sed -e "s%\@TERMUX_PREFIX\@%${TERMUX_PREFIX}%g" "$TERMUX_PKG_BUILDER_DIR/vimrc" \
+		> "$TERMUX_PREFIX/share/vim/vimrc"
+
+	### Remove most tutor files:
+	# Make a directory to temporarily hold the ones we want to keep
+	mkdir -p "$TERMUX_PKG_TMPDIR/vim-tutor"
+	# Copy what we want to keep into $TERMUX_PKG_TMPDIR/vim-tutor
+	cp -r   "$TERMUX_PREFIX/share/vim/vim91/tutor/en/" \
+			"$TERMUX_PREFIX/share/vim/vim91/tutor/tutor.vim" \
+			"$TERMUX_PREFIX/share/vim/vim91/tutor/tutor.tutor"{,.json} \
+			"$TERMUX_PREFIX/share/vim/vim91/tutor/tutor"{1,2} \
+			"$TERMUX_PKG_TMPDIR/vim-tutor"
+	# Remove all the tutor files
+	rm -rf "$TERMUX_PREFIX/share/vim/vim91/tutor"/*
+	# Copy back what we saved earlier
+	cp -r "$TERMUX_PKG_TMPDIR"/vim-tutor/* "$TERMUX_PREFIX/share/vim/vim91/tutor/"
+	mkdir -p "$TERMUX_PREFIX/libexec/vim"
+	mv "${TERMUX_PREFIX}"/bin/{ex,view,vim{,diff,tutor}} "${TERMUX_PREFIX}"/libexec/vim
 }

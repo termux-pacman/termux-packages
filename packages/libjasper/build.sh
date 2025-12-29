@@ -3,10 +3,9 @@ TERMUX_PKG_DESCRIPTION="Library for manipulating JPEG-2000 files"
 TERMUX_PKG_LICENSE="custom"
 TERMUX_PKG_LICENSE_FILE="LICENSE.txt"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="4.0.0"
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_VERSION="4.2.8"
 TERMUX_PKG_SRCURL=https://github.com/jasper-software/jasper/archive/refs/tags/version-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=977c4c2e4210f4e37313cd2232d99e73d57ab561917b3c060bcdd5e83a0a13f1
+TERMUX_PKG_SHA256=987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
 TERMUX_PKG_DEPENDS="libjpeg-turbo"
@@ -26,6 +25,6 @@ termux_step_post_get_source() {
 	local v="$(sed -En 's/^.*set\(JAS_SO_VERSION ([0-9]+).*$/\1/p' \
 			CMakeLists.txt)"
 	if [ "${_SOVERSION}" != "${v}" ]; then
-		termux_error_exit "Error: SOVERSION guard check failed."
+		termux_error_exit "SOVERSION guard check failed."
 	fi
 }

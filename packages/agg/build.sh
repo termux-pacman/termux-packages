@@ -2,8 +2,13 @@ TERMUX_PKG_HOMEPAGE="https://github.com/asciinema/agg"
 TERMUX_PKG_DESCRIPTION="asciinema gif generator"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=1.4.2
+TERMUX_PKG_VERSION="1.7.0"
 TERMUX_PKG_SRCURL="https://github.com/asciinema/agg/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=8a4b81733085d81de1076e2964dedf729a8603941de11659d775478293d9efd0
+TERMUX_PKG_SHA256=8927e2f3b1db53feed2e74319497ddc8404ac7989cb592099c402fbd05d94aa4
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_RECOMMENDS="asciinema"
 TERMUX_PKG_BUILD_IN_SRC=true
+
+termux_step_pre_configure() {
+	termux_setup_rust
+}

@@ -5,12 +5,15 @@ termux_step_start_build() {
 	TERMUX_HOSTBUILD_MARKER="$TERMUX_PKG_HOSTBUILD_DIR/TERMUX_BUILT_FOR_$TERMUX_PKG_VERSION"
 
 	if [ "$TERMUX_PKG_METAPACKAGE" = "true" ]; then
-		# Metapackage has no sources and therefore platform-independent.
+		# Metapackage has no sources
 		TERMUX_PKG_SKIP_SRC_EXTRACT=true
-		TERMUX_PKG_PLATFORM_INDEPENDENT=true
+		# Usually metapackages are also platform dependent but it is not always the
+		# right decision to mark them as such when they depend on packages which may
+		# not be available for all architectures
+		# TERMUX_PKG_PLATFORM_INDEPENDENT=true
 	fi
 
-	if [ -n "${TERMUX_PKG_BLACKLISTED_ARCHES:=""}" ] && [ "$TERMUX_PKG_BLACKLISTED_ARCHES" != "${TERMUX_PKG_BLACKLISTED_ARCHES/$TERMUX_ARCH/}" ]; then
+	if [ -n "${TERMUX_PKG_EXCLUDED_ARCHES:=""}" ] && [ "$TERMUX_PKG_EXCLUDED_ARCHES" != "${TERMUX_PKG_EXCLUDED_ARCHES/$TERMUX_ARCH/}" ]; then
 		echo "Skipping building $TERMUX_PKG_NAME for arch $TERMUX_ARCH"
 		exit 0
 	fi
@@ -62,15 +65,25 @@ termux_step_start_build() {
 		fi
 	fi
 
+	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ] || [ "$TERMUX_ARCH_BITS" = "32" ]; then
+		TERMUX_PKG_BUILD_MULTILIB=false
+	fi
+	if [ "$TERMUX_PKG_BUILD_MULTILIB" = "true" ] && [ $(tr ' ' '\n' <<< "${TERMUX_PKG_EXCLUDED_ARCHES//,/}" | grep -c -e '^arm$' -e '^i686$') = "2" ]; then
+		TERMUX_PKG_BUILD_ONLY_MULTILIB=true
+	fi
+
 	echo "termux - building $TERMUX_PKG_NAME for arch $TERMUX_ARCH..."
 	test -t 1 && printf "\033]0;%s...\007" "$TERMUX_PKG_NAME"
 
 	# Avoid exporting PKG_CONFIG_LIBDIR until after termux_step_host_build.
-	export TERMUX_PKG_CONFIG_LIBDIR=$TERMUX_PREFIX/lib/pkgconfig:$TERMUX_PREFIX/share/pkgconfig
+	termux_step_setup_pkg_config_libdir
 
+	local TERMUX_PKG_BUILDDIR_ORIG="$TERMUX_PKG_BUILDDIR"
 	if [ "$TERMUX_PKG_BUILD_IN_SRC" = "true" ]; then
-		echo "Building in src due to TERMUX_PKG_BUILD_IN_SRC being set to true" > "$TERMUX_PKG_BUILDDIR/BUILDING_IN_SRC.txt"
 		TERMUX_PKG_BUILDDIR=$TERMUX_PKG_SRCDIR
+	fi
+	if [ "$TERMUX_PKG_BUILD_MULTILIB" = "true" ] && [ "$TERMUX_PKG_BUILD_ONLY_MULTILIB" = "false" ] && ([ "$TERMUX_PKG_BUILD_IN_SRC" = "true" ] || [ "$TERMUX_PKG_MULTILIB_BUILDDIR" = "$TERMUX_PKG_BUILDDIR" ]); then
+		termux_error_exit "It is not possible to build 32-bit and 64-bit versions of a package in one place, the build location must be separate."
 	fi
 
 	if [ "$TERMUX_CONTINUE_BUILD" == "true" ]; then
@@ -79,6 +92,10 @@ termux_step_start_build() {
 			termux_error_exit "Cannot continue this build, hostbuilt tools are missing"
 		fi
 
+		# Set TERMUX_ELF_CLEANER for on-device continued build
+		if [ "$TERMUX_PACKAGE_LIBRARY" = "bionic" ] && [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
+			TERMUX_ELF_CLEANER="$(command -v termux-elf-cleaner)"
+		fi
 		# The rest in this function can be skipped when doing
 		# a continued build
 		return
@@ -88,29 +105,43 @@ termux_step_start_build() {
 		termux_error_exit "Package '$TERMUX_PKG_NAME' is not available for on-device builds."
 	fi
 
-	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
-		case "$TERMUX_APP_PACKAGE_MANAGER" in
-			"apt") apt install -y termux-elf-cleaner;;
-			"pacman") pacman -S termux-elf-cleaner --needed --noconfirm;;
-		esac
-		TERMUX_ELF_CLEANER="$(command -v termux-elf-cleaner)"
-	else
-		local TERMUX_ELF_CLEANER_VERSION
-		TERMUX_ELF_CLEANER_VERSION=$(bash -c ". $TERMUX_SCRIPTDIR/packages/termux-elf-cleaner/build.sh; echo \$TERMUX_PKG_VERSION")
-		termux_download \
-			"https://github.com/termux/termux-elf-cleaner/releases/download/v${TERMUX_ELF_CLEANER_VERSION}/termux-elf-cleaner" \
-			"$TERMUX_ELF_CLEANER" \
-			7c29143b9cffb3a9a580f39a7966b2bb36c5fc099da6f4c98dcdedacb14f08a2
-		chmod u+x "$TERMUX_ELF_CLEANER"
+	# Delete and re-create the directories used for building the package
+	termux_step_setup_build_folders
+
+	if [ "$TERMUX_PKG_BUILD_IN_SRC" = "true" ]; then
+		# Create a file for users to know that the build directory not containing any built files is expected behaviour
+		echo "Building in src due to TERMUX_PKG_BUILD_IN_SRC being set to true" > "$TERMUX_PKG_BUILDDIR_ORIG/BUILDING_IN_SRC.txt"
 	fi
 
-	# Some packages search for libutil, libpthread and librt even
-	# though this functionality is provided by libc.  Provide
-	# library stubs so that such configure checks succeed.
-	mkdir -p "$TERMUX_PREFIX/lib"
-	for lib in libutil.so libpthread.so librt.so; do
-		if [ ! -f $TERMUX_PREFIX/lib/$lib ]; then
-			echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/$lib
+	if [ "$TERMUX_PACKAGE_LIBRARY" = "bionic" ]; then
+		if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
+			case "$TERMUX_APP_PACKAGE_MANAGER" in
+				"apt") apt install -y termux-elf-cleaner;;
+				"pacman") pacman -S termux-elf-cleaner --needed --noconfirm;;
+			esac
+			TERMUX_ELF_CLEANER="$(command -v termux-elf-cleaner)"
+		else
+			local TERMUX_ELF_CLEANER_VERSION
+			TERMUX_ELF_CLEANER_VERSION=$(bash -c ". $TERMUX_SCRIPTDIR/packages/termux-elf-cleaner/build.sh; echo \$TERMUX_PKG_VERSION")
+			termux_download \
+				"https://github.com/termux/termux-elf-cleaner/releases/download/v${TERMUX_ELF_CLEANER_VERSION}/termux-elf-cleaner" \
+				"$TERMUX_ELF_CLEANER" \
+				59645fb25b84d11f108436e83d9df5e874ba4eb76ab62948869a23a3ee692fa7
+			chmod u+x "$TERMUX_ELF_CLEANER"
 		fi
-	done
+
+		# Some packages search for libutil, libpthread and librt even
+		# though this functionality is provided by libc.  Provide
+		# library stubs so that such configure checks succeed.
+		mkdir -p "$TERMUX_PREFIX/lib"
+		for lib in libutil.so libpthread.so librt.so; do
+			if [ ! -f $TERMUX_PREFIX/lib/$lib ]; then
+				echo 'INPUT(-lc)' > $TERMUX_PREFIX/lib/$lib
+			fi
+		done
+	fi
+}
+
+termux_step_setup_pkg_config_libdir() {
+	export TERMUX_PKG_CONFIG_LIBDIR=$TERMUX__PREFIX__LIB_DIR/pkgconfig:$TERMUX_PREFIX/share/pkgconfig
 }

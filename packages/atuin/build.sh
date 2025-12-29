@@ -1,44 +1,41 @@
-TERMUX_PKG_HOMEPAGE=https://github.com/ellie/atuin
+TERMUX_PKG_HOMEPAGE=https://atuin.sh/
 TERMUX_PKG_DESCRIPTION="Magical shell history"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_LICENSE_FILE="../LICENSE"
+TERMUX_PKG_LICENSE_FILE="../../LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="16.0.0"
-TERMUX_PKG_SRCURL=https://github.com/ellie/atuin/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=28d469e452086481f64293390ba0736a082623d49b5064a01b2e2106cc1e8fef
+TERMUX_PKG_VERSION="18.10.0"
+TERMUX_PKG_SRCURL=https://github.com/ellie/atuin/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=02228929976142f63b4464a35b8b29b29155e1814cf03e99c95381954c5d9e37
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
-TERMUX_PKG_HOSTBUILD=true
 
 termux_step_pre_configure() {
-	TERMUX_PKG_SRCDIR+="/atuin"
+	termux_setup_protobuf
+	termux_setup_rust
+	TERMUX_PKG_SRCDIR+="/crates/atuin"
 	TERMUX_PKG_BUILDDIR="$TERMUX_PKG_SRCDIR"
 
-	# required to build for x86_64, see #8029
-	export RUSTFLAGS="${RUSTFLAGS:-} -C link-args=$($CC -print-libgcc-file-name)"
-}
+	# https://github.com/termux/termux-packages/issues/8029
+	if [[ "${TERMUX_ARCH}" == "x86_64" ]]; then
+		local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+		export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$($CC -print-libgcc-file-name)"
+	fi
 
-termux_step_host_build() {
-	export CC=""
-	export CFLAGS=""
-	export CPPFLAGS=""
-	termux_setup_rust
-
-	cd "$TERMUX_PKG_SRCDIR"
-	cargo build \
-		--jobs $TERMUX_MAKE_PROCESSES \
-		--locked \
-		--target-dir $TERMUX_PKG_HOSTBUILD_DIR
+	# clash with rust host build
+	unset CFLAGS
 }
 
 termux_step_post_make_install() {
-	# Generate and install shell completions
-	mkdir completions/
-	for sh in 'bash' 'fish' 'zsh'; do
-		$TERMUX_PKG_HOSTBUILD_DIR/debug/atuin gen-completions -s $sh -o completions/
-	done
+	install -Dm644 /dev/null "$TERMUX_PREFIX"/share/bash-completion/completions/atuin
+	install -Dm644 /dev/null "$TERMUX_PREFIX"/share/zsh/site-functions/_atuin
+	install -Dm644 /dev/null "$TERMUX_PREFIX"/share/fish/vendor_completions.d/atuin.fish
+}
 
-	install -Dm600 completions/atuin.bash $TERMUX_PREFIX/share/bash-completion/completions/atuin.bash
-	install -Dm600 completions/_atuin $TERMUX_PREFIX/share/zsh/site-functions/_atuin
-	install -Dm600 completions/atuin.fish $TERMUX_PREFIX/share/fish/vendor_completions.d/atuin.fish
+termux_step_create_debscripts() {
+	cat <<-EOF >./postinst
+		#!${TERMUX_PREFIX}/bin/sh
+		atuin gen-completions -s bash > ${TERMUX_PREFIX}/share/bash-completion/completions/atuin
+		atuin gen-completions -s zsh > ${TERMUX_PREFIX}/share/zsh/site-functions/_atuin
+		atuin gen-completions -s fish > ${TERMUX_PREFIX}/share/fish/vendor_completions.d/atuin.fish
+	EOF
 }

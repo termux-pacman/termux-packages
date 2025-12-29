@@ -2,18 +2,24 @@ TERMUX_PKG_HOMEPAGE=https://github.com/OCL-dev/ocl-icd
 TERMUX_PKG_DESCRIPTION="OpenCL ICD Loader"
 TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2.3.1
-TERMUX_PKG_REVISION=3
-TERMUX_PKG_SRCURL=https://github.com/OCL-dev/ocl-icd/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=a32b67c2d52ffbaf490be9fc18b46428ab807ab11eff7664d7ff75e06cfafd6d
+TERMUX_PKG_VERSION="2.3.4"
+TERMUX_PKG_SRCURL=https://github.com/OCL-dev/ocl-icd/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=1a302b71b7304cca5a36f69d017b1af2b762cc4c2dd1c0c0e2fc1933db25c9cc
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_NO_STATICSPLIT=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+--enable-custom-layerdir=${TERMUX_PREFIX}/etc/OpenCL/layers
 --enable-custom-vendordir=${TERMUX_PREFIX}/etc/OpenCL/vendors
 --enable-official-khronos-headers
 "
 
 termux_step_pre_configure() {
 	./bootstrap
+}
+
+termux_step_post_make_install() {
+	mkdir -p "${TERMUX_PREFIX}/lib"
+	ln -fs libOpenCL.so "${TERMUX_PREFIX}/lib/libOpenCL.so.1"
 }
 
 # https://www.khronos.org/registry/OpenCL/specs/2.2/html/OpenCL_ICD_Installation.html

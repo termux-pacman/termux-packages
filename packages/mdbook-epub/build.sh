@@ -2,9 +2,11 @@ TERMUX_PKG_HOMEPAGE=https://github.com/Michael-F-Bryan/mdbook-epub
 TERMUX_PKG_DESCRIPTION="An EPUB renderer for mdbook"
 TERMUX_PKG_LICENSE="MPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.4.14
+TERMUX_PKG_VERSION="0.5.2"
 TERMUX_PKG_SRCURL=https://github.com/Michael-F-Bryan/mdbook-epub/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=d2cf2c38c50a3eb476c14854f395ce3423ec58ddc310699d747df5a6f37f6cf1
+TERMUX_PKG_SHA256=5040097cc5177012e15152d2bc548dbbad211adb91b3399a4c96fcc2ea966557
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_pre_configure() {
@@ -23,7 +25,7 @@ termux_step_pre_configure() {
 }
 
 termux_step_make() {
-	cargo build --jobs $TERMUX_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
+	cargo build --jobs $TERMUX_PKG_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
 }
 
 termux_step_make_install() {

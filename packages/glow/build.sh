@@ -1,27 +1,38 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/charmbracelet/glow
 TERMUX_PKG_DESCRIPTION="Render markdown on the CLI, with pizzazz!"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_MAINTAINER="@charmbracelet"
-TERMUX_PKG_VERSION="1.5.1"
+TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_VERSION="2.1.1"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/charmbracelet/glow/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=b4ecf269b7c6447e19591b1d23f398ef2b38a6a75be68458390b42d3efc44b92
+TERMUX_PKG_SHA256=f13e1d6be1ab4baf725a7fedc4cd240fc7e5c7276af2d92f199e590e1ef33967
+TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
-TERMUX_PKG_RECOMMENDS=git
+TERMUX_PKG_SUGGESTS=git
+
+termux_step_pre_configure() {
+	termux_setup_golang
+}
 
 termux_step_make() {
-        termux_setup_golang
+	mkdir -p "${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet"
 
-        cd "$TERMUX_PKG_SRCDIR"
-
-        mkdir -p "${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet"
-        cp -a "${TERMUX_PKG_SRCDIR}" "${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet/glow"
-        cd "${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet/glow"
-
-        go get -d -v
-        go build
+	go get -v
+	go build
 }
 
 termux_step_make_install() {
-        install -Dm700 ${TERMUX_PKG_BUILDDIR}/src/github.com/charmbracelet/glow/glow \
-                $TERMUX_PREFIX/bin/glow
+	mkdir -p "${TERMUX_PREFIX}/share/man/man1"
+	mkdir -p "${TERMUX_PREFIX}/share/zsh/site-functions"
+	mkdir -p "${TERMUX_PREFIX}/share/fish/vendor_completions.d"
+	mkdir -p "${TERMUX_PREFIX}/share/bash-completion/completions"
+
+	# borrowed from packages/gh
+	unset GOOS GOARCH CGO_LDFLAGS
+	unset CC CXX CFLAGS CXXFLAGS LDFLAGS
+	go run .             man > "${TERMUX_PREFIX}/share/man/man1/${TERMUX_PKG_NAME}.1"
+	go run . completion  zsh > "${TERMUX_PREFIX}/share/zsh/site-functions/_${TERMUX_PKG_NAME}"
+	go run . completion bash > "${TERMUX_PREFIX}/share/bash-completion/completions/${TERMUX_PKG_NAME}"
+	go run . completion fish > "${TERMUX_PREFIX}/share/fish/vendor_completions.d/${TERMUX_PKG_NAME}.fish"
+	install -Dm700 glow "$TERMUX_PREFIX/bin/glow"
 }

@@ -1,0 +1,37 @@
+--- a/build/gulpfile.vscode.ts
++++ b/build/gulpfile.vscode.ts
+@@ -40,6 +40,7 @@
+ const root = path.dirname(import.meta.dirname);
+ const commit = getVersion(root);
+ const versionedResourcesFolder = (product as typeof product & { quality?: string })?.quality === 'insider' ? commit!.substring(0, 10) : '';
++const buildRoot = path.join(root, "package-build-root");
+ 
+ // Build
+ const vscodeEntryPoints = [
+@@ -213,7 +214,7 @@
+ }
+ 
+ function packageTask(platform: string, arch: string, sourceFolderName: string, destinationFolderName: string, _opts?: { stats?: boolean }) {
+-	const destination = path.join(path.dirname(root), destinationFolderName);
++	const destination = path.join(buildRoot, destinationFolderName);
+ 	platform = platform || process.platform;
+ 
+ 	const task = () => {
+@@ -467,7 +468,7 @@
+ }
+ 
+ function patchWin32DependenciesTask(destinationFolderName: string) {
+-	const cwd = path.join(path.dirname(root), destinationFolderName);
++	const cwd = path.join(buildRoot, destinationFolderName);
+ 
+ 	return async () => {
+ 		const deps = await glob('**/*.node', { cwd, ignore: 'extensions/node_modules/@parcel/watcher/**' });
+@@ -495,8 +496,6 @@
+ 	};
+ }
+ 
+-const buildRoot = path.dirname(root);
+-
+ const BUILD_TARGETS = [
+ 	{ platform: 'win32', arch: 'x64' },
+ 	{ platform: 'win32', arch: 'arm64' },

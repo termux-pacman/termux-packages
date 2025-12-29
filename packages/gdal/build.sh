@@ -3,18 +3,29 @@ TERMUX_PKG_DESCRIPTION="A translator library for raster and vector geospatial da
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="LICENSE.TXT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=3.7.0
-TERMUX_PKG_REVISION=2
+TERMUX_PKG_VERSION="3.12.1"
 TERMUX_PKG_SRCURL=https://download.osgeo.org/gdal/${TERMUX_PKG_VERSION}/gdal-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=af4b26a6b6b3509ae9ccf1fcc5104f7fe015ef2110f5ba13220816398365adce
-TERMUX_PKG_DEPENDS="giflib, json-c, libc++, libcurl, libexpat, libfreexl, libgeos, libiconv, libjpeg-turbo, libjxl, liblzma, libpng, libspatialite, libsqlite, libwebp, libxml2, netcdf-c, openjpeg, openssl, proj, postgresql, zlib, zstd"
+TERMUX_PKG_SHA256=2a4fd3170ff81def93db60f7f61f2842a2ae7ad0335e4ed4ba305252f05835de
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="giflib, json-c, libc++, libcurl, libexpat, libfreexl, libgeos, libiconv, libjpeg-turbo, libjxl, liblzma, libpng, libspatialite, libsqlite, libwebp, libxml2, netcdf-c (>= 4.9.3), openjpeg, openssl, proj, postgresql, zlib, zstd"
 TERMUX_PKG_BUILD_DEPENDS="json-c-static"
 TERMUX_PKG_BREAKS="gdal-dev"
 TERMUX_PKG_REPLACES="gdal-dev"
 TERMUX_PKG_GROUPS="science"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCMAKE_INSTALL_LIBDIR=$TERMUX__PREFIX__LIB_SUBDIR
+-DCMAKE_INSTALL_INCLUDEDIR=$TERMUX__PREFIX__INCLUDE_SUBDIR
 -DGDAL_USE_JXL=ON
 -DGDAL_USE_TIFF_INTERNAL=ON
 -DGDAL_USE_GEOTIFF_INTERNAL=ON
+-DBUILD_PYTHON_BINDINGS=OFF
 "
+
+termux_step_pre_configure () {
+	if [ "${TERMUX_ARCH}" = "arm" ]; then
+		## -mfpu=neon causes build failure on ARM.
+		CFLAGS="${CFLAGS/-mfpu=neon/} -mfpu=vfp"
+		CXXFLAGS="${CXXFLAGS/-mfpu=neon/} -mfpu=vfp"
+	fi
+}

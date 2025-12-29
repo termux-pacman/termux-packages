@@ -3,37 +3,61 @@ TERMUX_PKG_DESCRIPTION="An open-source implementation of the OpenGL specificatio
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="docs/license.rst"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=23.1.5
+TERMUX_PKG_VERSION="25.3.2"
 TERMUX_PKG_SRCURL=https://archive.mesa3d.org/mesa-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=3cf88576fdebf24fc4047067936131c90cb6541c27365996b79b661dec1fb153
-TERMUX_PKG_DEPENDS="libandroid-shmem, libc++, libdrm, libglvnd, libwayland, libx11, libxext, libxfixes, libxshmfence, libxxf86vm, ncurses, vulkan-loader, zlib, zstd"
+TERMUX_PKG_SHA256=e69dab0d0ea03e3e8cb141b032f58ea9fcf3b9c1f61b31f6592cb4bbd8d0185d
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="libandroid-shmem, libc++, libdrm, libglvnd, libllvm (<< $TERMUX_LLVM_NEXT_MAJOR_VERSION), libwayland, libx11, libxext, libxfixes, libxshmfence, libxxf86vm, ncurses, vulkan-loader, zlib, zstd"
 TERMUX_PKG_SUGGESTS="mesa-dev"
-TERMUX_PKG_BUILD_DEPENDS="libllvm-static, libwayland-protocols, libxrandr, llvm, llvm-tools, mlir, xorgproto"
-TERMUX_PKG_CONFLICTS="libmesa, ndk-sysroot (<= 25b)"
-TERMUX_PKG_REPLACES="libmesa"
+TERMUX_PKG_BUILD_DEPENDS="libclc, libwayland-protocols, libxrandr, llvm, llvm-tools, mlir, spirv-tools, xorgproto"
+TERMUX_PKG_BREAKS="osmesa, osmesa-demos"
+TERMUX_PKG_CONFLICTS="libmesa, ndk-sysroot (<= 25b), osmesa"
+TERMUX_PKG_REPLACES="libmesa, osmesa"
 
+# FIXME: Set `shared-llvm` to disabled if possible
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --cmake-prefix-path $TERMUX_PREFIX
--Dcpp_rtti=false
 -Dgbm=enabled
 -Dopengl=true
 -Degl=enabled
 -Degl-native-platform=x11
 -Dgles1=disabled
 -Dgles2=enabled
--Ddri3=enabled
 -Dglx=dri
 -Dllvm=enabled
--Dshared-llvm=disabled
+-Dshared-llvm=enabled
 -Dplatforms=x11,wayland
--Dgallium-drivers=swrast,virgl,zink
--Dosmesa=true
--Dglvnd=true
+-Dgallium-drivers=llvmpipe,softpipe,virgl,zink
+-Dgallium-rusticl=true
+-Dglvnd=enabled
 -Dxmlconfig=disabled
 "
 
+termux_step_post_get_source() {
+	# Do not use meson wrap projects
+	rm -rf subprojects
+}
+
 termux_step_pre_configure() {
+	if [ "$TERMUX_PKG_API_LEVEL" -lt 29 ]; then
+		# ELF TLS is supported starting with API level 29.
+		patch --silent -p1 < "$TERMUX_PKG_BUILDER_DIR/0011-lld-undefined-version.diff"
+	fi
+
 	termux_setup_cmake
+	termux_setup_rust
+
+	: "${CARGO_HOME:=${HOME}/.cargo}"
+	export CARGO_HOME
+
+	cargo install --force --locked bindgen-cli
+	if [[ "${TERMUX_ON_DEVICE_BUILD}" == "false" ]]; then
+		export BINDGEN_EXTRA_CLANG_ARGS="--sysroot ${TERMUX_STANDALONE_TOOLCHAIN}/sysroot"
+		case "${TERMUX_ARCH}" in
+		arm) BINDGEN_EXTRA_CLANG_ARGS+=" --target=arm-linux-androideabi${TERMUX_PKG_API_LEVEL}" ;;
+		*) BINDGEN_EXTRA_CLANG_ARGS+=" --target=${TERMUX_ARCH}-linux-android${TERMUX_PKG_API_LEVEL}" ;;
+		esac
+	fi
 
 	CPPFLAGS+=" -D__USE_GNU"
 	LDFLAGS+=" -landroid-shmem"
@@ -45,22 +69,17 @@ termux_step_pre_configure() {
 			$TERMUX_PKG_BUILDER_DIR/cmake-wrapper.in \
 			> $_WRAPPER_BIN/cmake
 		chmod 0700 $_WRAPPER_BIN/cmake
-		sed "s|^export PKG_CONFIG_LIBDIR=|export PKG_CONFIG_LIBDIR=${TERMUX_PREFIX}/opt/libwayland/cross/lib/x86_64-linux-gnu/pkgconfig:|" \
-			"${TERMUX_STANDALONE_TOOLCHAIN}/bin/pkg-config" \
-			> "${_WRAPPER_BIN}/pkg-config"
-		chmod +x "${_WRAPPER_BIN}/pkg-config"
-		export PKG_CONFIG="${_WRAPPER_BIN}/pkg-config"
+		termux_setup_wayland_cross_pkg_config_wrapper
 	fi
-	export PATH=$_WRAPPER_BIN:$PATH
+	export LLVM_CONFIG="${TERMUX_PREFIX}/bin/llvm-config"
+	export PATH="${_WRAPPER_BIN}:${CARGO_HOME}/bin:${PATH}"
 
+	local _vk_drivers="swrast"
 	if [ $TERMUX_ARCH = "arm" ] || [ $TERMUX_ARCH = "aarch64" ]; then
-		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -Dvulkan-drivers=swrast,freedreno"
+		_vk_drivers+=",freedreno"
 		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -Dfreedreno-kmds=msm,kgsl"
-	elif [ $TERMUX_ARCH = "i686" ] || [ $TERMUX_ARCH = "x86_64" ]; then
-		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -Dvulkan-drivers=swrast"
-	else
-		termux_error_exit "Invalid arch: $TERMUX_ARCH"
 	fi
+	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -Dvulkan-drivers=$_vk_drivers"
 }
 
 termux_step_post_configure() {
@@ -89,4 +108,7 @@ termux_step_post_make_install() {
 	# Create symlinks
 	ln -sf libEGL_mesa.so ${TERMUX_PREFIX}/lib/libEGL_mesa.so.0
 	ln -sf libGLX_mesa.so ${TERMUX_PREFIX}/lib/libGLX_mesa.so.0
+	ln -sf libRusticlOpenCL.so ${TERMUX_PREFIX}/lib/libRusticlOpenCL.so.1
+
+	unset BINDGEN_EXTRA_CLANG_ARGS LLVM_CONFIG
 }

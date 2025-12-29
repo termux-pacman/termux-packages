@@ -1,11 +1,20 @@
 --- a/meson.build
 +++ b/meson.build
-@@ -884,7 +884,7 @@
+@@ -154,7 +154,7 @@
+ elif host_machine.system() == 'windows'
+   os_win32 = true
+ elif host_machine.system() == 'android'
+-  os_android = true
++  os_linux = true
+ elif host_machine.system() == 'linux'
+   os_linux = true
+ endif
+@@ -690,7 +690,7 @@
+   cdata.set('HAVE_DRM_DRM_FOURCC_H', have_drm_fourcc)
+ endif
  
- subdir('docs/reference')
+-cdata.set('HAVE_DMABUF', cc.has_header('linux/dma-buf.h'))
++cdata.set('HAVE_DMABUF', false)
  
--if not meson.is_cross_build()
-+if false
-   gnome.post_install(
-     glib_compile_schemas: true,
-     gio_querymodules: gio_module_dirs,
+ cloudproviders_dep = dependency('cloudproviders',
+   required: get_option('cloudproviders'),

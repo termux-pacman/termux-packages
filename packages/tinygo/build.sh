@@ -3,50 +3,111 @@ TERMUX_PKG_DESCRIPTION="Go compiler for microcontrollers, WASM, CLI tools"
 TERMUX_PKG_LICENSE="custom"
 TERMUX_PKG_LICENSE_FILE="LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="0.28.1"
-TERMUX_PKG_REVISION=2
+TERMUX_PKG_VERSION="0.39.0"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=git+https://github.com/tinygo-org/tinygo
 TERMUX_PKG_GIT_BRANCH="v${TERMUX_PKG_VERSION}"
-TERMUX_PKG_SHA256=fbf83a67f5b0d57742616b7591b8de26cabd234cee3d27c800440f1b22f868ab
-TERMUX_PKG_DEPENDS="libc++, tinygo-common"
-TERMUX_PKG_RECOMMENDS="binaryen"
+TERMUX_PKG_SHA256=2cea7d49bf18ad705c464af980ee6f39cf88756472bd7fefe8a424d8ffc7fa62
+TERMUX_PKG_DEPENDS="binaryen, golang, libc++"
+TERMUX_PKG_ANTI_BUILD_DEPENDS="binaryen, golang"
 TERMUX_PKG_NO_STATICSPLIT=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HOSTBUILD=true
-
+TERMUX_PKG_AUTO_UPDATE=true
 _LLVM_OPTION="
 -DCMAKE_BUILD_TYPE=MinSizeRel
 -DGENERATOR_IS_MULTI_CONFIG=ON
--DLLVM_ENABLE_LTO=Thin
 -DLLVM_TABLEGEN=${TERMUX_PKG_HOSTBUILD_DIR}/bin/llvm-tblgen
 -DCLANG_TABLEGEN=${TERMUX_PKG_HOSTBUILD_DIR}/bin/clang-tblgen
 "
-
 _LLVM_EXTRA_BUILD_TARGETS="
-lib/libLLVMFuzzerCLI.a
-lib/libLLVMFuzzMutate.a
-lib/libLLVMFileCheck.a
-lib/libLLVMInterfaceStub.a
-lib/libLLVMMIRParser.a
+lib/libLLVMCodeGenData.a
 lib/libLLVMDWARFLinker.a
+lib/libLLVMDWARFLinkerClassic.a
+lib/libLLVMDWARFLinkerParallel.a
+lib/libLLVMDWP.a
+lib/libLLVMDebugInfoGSYM.a
+lib/libLLVMDebugInfoLogicalView.a
+lib/libLLVMFileCheck.a
 lib/libLLVMFrontendOpenACC.a
+lib/libLLVMFuzzMutate.a
+lib/libLLVMFuzzerCLI.a
+lib/libLLVMInterfaceStub.a
+lib/libLLVMJITLink.a
+lib/libLLVMLineEditor.a
+lib/libLLVMMIRParser.a
 lib/libLLVMObjCopy.a
 lib/libLLVMObjectYAML.a
-lib/libLLVMDebugInfoGSYM.a
-lib/libLLVMDWP.a
-lib/libLLVMJITLink.a
+lib/libLLVMOrcDebugging.a
 lib/libLLVMOrcJIT.a
-lib/libLLVMLineEditor.a
+lib/libLLVMTextAPIBinaryReader.a
+lib/libLLVMSandboxIR.a
 lib/libLLVMXRay.a
 "
+
+termux_pkg_auto_update() {
+	local e=0
+	local latest_tag
+	latest_tag=$(termux_github_api_get_tag "${TERMUX_PKG_SRCURL}" "${TERMUX_PKG_UPDATE_TAG_TYPE}")
+	if [[ "${latest_tag}" == "${TERMUX_PKG_VERSION}" ]]; then
+		echo "INFO: No update needed. Already at version '${TERMUX_PKG_VERSION}'."
+		return
+	fi
+	[[ -z "${latest_tag}" ]] && e=1
+
+	local uptime_now=$(cat /proc/uptime)
+	local uptime_s="${uptime_now//.*}"
+	local uptime_h_limit=1
+	local uptime_s_limit=$((uptime_h_limit*60*60))
+	[[ -z "${uptime_s}" ]] && [[ "$(uname -o)" != "Android" ]] && e=1
+	[[ "${uptime_s}" == 0 ]] && [[ "$(uname -o)" != "Android" ]] && e=1
+	[[ "${uptime_s}" -gt "${uptime_s_limit}" ]] && e=1
+
+	if [[ "${e}" != 0 ]]; then
+		cat <<- EOL >&2
+		WARN: Auto update failure!
+		latest_tag=${latest_tag}
+		uptime_now=${uptime_now}
+		uptime_s=${uptime_s}
+		uptime_s_limit=${uptime_s_limit}
+		EOL
+		return
+	fi
+
+	local tmpdir=$(mktemp -d)
+	git clone --branch "v${latest_tag}" --depth=1 --recursive \
+		"${TERMUX_PKG_SRCURL#git+}" "${tmpdir}"
+	make -C "${tmpdir}" llvm-source GO=:
+	local s=$(
+		find "${tmpdir}" -type f ! -path '*/.git/*' -print0 | xargs -0 sha256sum | \
+		cut -d" " -f1 | LC_ALL=C sort | sha256sum | cut -d" " -f1
+	)
+
+	if [[ "${BUILD_PACKAGES}" == "false" ]]; then
+		echo "INFO: package needs to be updated to ${latest_tag}."
+		return
+	fi
+
+	sed \
+		-e "s|^TERMUX_PKG_SHA256=.*|TERMUX_PKG_SHA256=${s}|" \
+		-i "${TERMUX_PKG_BUILDER_DIR}/build.sh"
+
+	rm -fr "${tmpdir}"
+
+	echo "INFO: Generated checksum: ${s}"
+	termux_pkg_upgrade_version "${latest_tag}"
+}
 
 termux_step_post_get_source() {
 	# https://github.com/tinygo-org/tinygo/blob/release/Makefile
 	# https://github.com/espressif/llvm-project
 	make llvm-source GO=:
 
-	local s=$(find . -type f ! -path '*/.git/*' -print0 | xargs -0 sha256sum | LC_ALL=C sort | sha256sum)
-	if [[ "${s}" != "${TERMUX_PKG_SHA256}  "* ]]; then
+	local s=$(
+		find . -type f ! -path '*/.git/*' -print0 | xargs -0 sha256sum | \
+		cut -d" " -f1 | LC_ALL=C sort | sha256sum | cut -d" " -f1
+	)
+	if [[ "${s}" != "${TERMUX_PKG_SHA256}" ]]; then
 		termux_error_exit "
 		Checksum mismatch for source files!
 		Expected = ${TERMUX_PKG_SHA256}
@@ -67,14 +128,14 @@ termux_step_host_build() {
 	# build whatever llvm-config think is missing
 	ninja \
 		-C "${TERMUX_PKG_HOSTBUILD_DIR}" \
-		-j "${TERMUX_MAKE_PROCESSES}" \
+		-j "${TERMUX_PKG_MAKE_PROCESSES}" \
 		${_LLVM_EXTRA_BUILD_TARGETS}
 
-	echo "========== llvm-config =========="
+	echo "INFO: ========== llvm-config =========="
 	file "${TERMUX_PKG_HOSTBUILD_DIR}/bin/llvm-config"
 	"${TERMUX_PKG_HOSTBUILD_DIR}/bin/llvm-config" --cppflags
 	"${TERMUX_PKG_HOSTBUILD_DIR}/bin/llvm-config" --ldflags --libs --system-libs
-	echo "========== llvm-config =========="
+	echo "INFO: ========== llvm-config =========="
 
 	make build/release \
 		LLVM_BUILDDIR="${TERMUX_PKG_HOSTBUILD_DIR}" \
@@ -86,6 +147,9 @@ termux_step_host_build() {
 }
 
 termux_step_pre_configure() {
+	# this is a workaround for build-all.sh issue
+	TERMUX_PKG_DEPENDS+=", tinygo-common"
+
 	# https://github.com/termux/termux-packages/issues/16358
 	if [[ "${TERMUX_ON_DEVICE_BUILD}" == "true" ]]; then
 		echo "WARN: ld.lld wrapper is not working for on-device builds. Skipping."
@@ -117,10 +181,10 @@ termux_step_make() {
 	local _LLVM_TARGET_TRIPLE=${TERMUX_HOST_PLATFORM/-/-unknown-}${TERMUX_PKG_API_LEVEL}
 	local _LLVM_TARGET_ARCH
 	case "${TERMUX_ARCH}" in
-		aarch64) _LLVM_TARGET_ARCH=AArch64 ;;
-		arm) _LLVM_TARGET_ARCH=ARM ;;
-		i686|x86_64) _LLVM_TARGET_ARCH=X86 ;;
-		*) termux_error_exit "Invalid arch: ${TERMUX_ARCH}" ;;
+	aarch64) _LLVM_TARGET_ARCH="AArch64" ;;
+	arm) _LLVM_TARGET_ARCH="ARM" ;;
+	i686|x86_64) _LLVM_TARGET_ARCH="X86" ;;
+	*) termux_error_exit "Invalid arch: ${TERMUX_ARCH}" ;;
 	esac
 	_LLVM_OPTION+="
 	-DLLVM_HOST_TRIPLE=${_LLVM_TARGET_TRIPLE}
@@ -131,7 +195,7 @@ termux_step_make() {
 
 	ninja \
 		-C llvm-build \
-		-j "${TERMUX_MAKE_PROCESSES}" \
+		-j "${TERMUX_PKG_MAKE_PROCESSES}" \
 		${_LLVM_EXTRA_BUILD_TARGETS}
 
 	# replace Android llvm-config with wrapper around host build
@@ -165,5 +229,5 @@ termux_step_make() {
 termux_step_make_install() {
 	mkdir -p "${TERMUX_PREFIX}/lib/tinygo"
 	cp -fr "${TERMUX_PKG_SRCDIR}/build/release/tinygo" "${TERMUX_PREFIX}/lib"
-	ln -fsvT "../lib/tinygo/bin/tinygo" "${TERMUX_PREFIX}/bin/tinygo"
+	ln -fsv "../lib/tinygo/bin/tinygo" "${TERMUX_PREFIX}/bin/tinygo"
 }

@@ -5,13 +5,15 @@ TERMUX_PKG_LICENSE_FILE="LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
 _COMMIT=ca23e1745e6e2ba235550360e1def1457e2f3857
 TERMUX_PKG_VERSION=2022.10.04
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL="git+https://github.com/poljar/weechat-matrix-rs"
 TERMUX_PKG_SHA256=61d4d307167f274c1ee165a7021d5cda330a2331eb89e8add2f027becf8cae0c
+TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_GIT_BRANCH=main
 TERMUX_PKG_DEPENDS="weechat, openssl"
 TERMUX_PKG_BUILD_IN_SRC=true
 # There are compile errors for 32-bit platforms in weechat-rust dependency
-TERMUX_PKG_BLACKLISTED_ARCHES="arm, i686"
+TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
 
 termux_step_post_get_source() {
 	git fetch --unshallow
@@ -30,8 +32,29 @@ termux_step_post_get_source() {
 	fi
 }
 
-termux_step_make() {
+termux_step_pre_configure() {
 	termux_setup_rust
+
+	: "${CARGO_HOME:=$HOME/.cargo}"
+	export CARGO_HOME
+
+	cargo vendor
+	patch --silent -p1 \
+		-d ./vendor/weechat/ \
+		< "$TERMUX_PKG_BUILDER_DIR"/weechat-rust-printf_date_tags.diff
+
+	patch --silent -p1 \
+		-d "$TERMUX_PKG_SRCDIR" \
+		< "$TERMUX_PKG_BUILDER_DIR"/patch-root-Cargo.diff
+
+	export BINDGEN_EXTRA_CLANG_ARGS="--sysroot ${TERMUX_STANDALONE_TOOLCHAIN}/sysroot"
+	case "${TERMUX_ARCH}" in
+		arm) BINDGEN_EXTRA_CLANG_ARGS+=" --target=arm-linux-androideabi${TERMUX_PKG_API_LEVEL}" ;;
+		*) BINDGEN_EXTRA_CLANG_ARGS+=" --target=${TERMUX_ARCH}-linux-android${TERMUX_PKG_API_LEVEL}" ;;
+	esac
+}
+
+termux_step_make() {
 	# cmake is needed for building of olm-sys by cargo internally
 	termux_setup_cmake
 
@@ -44,7 +67,7 @@ termux_step_make() {
 	printf "WeeChat Plugin API version: %s \n" "$WEECHAT_PLUGIN_API_VERSION"
 	[[ -z "$WEECHAT_PLUGIN_API_VERSION" ]] && exit 1
 
-	cargo build --jobs $TERMUX_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
+	cargo build --jobs $TERMUX_PKG_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
 }
 
 termux_step_make_install() {

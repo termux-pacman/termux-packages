@@ -2,14 +2,13 @@ TERMUX_PKG_HOMEPAGE=https://www.qemu.org
 TERMUX_PKG_DESCRIPTION="A generic and open source machine emulator and virtualizer"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=1:8.0.2
+TERMUX_PKG_VERSION=1:10.1.2
 TERMUX_PKG_SRCURL=https://download.qemu.org/qemu-${TERMUX_PKG_VERSION:2}.tar.xz
-TERMUX_PKG_SHA256=f060abd435fbe6794125e2c398568ffc3cfa540042596907a8b18edca34cf6a5
-TERMUX_PKG_DEPENDS="gdk-pixbuf, glib, gtk3, libbz2, libcairo, libcurl, libepoxy, libgmp, libgnutls, libiconv, libjpeg-turbo, liblzo, libnettle, libnfs, libpixman, libpng, libslirp, libspice-server, libssh, libusb, libusbredir, libx11, mesa, ncurses, pulseaudio, qemu-common, resolv-conf, sdl2, sdl2-image, virglrenderer, zlib, zstd"
-
+TERMUX_PKG_SHA256=9d75f331c1a5cb9b6eb8fd9f64f563ec2eab346c822cb97f8b35cd82d3f11479
+TERMUX_PKG_DEPENDS="alsa-lib, dtc, gdk-pixbuf, glib, jack2, gtk3, libbz2, libcairo, libcurl, libdw, libepoxy, libgmp, libgnutls, libiconv, libjpeg-turbo, liblzo, libnettle, libnfs, libpixman, libpng, libslirp, libspice-server, libssh, libusb, libusbredir, libx11, mesa, ncurses, pulseaudio, qemu-common, resolv-conf, sdl2 | sdl2-compat, sdl2-image, virglrenderer, zlib, zstd"
 # Required by configuration script, but I can't find any binary that uses it.
 TERMUX_PKG_BUILD_DEPENDS="libtasn1"
-
+TERMUX_PKG_ANTI_BUILD_DEPENDS="sdl2-compat"
 # Remove files already present in qemu-utils and qemu-common.
 TERMUX_PKG_RM_AFTER_INSTALL="
 bin/elf2dmp
@@ -75,15 +74,23 @@ termux_step_configure() {
 	local QEMU_TARGETS=""
 
 	# System emulation.
-	QEMU_TARGETS+="aarch64-softmmu,"
+	if [[ "$TERMUX_ARCH_BITS" == "64" ]]; then
+		QEMU_TARGETS+="aarch64-softmmu,"
+	fi
 	QEMU_TARGETS+="arm-softmmu,"
 	QEMU_TARGETS+="i386-softmmu,"
 	QEMU_TARGETS+="m68k-softmmu,"
-	QEMU_TARGETS+="ppc64-softmmu,"
+	if [[ "$TERMUX_ARCH_BITS" == "64" ]]; then
+		QEMU_TARGETS+="ppc64-softmmu,"
+	fi
 	QEMU_TARGETS+="ppc-softmmu,"
-	QEMU_TARGETS+="riscv32-softmmu,"
-	QEMU_TARGETS+="riscv64-softmmu,"
-	QEMU_TARGETS+="x86_64-softmmu"
+	if [[ "$TERMUX_ARCH_BITS" == "64" ]]; then
+		QEMU_TARGETS+="riscv32-softmmu,"
+		QEMU_TARGETS+="riscv64-softmmu,"
+		QEMU_TARGETS+="x86_64-softmmu"
+	else
+		QEMU_TARGETS+="riscv32-softmmu"
+	fi
 
 	CFLAGS+=" $CPPFLAGS"
 	CXXFLAGS+=" $CPPFLAGS"
@@ -123,12 +130,11 @@ termux_step_configure() {
 		--disable-xen-pci-passthrough \
 		--enable-virtfs \
 		--enable-curl \
-		--enable-fdt \
+		--enable-fdt=system \
 		--enable-kvm \
-		--disable-hax \
 		--disable-hvf \
 		--disable-whpx \
-		--enable-libnfs \
+		--disable-libnfs \
 		--enable-lzo \
 		--disable-snappy \
 		--enable-bzip2 \

@@ -4,7 +4,7 @@ TERMUX_PKG_LICENSE="PythonPL"
 TERMUX_PKG_MAINTAINER="@termux"
 _MAJOR_VERSION=2.7
 TERMUX_PKG_VERSION=${_MAJOR_VERSION}.18
-TERMUX_PKG_REVISION=13
+TERMUX_PKG_REVISION=15
 TERMUX_PKG_SRCURL=https://www.python.org/ftp/python/${TERMUX_PKG_VERSION}/Python-${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43
 TERMUX_PKG_DEPENDS="gdbm, libandroid-posix-semaphore, libandroid-support, libbz2, libcrypt, libffi, libsqlite, ncurses, ncurses-ui-libs, openssl, readline, zlib"
@@ -60,6 +60,8 @@ termux_step_pre_configure() {
 	export TERMUX_ORIG_PATH=$PATH
 	export PATH=$TERMUX_PKG_HOSTBUILD_DIR:$PATH
 
+	if [ $TERMUX_ARCH = i686 ] || [ $TERMUX_ARCH = arm ]; then LDFLAGS+=" -lm"; fi
+
 	# Needed when building with clang, as setup.py only probes
 	# gcc for include paths when finding headers for determining
 	# if extension modules should be built (specifically, the
@@ -74,9 +76,9 @@ termux_step_pre_configure() {
 termux_step_post_make_install() {
 	# Avoid file clashes with the python (3) package:
 	(cd $TERMUX_PREFIX/bin
-	 mv 2to3 2to3-${_MAJOR_VERSION}
-	 mv pydoc pydoc${_MAJOR_VERSION}
-	 ln -sf pydoc${_MAJOR_VERSION} pydoc2)
+	mv 2to3 2to3-${_MAJOR_VERSION}
+	mv pydoc pydoc${_MAJOR_VERSION}
+	ln -sf pydoc${_MAJOR_VERSION} pydoc2)
 	# Restore path which termux_step_host_build messed with
 	export PATH=$TERMUX_ORIG_PATH
 }

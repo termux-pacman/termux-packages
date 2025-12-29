@@ -1,17 +1,20 @@
-TERMUX_PKG_HOMEPAGE=https://picolisp.com/wiki/?home
+TERMUX_PKG_HOMEPAGE="https://picolisp.com/wiki/?home"
 TERMUX_PKG_DESCRIPTION="Lisp interpreter and application server framework"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="COPYING"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=23.6
-TERMUX_PKG_SRCURL=https://deb.debian.org/debian/pool/main/p/picolisp/picolisp_${TERMUX_PKG_VERSION}.orig.tar.gz
-TERMUX_PKG_SHA256=4985f4390fc5834e457a03957d347ae4a052bceb2c44eb130d35443999902334
+TERMUX_PKG_VERSION="25.9"
+TERMUX_PKG_SRCURL=https://software-lab.de/picoLisp-${TERMUX_PKG_VERSION}.tgz
+TERMUX_PKG_SHA256=904122dd74aee62791211dff64ffd1490ae9849efcd0c6babbec4c21d1536de7
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libcrypt, libffi, openssl, readline"
 TERMUX_PKG_BUILD_IN_SRC=true
 # For 32-bit archs we nees to build minipicolisp
-TERMUX_PKG_BLACKLISTED_ARCHES="arm, i686"
+TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
 
 termux_step_make() {
+	sed -i "s|/usr/lib/picolisp/lib.l|${TERMUX_PREFIX}/lib/picolisp/lib.l|" $TERMUX_PKG_SRCDIR/bin/pil
+	sed -i "s|/usr/lib/picolisp/lib.l|${TERMUX_PREFIX}/lib/picolisp/lib.l|" $TERMUX_PKG_SRCDIR/bin/vip
 	cd $TERMUX_PKG_SRCDIR/src
 	$CC -O3 -c -emit-llvm base.ll
 	$CC -O3 -w -c -D_OS="\"Android\"" -D_CPU="\"$TERMUX_ARCH\"" `$PKGCONFIG --cflags libffi` -emit-llvm lib.c
@@ -34,16 +37,17 @@ termux_step_make() {
 	$CC -O3 -w -D_OS="\"Android\"" -D_CPU="\"$TERMUX_ARCH\"" $CFLAGS -I$TERMUX_PREFIX/include -L$TERMUX_PREFIX/lib $LDFLAGS sysdefs.c -o ../bin/sysdefs-gen
 
 	$STRIP ../bin/balance
-	$STRIP ../bin/ssl
 	$STRIP ../bin/httpGate
+	$STRIP ../bin/ssl
 	$STRIP ../bin/sysdefs-gen
+	# psh, pty, vip, watchdog are not stripped as they are plaintext lisp files
 }
 
 termux_step_make_install() {
 	cd $TERMUX_PKG_SRCDIR/src
 
 	install -Dm755 -t $TERMUX_PREFIX/bin ../bin/{picolisp,pil}
-	install -Dm755 -t $TERMUX_PREFIX/lib/picolisp/bin ../bin/{balance,httpGate,psh,ssl,sysdefs-gen,vip,watchdog}
+	install -Dm755 -t $TERMUX_PREFIX/lib/picolisp/bin ../bin/{balance,httpGate,pty,psh,ssl,sysdefs-gen,vip,watchdog}
 	install -Dm644 -t $TERMUX_PREFIX/lib/picolisp ../{ext.l,lib.css,lib.l}
 	install -Dm644 -t $TERMUX_PREFIX/share/man/man1 ../man/man1/*.1
 

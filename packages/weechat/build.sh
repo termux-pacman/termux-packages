@@ -4,35 +4,54 @@ TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
 # `weechat-python-plugin` depends on libpython${TERMUX_PYTHON_VERSION}.so.
 # Please revbump and rebuild when bumping TERMUX_PYTHON_VERSION.
-TERMUX_PKG_VERSION=4.0.1
-TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_VERSION="4.7.1"
 TERMUX_PKG_SRCURL=https://www.weechat.org/files/src/weechat-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=1b9533123af427922b3d7fabede958dc85392d50881d97d0b7986d8f514556e9
-TERMUX_PKG_DEPENDS="libiconv, ncurses, libgcrypt, libcurl, libgnutls, libandroid-support, zlib, zstd"
+TERMUX_PKG_SHA256=e83fb71ca251c5dd74bd9c5a6bd3f85dc2eb8ecec0955f43c07f3e0911edb7d3
+TERMUX_PKG_DEPENDS="libandroid-support, libcurl, libgcrypt, libgnutls, libiconv, ncurses, zlib, zstd"
 TERMUX_PKG_BREAKS="weechat-dev"
 TERMUX_PKG_REPLACES="weechat-dev"
-TERMUX_PKG_RM_AFTER_INSTALL="bin/weechat-curses share/man/man1/weechat-headless.1 share/icons"
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_RM_AFTER_INSTALL="
+bin/weechat-curses
+share/icons
+share/man/man1/weechat-headless.1
+"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
--DCA_FILE=$TERMUX_PREFIX/etc/tls/cert.pem
+-DGETTEXT_FOUND=ON
+-DENABLE_CJSON=OFF
+-DENABLE_GUILE=OFF
 -DENABLE_HEADLESS=OFF
+-DENABLE_JAVASCRIPT=OFF
 -DENABLE_LUA=ON
 -DENABLE_MAN=ON
 -DENABLE_PERL=ON
--DENABLE_PYTHON3=ON
--DENABLE_TCL=OFF
+-DENABLE_PYTHON=ON
 -DENABLE_PHP=OFF
 -DENABLE_RUBY=ON
--DENABLE_JAVASCRIPT=OFF
--DENABLE_GUILE=OFF
 -DENABLE_SPELL=OFF
+-DENABLE_TCL=OFF
 -DENABLE_TESTS=OFF
--DSTRICT=ON
 -DMSGFMT_EXECUTABLE=$(command -v msgfmt)
 -DMSGMERGE_EXECUTABLE=$(command -v msgmerge)
 -DXGETTEXT_EXECUTABLE=$(command -v xgettext)
--DLIBGCRYPT_CONFIG_EXECUTABLE=$TERMUX_PREFIX/bin/libgcrypt-config
+-DDL_LIBRARY=0
 "
 
 termux_step_pre_configure() {
-	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DPKG_CONFIG_EXECUTABLE=$PKG_CONFIG"
+	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DPKG_CONFIG_EXECUTABLE=${PKG_CONFIG}"
+
+	local _Ruby_API_VERSION=$(
+		. $TERMUX_SCRIPTDIR/packages/ruby/build.sh
+		echo "$(echo $TERMUX_PKG_VERSION | cut -d . -f 1-2).0"
+	)
+	local _Ruby_INCLUDE_DIR="$TERMUX_PREFIX/include/ruby-$_Ruby_API_VERSION"
+	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DRuby_INCLUDE_DIR=$_Ruby_INCLUDE_DIR"
+	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DRuby_CONFIG_INCLUDE_DIR=$_Ruby_INCLUDE_DIR"
+	if [ "$TERMUX_ARCH" == "arm" ]; then
+		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+="/$TERMUX_ARCH-linux-androideabi"
+	else
+		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+="/$TERMUX_ARCH-linux-android"
+	fi
+
+	LDFLAGS+=" -ldl"
 }

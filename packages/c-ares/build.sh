@@ -1,10 +1,10 @@
-TERMUX_PKG_HOMEPAGE=https://c-ares.haxx.se
+TERMUX_PKG_HOMEPAGE=https://c-ares.org/
 TERMUX_PKG_DESCRIPTION="Library for asynchronous DNS requests (including name resolves)"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.19.1"
-TERMUX_PKG_SRCURL=https://github.com/c-ares/c-ares/archive/cares-${TERMUX_PKG_VERSION//./_}.tar.gz
-TERMUX_PKG_SHA256=9eadec0b34015941abdf3eb6aead694c8d96a192a792131186a7e0a86f2ad6d9
+TERMUX_PKG_VERSION="1.34.6"
+TERMUX_PKG_SRCURL=https://github.com/c-ares/c-ares/archive/v$TERMUX_PKG_VERSION.tar.gz
+TERMUX_PKG_SHA256=4358939ff800b13b92f37d5fdda003718101faedfbdee792d6b79ddc1a53d890
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+.\d+.\d+"
 TERMUX_PKG_DEPENDS="resolv-conf"
@@ -13,6 +13,10 @@ TERMUX_PKG_REPLACES="c-ares-dev"
 # Build with cmake to install cmake/c-ares/*.cmake files:
 TERMUX_PKG_FORCE_CMAKE=true
 TERMUX_PKG_RM_AFTER_INSTALL="bin/"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCMAKE_INSTALL_LIBDIR=$TERMUX__PREFIX__LIB_SUBDIR
+-DCMAKE_INSTALL_INCLUDEDIR=$TERMUX__PREFIX__INCLUDE_SUBDIR
+"
 
 termux_step_post_get_source() {
 	# Do not forget to bump revision of reverse dependencies and rebuild them

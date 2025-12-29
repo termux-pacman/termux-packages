@@ -2,27 +2,33 @@ TERMUX_PKG_HOMEPAGE=https://www.gtk.org/
 TERMUX_PKG_DESCRIPTION="GObject-based multi-platform GUI toolkit"
 TERMUX_PKG_LICENSE="LGPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-_MAJOR_VERSION=4.10
-TERMUX_PKG_VERSION=${_MAJOR_VERSION}.4
-TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL=https://download.gnome.org/sources/gtk/${_MAJOR_VERSION}/gtk-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=7725400482e0685e28265e226c62847f4e73cfca9e9b416ac5838207f5377a24
-TERMUX_PKG_DEPENDS="adwaita-icon-theme, fontconfig, fribidi, gdk-pixbuf, glib, glib-bin, graphene, gtk-update-icon-cache, harfbuzz, libcairo, libepoxy, libjpeg-turbo, libpng, libtiff, libx11, libxcursor, libxdamage, libxext, libxfixes, libxi, libxinerama, libxrandr, pango, shared-mime-info"
-TERMUX_PKG_BUILD_DEPENDS="g-ir-scanner, xorgproto"
+TERMUX_PKG_VERSION="4.20.3"
+TERMUX_PKG_SRCURL=https://download.gnome.org/sources/gtk/${TERMUX_PKG_VERSION%.*}/gtk-${TERMUX_PKG_VERSION}.tar.xz
+TERMUX_PKG_SHA256=2873f2903088a66c71173ea2ed85ffae266a66b972c3a4842bbb2f6f187ec153
+TERMUX_PKG_DEPENDS="adwaita-icon-theme, fontconfig, fribidi, gdk-pixbuf, glib, graphene, gtk-update-icon-cache, harfbuzz, iso-codes, libcairo, libdrm, libepoxy, libjpeg-turbo, libpng, librsvg, libtiff, libwayland, libx11, libxcursor, libxdamage, libxext, libxfixes, libxi, libxinerama, libxkbcommon, libxrandr, pango, shared-mime-info"
+TERMUX_PKG_BUILD_DEPENDS="g-ir-scanner, glib-cross, libwayland-protocols, libwayland-cross-scanner, xorgproto"
 TERMUX_PKG_RECOMMENDS="desktop-file-utils, librsvg, ttf-dejavu"
+TERMUX_PKG_VERSIONED_GIR=false
 TERMUX_PKG_DISABLE_GIR=false
+# Prevent updating to unstable branch
+TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
--Dintrospection=enabled
--Dwayland-backend=false
--Ddemos=false
--Dbuild-testsuite=false
+-Dbuild-demos=true
 -Dbuild-examples=false
 -Dbuild-tests=false
--Dvulkan=disabled
--Dprint-cups=disabled
+-Dbuild-testsuite=false
+-Dintrospection=enabled
 -Dmedia-gstreamer=disabled
+-Dprint-cups=disabled
+-Dvulkan=disabled
+-Dwayland-backend=true
+-Dx11-backend=true
+-Dwayland-backend=true
 "
 
 termux_step_pre_configure() {
+	termux_setup_cmake
 	termux_setup_gir
+	termux_setup_ninja
+	termux_setup_pkg_config_wrapper "${TERMUX_PREFIX}/opt/glib/cross/lib/x86_64-linux-gnu/pkgconfig:${TERMUX_PREFIX}/opt/libwayland/cross/lib/x86_64-linux-gnu/pkgconfig"
 }

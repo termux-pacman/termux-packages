@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Library for computing the Discrete Fourier Transform (DF
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=3.3.10
-TERMUX_PKG_REVISION=3
+TERMUX_PKG_REVISION=4
 TERMUX_PKG_SRCURL=http://www.fftw.org/fftw-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
 TERMUX_PKG_BREAKS="fftw-dev"
@@ -22,6 +22,6 @@ termux_step_post_make_install() {
 		TERMUX_PKG_EXTRA_CONFIGURE_ARGS="$COMMON_ARGS --enable-$feature"
 		rm -Rf $TERMUX_PKG_TMPDIR/config-scripts
 		termux_step_configure
-		make -j $TERMUX_MAKE_PROCESSES install
+		make -j $TERMUX_PKG_MAKE_PROCESSES install
 	done
 }

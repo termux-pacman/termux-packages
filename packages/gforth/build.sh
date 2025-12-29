@@ -3,8 +3,8 @@ TERMUX_PKG_DESCRIPTION="The Forth implementation of the GNU project"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=0.7.3
-TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL=https://ftp.gnu.org/gnu/gforth/gforth-${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_REVISION=3
+TERMUX_PKG_SRCURL=https://mirrors.kernel.org/gnu/gforth/gforth-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=2f62f2233bf022c23d01c920b1556aa13eab168e3236b13352ac5e9f18542bb0
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
@@ -20,7 +20,7 @@ ac_cv_func_memcmp_working=yes
 skipcode=no
 --without-check
 "
-TERMUX_MAKE_PROCESSES=1
+TERMUX_PKG_MAKE_PROCESSES=1
 TERMUX_PKG_HOSTBUILD=true
 
 termux_step_host_build() {
@@ -29,7 +29,7 @@ termux_step_host_build() {
 
 	find $TERMUX_PKG_SRCDIR -mindepth 1 -maxdepth 1 -exec cp -a \{\} ./ \;
 	./configure --prefix=$_PREFIX_FOR_BUILD CC="gcc -m$TERMUX_ARCH_BITS"
-	make -j $TERMUX_MAKE_PROCESSES
+	make -j $TERMUX_PKG_MAKE_PROCESSES
 	make install
 }
 

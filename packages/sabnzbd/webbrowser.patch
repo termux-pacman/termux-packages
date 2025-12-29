@@ -19,10 +19,10 @@ index 6e4b61f72..017dc9407 100644
          if url and not url.startswith("http"):
              url = "file:///%s" % url
 -        if webbrowser:
--            webbrowser.open(url, 2, 1)
+-            webbrowser.open(url, 2, True)
 -        else:
 -            logging.info("Not showing panic message in webbrowser, no support found")
 +        subprocess.call(["termux-open-url", url])
-     except:
+     except Exception:
          logging.warning(T("Cannot launch the browser, probably not found"))
          logging.info("Traceback: ", exc_info=True)

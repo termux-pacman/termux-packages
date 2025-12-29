@@ -1,13 +1,17 @@
 TERMUX_PKG_HOMEPAGE=https://redis.io/
 TERMUX_PKG_DESCRIPTION="In-memory data structure store used as a database, cache and message broker"
-TERMUX_PKG_LICENSE="BSD 3-Clause"
+TERMUX_PKG_LICENSE="AGPL-V3"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=7.0.12
-TERMUX_PKG_SRCURL=https://download.redis.io/releases/redis-$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
+TERMUX_PKG_VERSION="1:8.4.0"
+TERMUX_PKG_SRCURL=https://download.redis.io/releases/redis-${TERMUX_PKG_VERSION:2}.tar.gz
+TERMUX_PKG_SHA256=ca909aa15252f2ecb3a048cd086469827d636bf8334f50bb94d03fba4bfc56e8
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libandroid-execinfo, libandroid-glob"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_CONFFILES="etc/redis.conf"
+TERMUX_PKG_BREAKS="valkey"
+TERMUX_PKG_CONFLICTS="valkey"
+TERMUX_PKG_REPLACES="valkey"
 
 termux_step_pre_configure() {
 	export PREFIX=$TERMUX_PREFIX

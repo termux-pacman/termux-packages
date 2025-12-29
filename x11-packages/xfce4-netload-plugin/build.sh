@@ -1,10 +1,13 @@
 TERMUX_PKG_HOMEPAGE=https://docs.xfce.org/panel-plugins/xfce4-netload-plugin/start
 TERMUX_PKG_DESCRIPTION="network load monitor plugin for the Xfce4 panel"
 TERMUX_PKG_LICENSE="GPL-2.0"
-TERMUX_PKG_MAINTAINER="Yisus7u7 <dev.yisus@hotmail.com>"
-_MAJOR_VERSION=1.4
-TERMUX_PKG_VERSION=${_MAJOR_VERSION}.1
-TERMUX_PKG_SRCURL=https://archive.xfce.org/src/panel-plugins/xfce4-netload-plugin/${_MAJOR_VERSION}/xfce4-netload-plugin-${TERMUX_PKG_VERSION}.tar.bz2
-TERMUX_PKG_SHA256=9fac3a3ad52e18584bfb127cd1721d56de1004b9fdd140915fded89704ccb44e
-TERMUX_PKG_DEPENDS="atk, gdk-pixbuf, glib, gtk3, harfbuzz, libcairo, libxfce4ui, libxfce4util, pango, xfce4-panel, zlib"
-TERMUX_PKG_BUILD_IN_SRC=true
+TERMUX_PKG_MAINTAINER="@Yisus7u7"
+TERMUX_PKG_VERSION="1.5.0"
+TERMUX_PKG_REVISION=1
+TERMUX_PKG_SRCURL=https://archive.xfce.org/src/panel-plugins/xfce4-netload-plugin/${TERMUX_PKG_VERSION%.*}/xfce4-netload-plugin-${TERMUX_PKG_VERSION}.tar.xz
+TERMUX_PKG_SHA256=a868be8f73e8396c2d61903d46646993c5130d16ded71ddb5da9088abf7cb7ba
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="glib, gtk3, libxfce4ui, libxfce4util, xfce4-panel"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-Dtests=false
+"

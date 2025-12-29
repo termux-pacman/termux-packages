@@ -3,9 +3,10 @@ TERMUX_PKG_DESCRIPTION="Nim programming language compiler"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="copying.txt"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2.0.0
+TERMUX_PKG_VERSION=2.2.4
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://nim-lang.org/download/nim-$TERMUX_PKG_VERSION.tar.xz
-TERMUX_PKG_SHA256=bd6101d840036fb78e93a69df6cf3f9fd0c21cd754b695ff84a3b4add8ed0af7
+TERMUX_PKG_SHA256=f82b419750fcce561f3f897a0486b180186845d76fb5d99f248ce166108189c7
 TERMUX_PKG_DEPENDS="clang, git, libandroid-glob, openssl"
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_BUILD_IN_SRC=true
@@ -21,7 +22,7 @@ tools/nimgrep
 
 termux_step_host_build() {
 	cp -r ../src/* ./
-	make -j $TERMUX_MAKE_PROCESSES CC=gcc LD=gcc
+	make -j $TERMUX_PKG_MAKE_PROCESSES CC=gcc LD=gcc
 }
 
 termux_step_make() {
@@ -46,13 +47,14 @@ termux_step_make() {
 		sed -i 's/arm64/amd64/g' makefile
 	fi
 	export CFLAGS=" $CPPFLAGS $CFLAGS  -w  -fno-strict-aliasing"
-	make LD=$CC uos=linux mycpu=$NIM_ARCH myos=android  -j $TERMUX_MAKE_PROCESSES useShPath=$TERMUX_PREFIX/bin/sh
+	make LD=$CC uos=linux mycpu=$NIM_ARCH myos=android  -j $TERMUX_PKG_MAKE_PROCESSES useShPath=$TERMUX_PREFIX/bin/sh
 	cp config/nim.cfg ../host-build/config
 
 	for cmd in $_NIM_TOOLS; do
 		pushd $(dirname $cmd)
 		case $cmd in
 			koch) nim_flags="--opt:size" ;;
+			dist/nimble/src/nimble) nim_flags="-d:nimNimbleBootstrap" ;; # See: https://github.com/nim-lang/nimble/issues/1248
 			*) nim_flags= ;;
 		esac
 		nim --cc:clang --clang.exe=$CC --clang.linkerexe=$CC $nim_flags --define:termux -d:release -d:sslVersion=3 --os:android --cpu:$NIM_ARCH  -t:"$CPPFLAGS $CFLAGS" -l:"$LDFLAGS -landroid-glob" -d:tempDir:$TERMUX_PREFIX/tmp c $(basename $cmd).nim

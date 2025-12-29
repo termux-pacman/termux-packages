@@ -5,20 +5,144 @@ on:
     - master
     paths:
     - '.github/workflows/repo-update.yml'
+    - 'pkgignore'
+  pull_request:
+    paths:
+    - '.github/workflows/repo-update.yml'
+    - 'pkgignore'
   schedule:
     - cron:  '0,30 0-23 * * *'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
+  check-repo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target_repo: [main@aarch64, main@arm, main@i686, main@x86_64, x11@aarch64, x11@arm, x11@i686, x11@x86_64, root@aarch64, root@arm, root@i686, root@x86_64]
+      fail-fast: false
+    steps:
+    - name: Clone check-tools
+      run: git clone "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/check-tools"
+    - name: Import key of Termux-Pacman
+      run: gpg --keyserver keyserver.ubuntu.com --recv-keys 998de27318e867ea976ba877389ceed64573dfca
+    - name: Clone termux-packages
+      run: |
+        cd check-tools
+        bash ./clone_repos.sh
+    - name: Running a scan
+      run: |
+        target_repo='${{ matrix.target_repo }}'
+        REPO="${target_repo%%@*}"
+        ARCH="${target_repo#*@}"
+        TOTAL="RESULT.${REPO}.${ARCH}"
+
+        DIR_REPO="termux-packages-repo/"
+        case "$REPO" in
+          "main") DIR_REPO+="packages";;
+          "x11") DIR_REPO+="x11-packages";;
+          "root") DIR_REPO+="root-packages";;
+          *)
+            echo "Error: repo '${REPO}' is unknown"
+            exit 0;;
+        esac
+
+        cd check-tools
+        if [ ! -d "$DIR_REPO" ]; then
+          echo "Error: '$DIR_REPO' not found."
+          exit 0
+        fi
+
+        bash ./check_pkgs_by_repo.sh "$REPO" "$ARCH" "$DIR_REPO"
+
+        # Removing packages...
+        DELETED_FILE="./output/$(date +%s)-deleted_termux-${REPO}_packages.txt"
+        for reason in NOTSUPPORTARCH UNKNOWN; do
+          infofile="./output/${reason}.${REPO}.${ARCH}"
+          if [ -f "${infofile}" ]; then
+            cat "${infofile}" >> "${DELETED_FILE}"
+          fi
+        done
+        if [ -f "${DELETED_FILE}" ]; then
+          # Install aws-cli
+          git clone https://github.com/termux-pacman/aws-cli-action
+          ./aws-cli-action/setup.sh '${{ secrets.AWS_ACCESS_KEY_ID }}' '${{ secrets.AWS_ACCESS_KEY }}' '${{ secrets.AWS_REGION }}'
+
+          # Import gpg key
+          mkdir gk
+          echo "${{ secrets.SF_GPG_BOT }}" > gk/termux-pacman-bot.gpg
+          gpg --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --import gk/termux-pacman-bot.gpg
+          rm -fr gk
+
+          # Upload file
+          echo "$(sed '/^[[:space:]]*$/d' ${DELETED_FILE} | sort | uniq)" > "${DELETED_FILE}"
+          gpg --batch --pinentry-mode=loopback --passphrase '${{ secrets.PW_GPG_BOT }}' --detach-sign --use-agent -u '${{ secrets.KEY_GPG_BOT }}' --no-armor "${DELETED_FILE}"
+          for format_file in "" ".sig"; do
+            aws s3 cp "${DELETED_FILE}${format_file}" s3://'${{ secrets.SFPU }}'/${REPO}/${ARCH}/"${DELETED_FILE##*/}${format_file}"
+          done
+          rm "${DELETED_FILE}.sig"
+        fi
+
+        mkdir total
+        touch ./total/${TOTAL}
+        for RESULT in "./output/"{NOTFOUND,DOESNOTMATCH}".${REPO}.${ARCH}"; do
+          if [ -f ${RESULT} ]; then
+            cat ${RESULT} | awk '{printf $1 "\n"}' >> ./total/${TOTAL}
+          fi
+        done
+        tar cf total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz ./total
+    - name: Store RESULT.* files
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: total-${{ matrix.target_repo }}-${{ github.sha }}
+        path: ./check-tools/total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz
+        if-no-files-found: error
+
   update-repo:
+    needs: check-repo
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
+      run: git clone -b "${{ github.head_ref || github.ref_name }}" https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
+    - name: Get RESULT.* files
+      uses: actions/download-artifact@v4.1.7
+      with:
+        path: ./
+    - name: Creating a REBUILD-LIST-BUILD
       run: |
-        git clone https://github.com/termux-pacman/termux-packages.git
-        mv termux-packages termux-packages-pacman
+        for i in ./total-*/total-*.tar.gz; do
+          tar xf $i -C ./
+        done
+        rm -fr ./total-*/
+        touch ./REBUILD-LIST-BUILD
+        cd termux-packages-pacman
+        for i in $(sort ../total/RESULT.* | uniq); do
+          BUILD_SOURCE="$(ls */${i}/build.sh 2> /dev/null)" || true
+          if [ -z "${BUILD_SOURCE}" ]; then
+            BUILD_SOURCE="$(ls */*/${i}.subpackage.sh 2> /dev/null)" || true
+            if [ -n "${BUILD_SOURCE}" ]; then
+              BUILD_SOURCE="$(dirname ${BUILD_SOURCE})/build.sh"
+            else
+              echo "Source package '${i}' was not found, skip"
+              continue
+            fi
+          fi
+          if ! grep -q "^${BUILD_SOURCE}$" ../REBUILD-LIST-BUILD && \
+            [ $(($(expr $(expr $(date +%s) - $(git log -n 1 --date=format:'%s' --format=%cd -- $(dirname ${BUILD_SOURCE}))) / 3600) > 8)) = 1 ]; then
+            echo "${BUILD_SOURCE}" >> ../REBUILD-LIST-BUILD
+          fi
+        done
+        cd ..
     - name: Clone root repository
       run: git clone https://github.com/termux/termux-packages.git
     - name: Update repo
+      env:
+        GITHUB_EVENT: ${{ github.event_name }}
+        GH_TOKEN: ${{ secrets.TOKEN }}
       run: |
         info() {
           echo "==> $1"
@@ -26,26 +150,38 @@ jobs:
         commit() {
           echo "-> $1"
         }
-        
+        install_list_issues() {
+          if [ -f ../LIST-ISSUES ]; then
+            rm ../LIST-ISSUES
+          fi
+          curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
+            "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
+          cat ../LIST-ISSUES
+        }
+
         # Edit
         info "Edit"
         cd termux-packages-pacman
         rm -fr */
         cd ../termux-packages
         cp -r * ../termux-packages-pacman
-        
+
         # Get list pkg
         info "Get list pkg"
         cd ../termux-packages-pacman
         list_files=" "
         for i in $(git status -s packages root-packages x11-packages | awk '{print $2}'); do
           dir_sp=(${i//// })
-          if [[ ! $(echo "$list_files" | grep " ${dir_sp[0]}/${dir_sp[1]} ") ]]; then
+          if ! grep -q " ${dir_sp[0]}/${dir_sp[1]} " <<< "$list_files" && ! grep -q "^${dir_sp[1]}$" ./pkgignore; then
             list_files+="${dir_sp[0]}/${dir_sp[1]} "
+            source_build="${dir_sp[0]}/${dir_sp[1]}/build.sh"
+            if grep -q "^${source_build}$" ../REBUILD-LIST-BUILD; then
+              sed -i "/^${source_build////'\/'}$/d" ../REBUILD-LIST-BUILD
+            fi
           fi
         done
         list_files=($list_files)
-        
+
         # Sort list pkg
         info "Sort list pkg"
         cd ../termux-packages
@@ -53,9 +189,9 @@ jobs:
         list_sort=""
         list_sha=""
         for i in ${list_files[@]}; do
-          sha_file=$(git log -n 1 --pretty=format:%H -- $i)
+          sha_file="$(git log -n 1 --pretty=format:%H -- $i)"
           value="$(git rev-list --count $sha_file)"
-          list_values[${value}]=$((${list_values[${value}]}+1))
+          list_values[${value}]="$((${list_values[${value}]}+1))"
           list_sort+="${value}-${list_values[${value}]} "
           list_sha+="${sha_file} "
         done
@@ -71,7 +207,7 @@ jobs:
         }
         sort_list_files=""
         for i in ${copy_list_sort[@]}; do
-          index=$(search_index "$i")
+          index="$(search_index "$i")"
           if [[ "${i#*-}" = "1" ]]; then
             sort_list_files+=" ${list_sha[$index]}###"
           else
@@ -79,30 +215,105 @@ jobs:
           fi
           sort_list_files+="${list_files[$index]}"
         done
-        
+
         # Start upload
         info "Start upload"
         cd ../termux-packages-pacman
+        needbuild=false
+        if git log -1 --pretty=%B | grep -q '%needbuild'; then
+          needbuild=true
+        fi
         git config --global user.name "termux-pacman-bot"
         git config --global user.email "termux-pacman-bot@outlook.com"
-        git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages-pacman.git"
+        git remote set-url origin "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/termux-packages.git"
         commit "Update system repo"
         git add .
-        git reset packages root-packages x11-packages README.md SECURITY.md
+        git reset packages root-packages x11-packages README.md SECURITY.md repo.json pkgignore
         {
           git commit -m "Update repo"
-          git push origin master
+          if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+            git push origin master
+          fi
         } || true
         commit "Update repo packages"
+        install_list_issues
         for i in $sort_list_files; do
           i_sp=(${i//###/ })
           commit "    ${i_sp[1]}"
           cd ../termux-packages
           commit_file="$(git show -s --format=%B ${i_sp[0]})"
           cd ../termux-packages-pacman
-          git add $(echo ${i_sp[1]} | sed 's/&&/ /g')
+          git add $(sed 's/&&/ /g' <<< "${i_sp[1]}")
           {
-            git commit -m "$commit_file"
-            git push origin master
+            if $needbuild; then
+              git commit -m "$(sed 's/%ci:no-build//g; s/\[skip ci\]//g' <<< $commit_file)"
+            else
+              git commit -m "$commit_file"
+            fi
+            if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+              git push origin master
+            fi
           } || true
+          for j in $(sed 's/&&/ /g' <<< "${i_sp[1]}"); do
+            while read LINE; do
+              if [[ "$(awk -F ' // ' '{printf $1}' <<< "$LINE")" != "termux-pacman-bot" || \
+                "$(awk -F ' // ' '{printf $2}' <<< "$LINE")" != "open" || \
+                "$(awk -F ' // ' '{printf $4}' <<< "$LINE")" != "[AUTO-CHECK]: failed to recompile ${j}" ]]; then
+                continue
+              fi
+              NUMBER="$(awk -F ' // ' '{printf $3}' <<< "$LINE")"
+              commit "Close the issue \#${NUMBER} on ${pkgdir}"
+              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                gh issue close "${NUMBER}" \
+                  -c "The package has been updated - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${j})."
+              fi
+              install_list_issues
+              break
+            done <<< $(jq -r '.[] | "\(.user.login) \("//") \(.state) \("//") \(.number) \("//") \(.title)"' ../LIST-ISSUES)
+          done
         done
+        git checkout -f
+        git clean -fd
+
+        # Recompile packages if necessary
+        info "Rebuild packages"
+        listchanged=""
+        for i in $(cat ../REBUILD-LIST-BUILD); do
+          # It is necessary to create an issue because the package has
+          # a compilation error even after recompilation.
+          pkgdir="$(dirname ${i})"
+          if [[ "$(git log -n 1 --format=%B -- "${i}")" = "rebuild(${pkgdir}): auto check by @termux-pacman-bot" && \
+            "$(git log -n 1 --format=%an -- "${i}")" = "termux-pacman-bot" && \
+            "$(git log -n 1 --format=%ae -- "${i}")" = "termux-pacman-bot@outlook.com" ]]; then
+            if ! jq -r '.[] | "\(.user.login) \("/") \(.state) \("/") \(.title)"' ../LIST-ISSUES | grep -q "^termux-pacman-bot / open / \[AUTO-CHECK\]:.*${pkgdir}$"; then
+              commit "Create an issue on ${pkgdir}"
+              if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+                gh issue create \
+                  --title "[AUTO-CHECK]: failed to recompile ${pkgdir}" \
+                  --body "$(echo -e "This issue was automatically generated because the '${pkgdir}' package was not recompiled successfully.\n\nCommit by recompilation - https://github.com/termux-pacman/termux-packages/commit/$(git log -n 1 --format=%H -- ${i})")" \
+                  --label "auto recompilation failed" \
+                  --assignee Maxython
+              fi
+            fi
+            continue
+          fi
+          echo "" >> ./${i}
+          git add ./${i}
+          listchanged+=" ${i}"
+        done
+        if [ -n "${listchanged}" ]; then
+          git commit -m "$(echo -e "termux-pacman/auto-check-repo: preparing to recompile packages\n[skip ci]")"
+          if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+            git push origin master
+          fi
+          for i in ${listchanged}; do
+            pkgdir="$(dirname ${i})"
+            commit "Rebuild ${pkgdir}"
+            sed -i '$d' ./${i}
+            git add ./${i}
+            git commit -m "rebuild(${pkgdir}): auto check by @termux-pacman-bot"
+            if [ "${GITHUB_EVENT}" != "pull_request" ]; then
+              git push origin master
+            fi
+          done
+        fi

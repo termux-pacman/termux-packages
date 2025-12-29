@@ -1,75 +1,75 @@
-TERMUX_PKG_HOMEPAGE=https://github.com/wasmerio/wasmer
+TERMUX_PKG_HOMEPAGE=https://wasmer.io/
 TERMUX_PKG_DESCRIPTION="A fast and secure WebAssembly runtime"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_LICENSE_FILE="ATTRIBUTIONS, LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=3.2.1
-TERMUX_PKG_SRCURL=https://github.com/wasmerio/wasmer/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=fe4258f4456c2b5743cfddfa9f9743c2c0982f21637ac204ef62e0223f2f4c2a
-TERMUX_PKG_RECOMMENDS="wapm"
+TERMUX_PKG_VERSION="6.1.0"
+TERMUX_PKG_SRCURL=https://github.com/wasmerio/wasmer/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=7bccb5b86724ea35ca9373fb81092080a615c1baa6129a8eeee9ed3e3f74b9b1
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
+TERMUX_PKG_AUTO_UPDATE=true
 
 # missing support in wasmer-emscripten, wasmer-vm
-TERMUX_PKG_BLACKLISTED_ARCHES="arm, i686"
+TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
 
 termux_step_pre_configure() {
 	# https://github.com/rust-lang/compiler-builtins#unimplemented-functions
 	# https://github.com/rust-lang/rfcs/issues/2629
 	# https://github.com/rust-lang/rust/issues/46651
 	# https://github.com/termux/termux-packages/issues/8029
-	RUSTFLAGS+=" -C link-arg=$(${CC} -print-libgcc-file-name)"
+	local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+	export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$(${CC} -print-libgcc-file-name)"
 	export WASMER_INSTALL_PREFIX="${TERMUX_PREFIX}"
 	termux_setup_rust
 }
 
 termux_step_make() {
+	local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+
 	# https://github.com/wasmerio/wasmer/blob/master/Makefile
 	# Makefile only does host builds
 	# Dropping host build due to https://github.com/wasmerio/wasmer/issues/2822
 
 	local compilers="cranelift"
 
-	# TODO llvm-sys.rs crate has issues with llvm-config
+	# TODO llvm-sys.rs crate has issues with libLLVM*.so as static archive
 	#compilers+=",llvm"
 	#export LLVM_VERSION=$(${TERMUX_PREFIX}/bin/llvm-config --version)
 	#export LLVM_SYS_140_PREFIX=$(${TERMUX_PREFIX}/bin/llvm-config --prefix)
 
-	if [[ "${TERMUX_ARCH}" == "aarch64" ]] || \
-		[[ "${TERMUX_ARCH}" == "x86_64" ]]; then
-		compilers+=",singlepass"
-	fi
+	case "${TERMUX_ARCH}" in
+	aarch64) compilers+=",singlepass" ;;
+	x86_64) compilers+=",singlepass" ;;
+	esac
 
 	local compiler_features="${compilers},wasmer-artifact-create,static-artifact-create,wasmer-artifact-load,static-artifact-load"
 	local capi_compiler_features="${compilers/,llvm/},wasmer-artifact-create,static-artifact-create,wasmer-artifact-load,static-artifact-load"
 
-	# error: none of the selected packages contains these features
-	#compiler_features+=",engine,middlewares"
-
-	# make build-wasmer
+	echo "make build-wasmer"
 	# https://github.com/wasmerio/wasmer/blob/master/lib/cli/Cargo.toml
 	cargo build \
-		--jobs "${TERMUX_MAKE_PROCESSES}" \
+		--jobs "${TERMUX_PKG_MAKE_PROCESSES}" \
 		--target "${CARGO_TARGET_NAME}" \
 		--release \
 		--manifest-path lib/cli/Cargo.toml \
 		--no-default-features \
-		--features "wat,wast,cache,wasi,emscripten,${compiler_features},webc_runner" \
+		--features "wat,wast,${compiler_features}" \
 		--bin wasmer
 
-	# make build-capi
+	echo "make build-capi"
 	cargo build \
-		--jobs "${TERMUX_MAKE_PROCESSES}" \
+		--jobs "${TERMUX_PKG_MAKE_PROCESSES}" \
 		--target "${CARGO_TARGET_NAME}" \
 		--release \
 		--manifest-path lib/c-api/Cargo.toml \
 		--no-default-features \
 		--features "wat,compiler,wasi,middlewares,webc_runner,${capi_compiler_features}"
 
-	# make build-wasmer-headless-minimal
-	RUSTFLAGS="${RUSTFLAGS} -C panic=abort" \
+	echo "make build-wasmer-headless-minimal"
+	export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C panic=abort"
 	cargo build \
-		--jobs "${TERMUX_MAKE_PROCESSES}" \
+		--jobs "${TERMUX_PKG_MAKE_PROCESSES}" \
 		--target "${CARGO_TARGET_NAME}" \
 		--release \
 		--manifest-path=lib/cli/Cargo.toml \
@@ -77,10 +77,10 @@ termux_step_make() {
 		--features sys,headless-minimal \
 		--bin wasmer-headless
 
-	# make build-capi-headless
-	RUSTFLAGS="${RUSTFLAGS} -C panic=abort -C link-dead-code -C lto -O -C embed-bitcode=yes" \
+	echo "make build-capi-headless"
+	export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C panic=abort -C link-dead-code -C lto -O -C embed-bitcode=yes"
 	cargo build \
-		--jobs "${TERMUX_MAKE_PROCESSES}" \
+		--jobs "${TERMUX_PKG_MAKE_PROCESSES}" \
 		--target "${CARGO_TARGET_NAME}" \
 		--release \
 		--manifest-path lib/c-api/Cargo.toml \
@@ -93,8 +93,8 @@ termux_step_make_install() {
 	install -Dm755 -t "${TERMUX_PREFIX}/bin" "target/${CARGO_TARGET_NAME}/release/wasmer"
 	install -Dm755 -t "${TERMUX_PREFIX}/bin" "target/${CARGO_TARGET_NAME}/release/wasmer-headless"
 
-	for header in lib/c-api/*.h; do
-		install -Dm644 "${header}" "${TERMUX_PREFIX}/include/$(basename ${header})"
+	for h in lib/c-api/*.h; do
+		install -Dm644 "${h}" "${TERMUX_PREFIX}"/include/$(basename "${h}")
 	done
 	# copy to share/doc/wasmer instead of include
 	install -Dm644 "lib/c-api/README.md" "${TERMUX_PREFIX}/share/doc/wasmer/wasmer-README.md"
@@ -111,7 +111,7 @@ termux_step_make_install() {
 	install -Dm644 "target/headless/${CARGO_TARGET_NAME}/release/libwasmer.a" "${TERMUX_PREFIX}/lib/libwasmer-headless.a"
 
 	# https://github.com/wasmerio/wasmer/blob/master/lib/cli/src/commands/config.rs
-	mkdir -p "${TERMUX_PREFIX}/lib/pkgconfig"
+	install -Dm644 /dev/null "${TERMUX_PREFIX}/lib/pkgconfig/wasmer.pc"
 	cat <<- EOF > "${TERMUX_PREFIX}/lib/pkgconfig/wasmer.pc"
 	prefix=${TERMUX_PREFIX}
 	exec_prefix=${TERMUX_PREFIX}/bin
@@ -125,7 +125,23 @@ termux_step_make_install() {
 	Libs: -L${TERMUX_PREFIX}/lib -lwasmer
 	EOF
 
-	cp ATTRIBUTIONS.md ATTRIBUTIONS
+	cp docs/ATTRIBUTIONS.md ATTRIBUTIONS
 
-	unset LLVM_VERSION LLVM_SYS_140_PREFIX WASMER_INSTALL_PREFIX
+	unset LLVM_SYS_140_PREFIX LLVM_VERSION WASMER_INSTALL_PREFIX
+}
+
+termux_step_create_debscripts() {
+	cat <<- EOL > postinst
+	#1${TERMUX_PREFIX}/bin/sh
+	if [ -n "\$(command -v wapm)" ]; then
+	echo "
+	===== Post-install notice =====
+
+	Upstream has deprecated 'wapm' package.
+	You may want to remove 'wapm' package.
+
+	===== Post-install notice =====
+	"
+	fi
+	EOL
 }

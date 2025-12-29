@@ -2,10 +2,13 @@ TERMUX_PKG_HOMEPAGE=https://www.openttd.org/
 TERMUX_PKG_DESCRIPTION="An engine for running Transport Tycoon Deluxe"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=13.3
-TERMUX_PKG_SRCURL=https://github.com/OpenTTD/OpenTTD/archive/$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=a1b4a75a188c1dc132abbca4bb26badf3cdc092eff29ec90a613dd8b20b69916
-TERMUX_PKG_DEPENDS="fontconfig, freetype, libc++, libicu, liblzma, liblzo, libpng, openttd-gfx, openttd-msx, openttd-sfx, sdl2, zlib"
+TERMUX_PKG_VERSION="15.0-beta3"
+TERMUX_PKG_REVISION=1
+TERMUX_PKG_SRCURL=git+https://github.com/OpenTTD/OpenTTD
+TERMUX_PKG_GIT_BRANCH="$TERMUX_PKG_VERSION"
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="fontconfig, freetype, libc++, libicu, liblzma, liblzo, libpng, openttd-gfx, openttd-msx, openttd-sfx, sdl2 | sdl2-compat, zlib"
+TERMUX_PKG_ANTI_BUILD_DEPENDS="sdl2-compat"
 TERMUX_PKG_RECOMMENDS="desktop-file-utils, hicolor-icon-theme"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DBINARY_NAME=openttd
@@ -20,7 +23,7 @@ TERMUX_PKG_EXTRA_HOSTBUILD_CONFIGURE_ARGS="
 termux_step_host_build() {
 	termux_setup_cmake
 	cmake "$TERMUX_PKG_SRCDIR" $TERMUX_PKG_EXTRA_HOSTBUILD_CONFIGURE_ARGS
-	make -j $TERMUX_MAKE_PROCESSES
+	make -j $TERMUX_PKG_MAKE_PROCESSES
 }
 
 termux_step_pre_configure() {

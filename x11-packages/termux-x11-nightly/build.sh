@@ -1,53 +1,58 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/termux/termux-x11
-TERMUX_PKG_DESCRIPTION="Termux X11 add-on application. Still in early development."
+TERMUX_PKG_DESCRIPTION="Termux X11 add-on."
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="Twaik Yont @twaik"
-TERMUX_PKG_VERSION=1.03.00
-TERMUX_PKG_SRCURL=https://github.com/termux/termux-x11/archive/05e5c98889adbbd9a1aaad72108b6dfdefdfa656.tar.gz
-TERMUX_PKG_SHA256=76a8d0a0f4d063d9685091c18292b7b2947424a7ed1b8491bdcc21e7d6d5d2c4
+TERMUX_PKG_VERSION=1.03.01
+TERMUX_PKG_REVISION=4
+TERMUX_PKG_SRCURL=https://github.com/termux/termux-x11/archive/efb2d97a46adf1657bacf395c38166a648260066.tar.gz
+TERMUX_PKG_SHA256=49f635b0aa731b72ad5f5fb78f770d47bc86eeab37b80a2e7a31e93e77e183b3
+TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="xkeyboard-config"
-_JDK_VERSION=17.0.7.7.1
-_GRADLE_VERSION=8.1.1
+# We provide a termux-x11-xfce4 service script, so let's suggest xfce4
+TERMUX_PKG_SUGGESTS="xfce4"
+TERMUX_PKG_BREAKS="termux-x11"
+TERMUX_PKG_REPLACES="termux-x11"
+TERMUX_PKG_PROVIDES="termux-x11"
 
 termux_step_make() {
-	# Download and use a new enough gradle version to avoid the process hanging after running:
-	termux_download \
-		https://corretto.aws/downloads/resources/$_JDK_VERSION/amazon-corretto-$_JDK_VERSION-linux-x64.tar.gz \
-		$TERMUX_PKG_CACHEDIR/amazon-corretto-$_JDK_VERSION-linux-x64.tar.gz \
-		8d23e0f1249f2852caa76b7ae8770847e005e4310a70a46b7c1a816c34ff9195
-	termux_download \
-		https://services.gradle.org/distributions/gradle-$_GRADLE_VERSION-all.zip \
-		$TERMUX_PKG_CACHEDIR/gradle-$_GRADLE_VERSION-all.zip \
-		5625a0ae20fe000d9225d000b36909c7a0e0e8dda61c19b12da769add847c975
-	mkdir $TERMUX_PKG_TMPDIR/gradle
-	mkdir $TERMUX_PKG_TMPDIR/gradle-jdk
-	
-	tar --strip-components=1 -xf $TERMUX_PKG_CACHEDIR/amazon-corretto-$_JDK_VERSION-linux-x64.tar.gz -C $TERMUX_PKG_TMPDIR/gradle-jdk
-	unzip -q $TERMUX_PKG_CACHEDIR/gradle-$_GRADLE_VERSION-all.zip -d $TERMUX_PKG_TMPDIR/gradle
-
-	# Avoid spawning the gradle daemon due to org.gradle.jvmargs
-	# being set (https://github.com/gradle/gradle/issues/1434):
-	rm gradle.properties
-
-	export JAVA_HOME="$TERMUX_PKG_TMPDIR/gradle-jdk"
-	export ANDROID_HOME
-	export GRADLE_OPTS="-Dorg.gradle.daemon=false -Xmx1536m"
-	
-	echo "org.gradle.jvmargs=-Xmx1536m" > $TERMUX_PKG_SRCDIR/gradle.properties
-	echo "android.useAndroidX=true" >> $TERMUX_PKG_SRCDIR/gradle.properties
-	echo "android.enableJetifier=true" >> $TERMUX_PKG_SRCDIR/gradle.properties
-
-	cd $TERMUX_PKG_SRCDIR
-	# Github action builds are signed with debug key, and loader checks self signature while loading main package.
-	$TERMUX_PKG_TMPDIR/gradle/gradle-$_GRADLE_VERSION/bin/gradle :shell-loader:assembleDebug
+	:
 }
 
 termux_step_make_install() {
-	mkdir -p $TERMUX_PREFIX/bin
+	# Downloading full JDK to compile 7kb apk seems excessive, let's download a prebuilt.
+	local LOADER_URL="https://github.com/termux/termux-x11/releases/download/nightly/termux-x11-nightly-1.03.01-0-any.pkg.tar.xz"
+	install -t $TERMUX_PREFIX/bin -m 755 termux-x11 termux-x11-preference
 	mkdir -p $TERMUX_PREFIX/libexec/termux-x11
-	cp $TERMUX_PKG_SRCDIR/termux-x11 $TERMUX_PREFIX/bin/termux-x11
-	cp $TERMUX_PKG_SRCDIR/shell-loader/build/outputs/apk/debug/shell-loader-debug.apk \
-		$TERMUX_PREFIX/libexec/termux-x11/loader.apk
+	wget -qO- $LOADER_URL | tar -OJxf - --wildcards "*loader.apk" > $TERMUX_PREFIX/libexec/termux-x11/loader.apk
+}
+
+termux_step_post_make_install() {
+	# Setup termux-services scripts
+	mkdir -p $TERMUX_PREFIX/var/service/tx11/log
+	ln -sf $TERMUX_PREFIX/share/termux-services/svlogger $TERMUX_PREFIX/var/service/tx11/log/run
+	sed -e "s%@TERMUX_PREFIX@%$TERMUX_PREFIX%g" \
+		-e "s%@TERMUX_HOME@%$TERMUX_ANDROID_HOME%g" \
+		$TERMUX_PKG_BUILDER_DIR/sv/tx11.run.in > $TERMUX_PREFIX/var/service/tx11/run
+	chmod 700 $TERMUX_PREFIX/var/service/tx11/run
+	touch $TERMUX_PREFIX/var/service/tx11/down
+
+	mkdir -p $TERMUX_PREFIX/var/service/tx11-xfce4/log
+	ln -sf $TERMUX_PREFIX/share/termux-services/svlogger $TERMUX_PREFIX/var/service/tx11-xfce4/log/run
+	sed "s%@TERMUX_PREFIX@%$TERMUX_PREFIX%g" \
+		$TERMUX_PKG_BUILDER_DIR/sv/tx11-xfce4.run.in > $TERMUX_PREFIX/var/service/tx11-xfce4/run
+	chmod 700 $TERMUX_PREFIX/var/service/tx11-xfce4/run
+	touch $TERMUX_PREFIX/var/service/tx11-xfce4/down
+}
+
+termux_step_create_debscripts() {
+	cat <<- EOF > postinst
+		#!${TERMUX_PREFIX}/bin/sh
+		chmod -w $TERMUX_PREFIX/libexec/termux-x11/loader.apk
+	EOF
+
+	if [ "$TERMUX_PACKAGE_FORMAT" = "pacman" ]; then
+		echo "post_install" > postupg
+	fi
 }

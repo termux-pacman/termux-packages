@@ -10,10 +10,9 @@ TERMUX_PKG_SRCURL=git+https://github.com/ptitSeb/box86
 TERMUX_PKG_GIT_BRANCH=master
 TERMUX_PKG_DEPENDS="libandroid-complex-math, libandroid-glob, libandroid-spawn, libandroid-sysv-semaphore"
 TERMUX_PKG_AUTO_UPDATE=true
-TERMUX_PKG_ENABLE_CLANG16_PORTING=false
 
 # box86 is for arm only
-TERMUX_PKG_BLACKLISTED_ARCHES="aarch64, i686, x86_64"
+TERMUX_PKG_EXCLUDED_ARCHES="aarch64, i686, x86_64"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DANDROID=ON
@@ -35,7 +34,7 @@ termux_pkg_auto_update() {
 
 	local latest_commit_date_tz=$(curl -s "https://api.github.com/repos/ptitSeb/box86/commits/${latest_commit}" | jq .commit.committer.date | sed -e 's|\"||g')
 	if [[ -z "${latest_commit_date_tz}" ]]; then
-		termux_error_exit "ERROR: Unable to get latest commit date info"
+		termux_error_exit "Unable to get latest commit date info"
 	fi
 
 	local latest_commit_date=$(echo "${latest_commit_date_tz}" | sed -e 's|\(.*\)T\(.*\)Z|\1|' -e 's|\-||g')
@@ -55,14 +54,14 @@ termux_pkg_auto_update() {
 	fi
 
 	if ! dpkg --compare-versions "${latest_version}" gt "${TERMUX_PKG_VERSION}"; then
-		termux_error_exit "ERROR: Resulting latest version is not counted as update to the current version (${latest_version} < ${TERMUX_PKG_VERSION})"
+		termux_error_exit "Resulting latest version is not counted as update to the current version (${latest_version} < ${TERMUX_PKG_VERSION})"
 	fi
 
 	# unlikely to happen
 	if [[ "${latest_commit_date}" -lt "${_COMMIT_DATE}" ]]; then
-		termux_error_exit "ERROR: Upstream is older than current package version. Please report to upstream."
+		termux_error_exit "Upstream is older than current package version. Please report to upstream."
 	elif [[ "${latest_commit_date}" -eq "${_COMMIT_DATE}" ]] && [[ "${latest_commit_time}" -lt "${_COMMIT_TIME}" ]]; then
-		termux_error_exit "ERROR: Upstream is older than current package version. Please report to upstream."
+		termux_error_exit "Upstream is older than current package version. Please report to upstream."
 	fi
 
 	sed -i "${TERMUX_PKG_BUILDER_DIR}/build.sh" \

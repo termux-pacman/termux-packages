@@ -2,17 +2,21 @@ TERMUX_PKG_HOMEPAGE=https://github.com/Z3Prover/z3
 TERMUX_PKG_DESCRIPTION="Z3 is a theorem prover from Microsoft Research"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="4.12.2"
-TERMUX_PKG_SRCURL=https://github.com/Z3Prover/z3/archive/z3-$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=9f58f3710bd2094085951a75791550f547903d75fe7e2fcb373c5f03fc761b8f
+TERMUX_PKG_VERSION="4.15.4"
+TERMUX_PKG_SRCURL=https://github.com/Z3Prover/z3/archive/refs/tags/z3-${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=dae526252cb0585c8c863292ebec84cace4901a014b190a73f14087dd08d252b
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
 TERMUX_PKG_DEPENDS="libc++"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_configure() {
-	chmod +x scripts/mk_make.py
-	CXX="$CXX" CC="$CC" python3 scripts/mk_make.py --prefix=$TERMUX_PREFIX --build=$TERMUX_PKG_BUILDDIR
+	# FPMATH_ENABLED=False to workaround NDK r27 issues:
+	# clang++: error: unsupported option '-msse' for target 'aarch64-linux-androideabi24'
+	# clang++: error: unsupported option '-msse2' for target 'armv7a-androideabi24'
+	# clang++: error: unsupported option '-msimd128' for target 'i686-linux-androideabi24'
+	# clang++: error: unsupported option '-msimd128' for target 'x86_64-linux-androideabi24'
+	CXX="$CXX" CC="$CC" FPMATH_ENABLED=False python3 scripts/mk_make.py --prefix=$TERMUX_PREFIX --build=$TERMUX_PKG_BUILDDIR
 	if $TERMUX_ON_DEVICE_BUILD; then
 		sed 's%../../../../../../../../%%g' -i Makefile
 	else

@@ -3,27 +3,14 @@ TERMUX_PKG_DESCRIPTION="Rust implementation of Git"
 TERMUX_PKG_LICENSE="Apache-2.0, MIT"
 TERMUX_PKG_LICENSE_FILE="LICENSE-APACHE, LICENSE-MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.1.0
-TERMUX_PKG_REVISION=1
-_RELEASE_PREFIX="git-hashtable"
-TERMUX_PKG_SRCURL=https://github.com/Byron/gitoxide/archive/refs/tags/${_RELEASE_PREFIX}-v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=33f761b9e6bb268a2ad725bf88e85808e4a9c7e06cface2fd637ac14dc2382fc
-TERMUX_PKG_AUTO_UPDATE=true
-TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
+TERMUX_PKG_VERSION="0.48.0"
+TERMUX_PKG_SRCURL=https://github.com/Byron/gitoxide/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=13c1470e396c2aecaf5098a96fec3e2355c57213f1ca1c3aba3c70115f62df93
 TERMUX_PKG_DEPENDS="resolv-conf"
 TERMUX_PKG_BUILD_IN_SRC=true
-
-termux_pkg_auto_update() {
-	# Get latest release tag:
-	local tag
-	tag="$(termux_github_api_get_tag "${TERMUX_PKG_SRCURL}")"
-	# check if this is not a ${_RELEASE_PREFIX} release:
-	if grep -qP "^${_RELEASE_PREFIX}-v${TERMUX_PKG_UPDATE_VERSION_REGEXP}\$" <<<"$tag"; then
-		termux_pkg_upgrade_version "$tag"
-	else
-		echo "WARNING: Skipping auto-update: Not a ${_RELEASE_PREFIX} release($tag)"
-	fi
-}
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_METHOD=repology
+TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
 
 termux_step_pre_configure() {
 	termux_setup_cmake
@@ -39,11 +26,16 @@ termux_step_pre_configure() {
 			$TERMUX_PKG_BUILDER_DIR/trust-dns-resolver.diff \
 			| patch --silent -p1 -d ${d} || :
 	done
+
+	if [ "$TERMUX_ARCH" == "x86_64" ]; then
+		local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+		export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$($CC -print-libgcc-file-name)"
+	fi
 }
 
 termux_step_make() {
 	cargo build \
-		--jobs $TERMUX_MAKE_PROCESSES \
+		--jobs $TERMUX_PKG_MAKE_PROCESSES \
 		--target $CARGO_TARGET_NAME \
 		--release \
 		--no-default-features \
@@ -51,7 +43,7 @@ termux_step_make() {
 }
 
 termux_step_make_install() {
-	install -Dm755 -t $TERMUX_PREFIX/bin target/${CARGO_TARGET_NAME}/release/gix
-	install -Dm755 -t $TERMUX_PREFIX/bin target/${CARGO_TARGET_NAME}/release/ein
+	install -Dm755 -t $TERMUX_PREFIX/bin \
+		target/${CARGO_TARGET_NAME}/release/ein \
+		target/${CARGO_TARGET_NAME}/release/gix
 }
-

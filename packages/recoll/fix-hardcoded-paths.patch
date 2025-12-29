@@ -1,11 +1,11 @@
 --- a/common/rclconfig.cpp
 +++ b/common/rclconfig.cpp
-@@ -1417,7 +1417,7 @@
+@@ -1817,7 +1817,7 @@
              // being used by recollindex instances. So explicitely test for /run/user/$uid, still
              // leaving open the remote possibility that XDG_RUNTIME_DIR would be set to something
              // else...
--            rundir = path_cat("/run/user", lltodecstr(getuid()));
-+            rundir = path_cat("@TERMUX_PREFIX@/var/run/user", lltodecstr(getuid()));
+-            rundir = path_cat("/run/user", std::to_string(getuid()));
++            rundir = path_cat("@TERMUX_PREFIX@/var/run/user", std::to_string(getuid()));
              if (path_isdir(rundir)) {
                  p = rundir.c_str();
              }
@@ -80,12 +80,12 @@
 @@ -5,7 +5,7 @@
  
  [Service]
- Type=simple
+ Type=exec
 -ExecStart=/usr/bin/recollindex -m -D -x -w 30 -c %h/.recoll/
 +ExecStart=@TERMUX_PREFIX@/bin/recollindex -m -D -x -w 30 -c %h/.recoll/
  Restart=on-failure
+ RestartSec=60
  
- [Install]
 --- a/index/recollindex@.service
 +++ b/index/recollindex@.service
 @@ -3,13 +3,13 @@
@@ -96,7 +96,7 @@
 +RequiresMountsFor=@TERMUX_HOME@
  
  [Service]
- Type=simple
+ Type=exec
  Restart=on-failure
  RestartSec=30
 -ExecStart=/usr/bin/recollindex -m -D -x -w 10 -c /home/%i/.recoll
@@ -106,22 +106,23 @@
  [Install]
 --- a/python/recoll/recoll/rclconfig.py
 +++ b/python/recoll/recoll/rclconfig.py
-@@ -67,13 +67,13 @@
-                 self.datadir = os.path.join(os.path.dirname(sys.argv[0]), "..")
-                 #print("Mac datadir: [%s]" % self.datadir, file=sys.stderr)
-             else:
--                dirs = ("/opt/local", "/opt", "/usr", "/usr/local")
-+                dirs = ("@TERMUX_PREFIX@/opt/local", "@TERMUX_PREFIX@/opt", "@TERMUX_PREFIX@", "@TERMUX_PREFIX@/local")
-                 for dir in dirs:
-                     dd = os.path.join(dir, "share/recoll")
-                     if os.path.exists(dd):
-                         self.datadir = dd
+@@ -93,14 +93,14 @@
+                     # On ux platforms, the datadir value is set by "configure" in the C code.
+                     # Try to guess
+                     # msg("Trying to guess datadir")
+-                    dirs = ("/opt/local", "/opt", "/usr", "/usr/local", "/usr/pkg")
++                    dirs = ("@TERMUX_PREFIX@/opt/local", "@TERMUX_PREFIX@/opt", "@TERMUX_PREFIX@", "@TERMUX_PREFIX@/local", "@TERMUX_PREFIX@/pkg")
+                     for dir in dirs:
+                         dd = os.path.join(dir, "share/recoll")
+                         if os.path.exists(dd):
+                             self.datadir = dd
          if self.datadir is None:
+             # msg("DATADIR could not be computed. Trying /usr/share/recoll as last resort")
 -            self.datadir = "/usr/share/recoll"
 +            self.datadir = "@TERMUX_PREFIX@/share/recoll"
+         # msg(f"DATADIR: [{self.datadir}]")
+         baseconfdir = os.path.join(self.datadir, "examples")
          f = None
-         try:
-             f = open(os.path.join(self.datadir, "examples", "recoll.conf"), "r")
 --- a/sampleconf/mimemap
 +++ b/sampleconf/mimemap
 @@ -252,19 +252,19 @@
@@ -178,18 +179,18 @@
  # <var name="mhmboxquirks" type="string">
 --- a/utils/appformime.cpp
 +++ b/utils/appformime.cpp
-@@ -25,7 +25,7 @@
+@@ -24,7 +24,7 @@
+ #include "pathut.h"
  #include "smallut.h"
- #include "appformime.h"
  
--static const string topappsdir("/usr/share/applications");
-+static const string topappsdir("@TERMUX_PREFIX@/share/applications");
- static const string desktopext("desktop");
+-static const std::string topappsdir("/usr/share/applications");
++static const std::string topappsdir("@TERMUX_PREFIX@/share/applications");
+ static const std::string desktopext("desktop");
  
  static DesktopDb *theDb;
---- a/utils/rclutil.cpp
-+++ b/utils/rclutil.cpp
-@@ -555,7 +555,7 @@
+--- a/common/rclutil.cpp
++++ b/common/rclutil.cpp
+@@ -580,7 +580,7 @@
  #ifdef _WIN32
              stmpdir = path_wingetrcltmpdir();
  #else

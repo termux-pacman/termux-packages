@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Small, fast, class-based concurrent scripting language l
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=0.4.0
-TERMUX_PKG_REVISION=2
+TERMUX_PKG_REVISION=4
 TERMUX_PKG_SRCURL=https://github.com/wren-lang/wren/archive/$TERMUX_PKG_VERSION.tar.gz
 TERMUX_PKG_SHA256=23c0ddeb6c67a4ed9285bded49f7c91714922c2e7bb88f42428386bf1cf7b339
 TERMUX_PKG_AUTO_UPDATE=true
@@ -24,7 +24,7 @@ termux_step_make() {
 	else
 		RELEASE=release_64bit
 	fi
-	make -j $TERMUX_MAKE_PROCESSES $QUIET_BUILD config=${RELEASE}
+	make -j $TERMUX_PKG_MAKE_PROCESSES $QUIET_BUILD config=${RELEASE}
 }
 
 termux_step_make_install() {

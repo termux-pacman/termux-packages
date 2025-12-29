@@ -2,10 +2,11 @@ TERMUX_PKG_HOMEPAGE=https://www.ghostscript.com/
 TERMUX_PKG_DESCRIPTION="Interpreter for the PostScript language and for PDF"
 TERMUX_PKG_LICENSE="AGPL-V3"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=10.01.2
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_VERSION="10.05.1"
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${TERMUX_PKG_VERSION//.}/ghostpdl-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=ee76cb526f5b6683e2adcb65398a1f333f7972289cec960b67aaa227c0d72e88
+TERMUX_PKG_SHA256=c0be073366d19471320dce13e210b4c47e14b01070d6cf3d2d6d6e8415344615
+TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_DEPENDS="fontconfig, freetype, jbig2dec, libandroid-support, libc++, libiconv, libidn, libjpeg-turbo, libpng, libtiff, littlecms, openjpeg, zlib"
 TERMUX_PKG_BUILD_DEPENDS="libexpat"
 TERMUX_PKG_BUILD_IN_SRC=true
@@ -28,22 +29,20 @@ termux_step_post_get_source() {
 }
 
 termux_step_pre_configure() {
-	# Use `make -j1` otherwise build may fail with error
-	# about missing 'arch.h'.
-	TERMUX_MAKE_PROCESSES=1
-	CPPFLAGS+=" -I${TERMUX_STANDALONE_TOOLCHAIN}/sysroot/usr/include/c++/v1"
+	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
+		export PKGCONFIG="$PKG_CONFIG"
+		export LDFLAGS+=" -liconv"
+	fi
 
-	# Workaround for build break caused by `sha2.h` from `libmd` package:
-	if [ -e "$TERMUX_PREFIX/include/sha2.h" ]; then
-		local inc="$TERMUX_PKG_BUILDDIR/_include"
-		mkdir -p "${inc}"
-		ln -sf "$TERMUX_PKG_SRCDIR/base/sha2.h" "${inc}/"
-		CPPFLAGS="-I${inc} ${CPPFLAGS}"
+	if [[ "${TERMUX_ARCH}" == "aarch64" ]]; then
+		# https://github.com/llvm/llvm-project/issues/74361
+		# NDK r27: clang++: error: unsupported option '-mfpu=' for target 'aarch64-linux-android24'
+		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --disable-neon"
 	fi
 }
 
 termux_step_make() {
-	make -j $TERMUX_MAKE_PROCESSES \
+	make -j $TERMUX_PKG_MAKE_PROCESSES \
 		so all \
 		${TERMUX_PKG_EXTRA_MAKE_ARGS}
 }

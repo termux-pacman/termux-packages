@@ -1,10 +1,18 @@
 --- a/meson.build
 +++ b/meson.build
-@@ -78,6 +78,7 @@
-     # Lua has no official .pc file
-     # so distros come up with their own names
-     lua_names = [
-+        'lua54',
-         'lua5.4', # Debian
-         'lua-5.4', # FreeBSD
-         'lua',    # Fedora
+@@ -99,7 +99,6 @@
+     lite_bindir = 'bin'
+     lite_docdir = get_option('datadir') / 'doc' / 'lite-xl'
+     lite_datadir = get_option('datadir') / 'lite-xl'
+-    if host_machine.system() == 'linux'
+         install_data('resources' / 'icons' / 'lite-xl.svg',
+             install_dir : get_option('datadir') / 'icons' / 'hicolor' / 'scalable' / 'apps'
+         )
+@@ -109,7 +108,6 @@
+         install_data('resources' / 'linux' / 'org.lite_xl.lite_xl.appdata.xml',
+             install_dir : get_option('datadir') / 'metainfo'
+         )
+-    endif
+ endif
+ 
+ install_data('licenses' / 'licenses.md', install_dir : lite_docdir)

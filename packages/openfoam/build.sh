@@ -2,10 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://www.openfoam.com
 TERMUX_PKG_DESCRIPTION="OpenFOAM is a CFD software written in C++"
 TERMUX_PKG_MAINTAINER="Henrik Grimler @Grimler91"
 TERMUX_PKG_LICENSE="GPL-3.0"
-TERMUX_PKG_VERSION=2212
-TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL=https://develop.openfoam.com/Development/openfoam/-/archive/OpenFOAM-v${TERMUX_PKG_VERSION}/openfoam-OpenFOAM-v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=424710fea228baec7ec677b5cb86821f8052ecde12ca36ab7ffba5ef601a2045
+TERMUX_PKG_VERSION=2412
+TERMUX_PKG_REVISION=4
+TERMUX_PKG_SRCURL=https://develop.openfoam.com/Development/openfoam/-/archive/OpenFOAM-v${TERMUX_PKG_VERSION}/openfoam-OpenFOAM-v${TERMUX_PKG_VERSION}.tar.bz2
+TERMUX_PKG_SHA256=9d7fdfd2b93bb6296fc7604eb27528364683a19229ae319a988e4cdc95b73d9a
 TERMUX_PKG_DEPENDS="boost, libc++, libgmp, libmpfr, openmpi, readline, zlib"
 TERMUX_PKG_BUILD_DEPENDS="boost-headers, cgal, flex, libandroid-execinfo"
 TERMUX_PKG_GROUPS="science"
@@ -78,10 +78,10 @@ termux_step_make() {
 	source "$TERMUX_PKG_SRCDIR"/etc/bashrc || true
 	set -u
 	unset LD_LIBRARY_PATH
-	./Allwmake
+	./Allwmake -j
 	cd wmake/src
 	make clean
-	make
+	make -j $TERMUX_PKG_MAKE_PROCESSES
 }
 
 termux_step_make_install() {

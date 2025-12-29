@@ -2,26 +2,32 @@ TERMUX_PKG_HOMEPAGE=https://www.webmproject.org
 TERMUX_PKG_DESCRIPTION="VP8 & VP9 Codec SDK"
 TERMUX_PKG_LICENSE="BSD 3-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1:1.13.0"
+TERMUX_PKG_VERSION="1:1.15.2"
 TERMUX_PKG_SRCURL=https://github.com/webmproject/libvpx/archive/v${TERMUX_PKG_VERSION:2}.tar.gz
-TERMUX_PKG_SHA256=cb2a393c9c1fae7aba76b950bb0ad393ba105409fe1a147ccd61b0aaa1501066
+TERMUX_PKG_SHA256=26fcd3db88045dee380e581862a6ef106f49b74b6396ee95c2993a260b4636aa
 TERMUX_PKG_DEPENDS="libc++"
 TERMUX_PKG_BREAKS="libvpx-dev"
 TERMUX_PKG_REPLACES="libvpx-dev"
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag"
-TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
+TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+$"
 
-termux_pkg_auto_update() {
-	# Get the newest tag:
-	local tag
-	tag="$(termux_github_api_get_tag "${TERMUX_PKG_SRCURL}" "${TERMUX_PKG_UPDATE_TAG_TYPE}")"
-	# check if this is not a release (e.g. a release candidate):
-	if grep -qP "^${TERMUX_PKG_UPDATE_VERSION_REGEXP}\$" <<<"$tag"; then
-		termux_pkg_upgrade_version "$tag"
-	else
-		echo "WARNING: Skipping auto-update: Not a release($tag)"
+termux_step_post_get_source() {
+	# Check whether it is ABI compatible with previous version
+	# Should revbump ffmpeg if ABI is changed
+	local abi=9
+	local encabi=37
+	local decabi=12
+
+	mkdir -p termux-abi-test && cd termux-abi-test
+	gcc "$TERMUX_PKG_BUILDER_DIR"/abi-test.c -o abi-test -I../
+	local abi_got eabi_got dabi_got
+	IFS=' ' read -r abi_got eabi_got dabi_got < <(./abi-test)
+	if [ "$abi_got $eabi_got $dabi_got" != "$abi $encabi $decabi" ]; then
+		termux_error_exit "ABI version mismatch in libvpx, got $abi_got $eabi_got $dabi_got."
 	fi
+	cd -
+	rm -rf termux-abi-test
 }
 
 termux_step_configure() {
@@ -59,7 +65,12 @@ termux_step_configure() {
 		--disable-realtime-only \
 		--disable-unit-tests \
 		--enable-pic \
+		--enable-postproc \
 		--enable-vp8 \
+		--enable-vp9 \
+		--enable-vp9-highbitdepth \
+		--enable-vp9-temporal-denoising \
+		--enable-vp9-postproc \
 		--enable-shared \
 		--enable-small \
 		--as=auto \
@@ -69,11 +80,11 @@ termux_step_configure() {
 termux_step_post_massage() {
 	# Do not forget to bump revision of reverse dependencies and rebuild them
 	# after SOVERSION is changed.
-	local _SOVERSION_GUARD_FILES="lib/libvpx.so.8"
+	local _SOVERSION_GUARD_FILES="lib/libvpx.so.11"
 	local f
 	for f in ${_SOVERSION_GUARD_FILES}; do
 		if [ ! -e "${f}" ]; then
-			termux_error_exit "Error: file ${f} not found; please check if SOVERSION has changed."
+			termux_error_exit "file ${f} not found; please check if SOVERSION has changed."
 		fi
 	done
 }

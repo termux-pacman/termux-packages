@@ -3,14 +3,31 @@ TERMUX_PKG_DESCRIPTION="Fully automated Usenet Binary Downloader"
 TERMUX_PKG_LICENSE="GPL-2.0, GPL-3.0"
 TERMUX_PKG_LICENSE_FILE="LICENSE.txt, GPL2.txt, GPL3.txt"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=4.0.2
+TERMUX_PKG_VERSION="4.5.5"
 TERMUX_PKG_SRCURL=https://github.com/sabnzbd/sabnzbd/releases/download/${TERMUX_PKG_VERSION}/SABnzbd-${TERMUX_PKG_VERSION}-src.tar.gz
-TERMUX_PKG_SHA256=2783f225057031869dff74f7eb191f54f35e8abe60906fcaaa94ab7772166c4e
+TERMUX_PKG_SHA256=7f93d714287293f519f244b92d8eb727aa504448c5961dab8420e2093f92e3b7
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="python, python-cryptography, python-sabyenc3, termux-tools, par2, unrar, p7zip, unzip"
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_SERVICE_SCRIPT=("sabnzbd" 'exec sabnzbd -d 2>&1')
-TERMUX_PKG_PYTHON_TARGET_DEPS="'cheetah3==3.2.6.post1', 'cffi==1.15.1', 'pycparser==2.21', 'feedparser==6.0.10', 'configobj==5.0.8', 'cheroot==10.0.0', 'six==1.16.0', 'cherrypy==18.8.0', 'jaraco.functools==3.6.0', 'jaraco.collections==4.1.0', 'jaraco.text==3.8.1', 'jaraco.classes==3.2.3', 'jaraco.context==4.3.0', 'more-itertools==9.1.0', 'zc.lockfile==3.0.post1', 'python-dateutil==2.8.2', 'tempora==5.2.2', 'pytz==2023.3', 'sgmllib3k==1.0.0', 'portend==3.1.0', 'chardet==5.1.0', 'PySocks==1.7.1', 'puremagic==1.15', 'guessit==3.7.1', 'babelfish==0.6.0', 'rebulk==3.2.0'"
+
+termux_step_post_get_source() {
+	export TERMUX_PKG_PYTHON_TARGET_DEPS=""
+	while IFS="" read -r dep
+	do
+		# only install main requirements
+		if [ -z "$dep" ]; then
+			break
+		fi
+		dep="${dep/[# ]*}"
+		# https://github.com/termux/termux-packages/issues/20229
+		if [ -z "$dep" ] || [ -z "${dep/sabctools*}" ]; then
+			continue
+		fi
+		TERMUX_PKG_PYTHON_TARGET_DEPS+="'$dep', "
+	done < "$TERMUX_PKG_SRCDIR/requirements.txt"
+}
 
 termux_step_make_install() {
 	local sabnzbd="${TERMUX_PREFIX}/share/sabnzbd"

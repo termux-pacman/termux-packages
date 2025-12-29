@@ -1,7 +1,8 @@
---- a/Makefile
-+++ b/Makefile
-@@ -19,7 +19,7 @@
- MAGIC_API_VERSION:=0x00000008
+diff -uNr tuxpaint-0.9.35/Makefile tuxpaint-0.9.35.mod/Makefile
+--- tuxpaint-0.9.35/Makefile	2025-05-26 19:00:19.000000000 +0800
++++ tuxpaint-0.9.35.mod/Makefile	2025-06-01 20:26:47.461099435 +0800
+@@ -29,7 +29,7 @@
+ MAGIC_API_VERSION:=0x0000000B
  
  # Need to know the OS
 -SYSNAME:=$(shell uname -s)
@@ -9,33 +10,34 @@
  ifeq ($(findstring MINGW32, $(SYSNAME)),MINGW32)
    OS:=windows
    GPERF:=/usr/bin/gperf
-@@ -169,14 +169,14 @@
+@@ -198,7 +198,7 @@
  macos_ARCH_CFLAGS:=-isysroot $(SDKROOT) -I$(SDKROOT)/usr/include -I$(HOSTROOT)/include -mmacosx-version-min=$(MINVER) -arch $(subst $() $(), -arch ,$(ARCHS)) -w -headerpad_max_install_names -DHAVE_STRCASESTR
  ios_ARCH_CFLAGS:=-isysroot $(SDKROOT) -I$(SDKROOT)/usr/include -I$(HOSTROOT)/include $(MINVEROPT) -arch $(subst $() $(), -arch ,$(ARCHS)) -w -fPIC -DHAVE_STRCASESTR -DUNLINK_ONLY
  beos_ARCH_CFLAGS:=
 -linux_ARCH_CFLAGS:=
-+linux_ARCH_CFLAGS:=$(CFLAGS) $(CPPFLAGS)
++linux_ARCH_CFLAGS:=$(CPPFLAGS) $(CFLAGS)
+ netbsd_ARCH_CFLAGS:=-DHAVE_STRCASESTR
  ARCH_CFLAGS:=$($(OS)_ARCH_CFLAGS)
  
- windows_ARCH_LDFLAGS:=
+@@ -207,7 +207,7 @@
  macos_ARCH_LDFLAGS:=-isysroot $(SDKROOT) -L$(HOSTROOT)/lib -mmacosx-version-min=$(MINVER) -arch $(subst $() $(), -arch ,$(ARCHS))
  ios_ARCH_LDFLAGS:=-isysroot $(SDKROOT) -L$(HOSTROOT)/lib $(MINVEROPT) -arch $(subst $() $(), -arch ,$(ARCHS))
  beos_ARCH_LDFLAGS:=
 -linux_ARCH_LDFLAGS:=
 +linux_ARCH_LDFLAGS:=$(LDFLAGS)
+ netbsd_ARCH_LDFLAGS:=
  ARCH_LDFLAGS:=$($(OS)_ARCH_LDFLAGS)
- LDFLAGS:=$(ARCH_LDFLAGS)
  
-@@ -205,7 +205,7 @@
- windows_PREFIX:=/usr/local
+@@ -250,7 +250,7 @@
+ os2_PREFIX:=c:/extras/tuxpaint
  macos_PREFIX:=Resources
  ios_PREFIX:=.
 -linux_PREFIX:=/usr/local
 +linux_PREFIX:=@TERMUX_PREFIX@
+ netbsd_PREFIX:=/usr/local
  PREFIX:=$($(OS)_PREFIX)
  
- # Root directory to place files when creating packages.
-@@ -242,7 +242,7 @@
+@@ -288,7 +288,7 @@
  MAGIC_PREFIX:=$(DESTDIR)$(LIBDIR)/lib$(LIBDIRSUFFIX)/tuxpaint/plugins
  
  # Docs and man page:
@@ -44,16 +46,16 @@
  MAN_PREFIX:=$(DESTDIR)$(PREFIX)/share/man
  DEVMAN_PREFIX:=$(DESTDIR)$(PREFIX)/share/man
  
-@@ -545,7 +545,7 @@
- windows_ARCH_INSTALL:=
- macos_ARCH_INSTALL:=install-macbundle
- ios_ARCH_INSTALL:=install-iosbundle
--linux_ARCH_INSTALL:=install-xdg install-man install-importscript install-bash-completion
-+linux_ARCH_INSTALL:=install-man install-importscript
+@@ -622,7 +622,7 @@
+ ifeq ($(PACKAGE_ONLY),yes)
+ 	linux_ARCH_INSTALL:=install-pkgxdg install-man install-importscript install-bash-completion
+ else
+-	linux_ARCH_INSTALL:=install-xdg install-man install-importscript install-bash-completion
++	linux_ARCH_INSTALL:=install-man install-importscript
+ endif
  ARCH_INSTALL:=$($(OS)_ARCH_INSTALL)
  
- # "make install" installs all of the various parts
-@@ -1021,12 +1021,6 @@
+@@ -1168,12 +1168,6 @@
  	@install -d $(DOC_PREFIX)/en/magic-docs
  	@cp -R magic/magic-docs/en/* $(DOC_PREFIX)/en/magic-docs/
  	@echo
@@ -66,7 +68,7 @@
  	@chmod -R a=rX,g=rX,u=rwX $(DOC_PREFIX)
  
  
-@@ -1050,14 +1044,6 @@
+@@ -1197,14 +1191,6 @@
  	@gzip -f $(MAN_PREFIX)/man1/tp-magic-config.1
  	@chmod a+rx,g-w,o-w $(MAN_PREFIX)/man1/tp-magic-config.1.gz
  	@echo
@@ -81,21 +83,21 @@
  	@# FIXME: The other man pages aren't localizable yet -bjk 2021.08.14
  
  # Install the support files for macOS application bundle
-@@ -1332,7 +1318,7 @@
- macos_MAGIC_SDL_LIBS:=-L/usr/local/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
- ios_MAGIC_SDL_LIBS:=$(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
+@@ -1494,7 +1480,7 @@
+ macos_MAGIC_SDL_LIBS:=-L/usr/local/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB) -lSDL2_gfx
+ ios_MAGIC_SDL_LIBS:=$(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB) -lSDL2_gfx
  beos_MAGIC_SDL_LIBS:=-L/usr/local/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
 -linux_MAGIC_SDL_LIBS:=-L/usr/local/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
 +linux_MAGIC_SDL_LIBS:=-L@TERMUX_PREFIX@/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
+ netbsd_MAGIC_SDL_LIBS:=-L/usr/local/lib $(shell $(PKG_CONFIG) $(SDL_PCNAME) --libs) -lSDL2_image -lSDL2_ttf $(SDL_MIXER_LIB)
  MAGIC_SDL_LIBS:=$($(OS)_MAGIC_SDL_LIBS)
  
- windows_MAGIC_ARCH_LINKS=-lintl $(PNG)
-@@ -1346,7 +1332,7 @@
+@@ -1512,7 +1498,7 @@
  macos_PLUGIN_LIBS:=$(MAGIC_SDL_LIBS) $(MAGIC_ARCH_LINKS)
  ios_PLUGIN_LIBS:=$(MAGIC_SDL_LIBS) $(MAGIC_ARCH_LINKS)
  beos_PLUGIN_LIBS:="$(MAGIC_SDL_LIBS) $(MAGIC_ARCH_LINKS) $(MAGIC_SDL_CPPFLAGS)"
 -linux_PLUGIN_LIBS:=
 +linux_PLUGIN_LIBS:=$(MAGIC_SDL_LIBS)
+ netbsd_PLUGIN_LIBS:=
  PLUGIN_LIBS:=$($(OS)_PLUGIN_LIBS)
  
- #MAGIC_CFLAGS:=-g3 -O2 -fvisibility=hidden -fno-common -W -Wstrict-prototypes -Wmissing-prototypes -Wall $(MAGIC_SDL_CPPFLAGS) -Isrc/

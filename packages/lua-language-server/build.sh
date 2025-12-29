@@ -1,11 +1,12 @@
 TERMUX_PKG_HOMEPAGE="https://github.com/sumneko/lua-language-server"
 TERMUX_PKG_DESCRIPTION="Sumneko Lua Language Server coded in Lua"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_MAINTAINER="Aditya Alok <alok@termux.org>"
-TERMUX_PKG_VERSION="3.6.25"
+TERMUX_PKG_MAINTAINER="Joshua Kahn @TomJo2000"
+TERMUX_PKG_VERSION="3.16.1"
 TERMUX_PKG_GIT_BRANCH="${TERMUX_PKG_VERSION}"
 TERMUX_PKG_SRCURL="git+https://github.com/sumneko/lua-language-server"
 TERMUX_PKG_DEPENDS="libandroid-spawn, libc++"
+TERMUX_PKG_BUILD_DEPENDS="binutils-libs"
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
@@ -19,6 +20,14 @@ _patch_on_device() {
 	fi
 }
 
+_load_ubuntu_packages() {
+	if [[ "$TERMUX_ON_DEVICE_BUILD" == "false" ]]; then
+		export HOSTBUILD_ROOTFS="${TERMUX_PKG_HOSTBUILD_DIR}/ubuntu_packages"
+		export LD_LIBRARY_PATH="${HOSTBUILD_ROOTFS}/usr/lib/x86_64-linux-gnu"
+		LD_LIBRARY_PATH+=":${HOSTBUILD_ROOTFS}/usr/lib"
+	fi
+}
+
 termux_step_host_build() {
 	_patch_on_device
 	termux_setup_ninja
@@ -26,11 +35,38 @@ termux_step_host_build() {
 	mkdir 3rd
 	cp -a "${TERMUX_PKG_SRCDIR}"/3rd/luamake 3rd/
 
+	if [[ "$TERMUX_ON_DEVICE_BUILD" == "false" ]]; then
+		local ubuntu_packages
+		ubuntu_packages+="libunwind-dev,"
+		ubuntu_packages+="libunwind8,"
+		ubuntu_packages+="binutils,"
+		ubuntu_packages+="binutils-common,"
+		ubuntu_packages+="binutils-x86-64-linux-gnu,"
+		ubuntu_packages+="libbinutils,"
+		ubuntu_packages+="libctf-nobfd0,"
+		ubuntu_packages+="libctf0,"
+		ubuntu_packages+="libgprofng0,"
+		ubuntu_packages+="libsframe1,"
+		ubuntu_packages+="binutils-dev,"
+
+		termux_download_ubuntu_packages "$ubuntu_packages"
+
+		_load_ubuntu_packages
+
+		patch="$TERMUX_PKG_BUILDER_DIR/hostbuild-force-link.diff"
+		echo "Applying patch: $(basename "$patch")"
+		test -f "$patch" && sed \
+			-e "s%\@TERMUX_PKG_HOSTBUILD_DIR\@%${TERMUX_PKG_HOSTBUILD_DIR}%g" \
+			"$patch" | patch --silent -p1
+	fi
+
 	cd 3rd/luamake
 	./compile/install.sh
 }
 
 termux_step_make() {
+	termux_setup_ninja
+
 	CFLAGS+=" -DBEE_ENABLE_FILESYSTEM"     # without this, it tries to link against its own filesystem lib and fails.
 	CFLAGS+=" -Wno-unknown-warning-option" # for -Wno-maybe-uninitialized argument.
 
@@ -38,6 +74,15 @@ termux_step_make() {
 		-e "s%\@FLAGS\@%${CFLAGS} ${CPPFLAGS}%g" \
 		-e "s%\@LDFLAGS\@%${LDFLAGS}%g" \
 		"${TERMUX_PKG_BUILDER_DIR}"/make.lua.diff | patch --silent -p1
+
+	_load_ubuntu_packages
+
+	patch="$TERMUX_PKG_BUILDER_DIR/force-cast-unw_context_t.diff"
+	echo "Applying patch: $(basename "$patch")"
+	test -f "$patch" && {
+		patch --silent -p1 -d "$TERMUX_PKG_SRCDIR/3rd/bee.lua/bee/crash/linux" < "$patch"
+		patch --silent -p1 -d "$TERMUX_PKG_SRCDIR/3rd/luamake/bee.lua/bee/crash" < "$patch"
+	}
 
 	"${TERMUX_PKG_HOSTBUILD_DIR}"/3rd/luamake/luamake \
 		-cc "${CC}" \
@@ -49,20 +94,12 @@ termux_step_make_install() {
 
 	cat > "${TERMUX_PREFIX}/bin/${TERMUX_PKG_NAME}" <<- EOF
 		#!${TERMUX_PREFIX}/bin/bash
+		TMPPATH="\$(mktemp -d "${TERMUX_PREFIX}/tmp/${TERMUX_PKG_NAME}.XXXX")"
 
-		# After action of termux-elf-cleaner lua-language-server's binary is unable to
-		# determine its version, so provide it manually.
-		if [ "\$1" = "--version" ]; then
-			echo "${TERMUX_PKG_NAME}: ${TERMUX_PKG_VERSION}"
-		else
-			TMPPATH=\$(mktemp -d "${TERMUX_PREFIX}/tmp/${TERMUX_PKG_NAME}.XXXX")
-
-			exec ${datadir}/bin/${TERMUX_PKG_NAME} \\
-				--logpath="\${TMPPATH}/log" \\
-				--metapath="\${TMPPATH}/meta" \\
-				"\${@}"
-		fi
-
+		exec ${datadir}/bin/${TERMUX_PKG_NAME} \\
+		--logpath="\${TMPPATH}/log" \\
+		--metapath="\${TMPPATH}/meta" \\
+		"\${@}"
 	EOF
 
 	chmod 0700 "${TERMUX_PREFIX}/bin/${TERMUX_PKG_NAME}"
@@ -70,6 +107,9 @@ termux_step_make_install() {
 	install -Dm700 -t "${datadir}"/bin ./bin/"${TERMUX_PKG_NAME}"
 	install -Dm600 -t "${datadir}" ./{main,debugger}.lua
 	install -Dm600 -t "${datadir}"/bin ./bin/main.lua
+
+	# needed for --version
+	install -Dm600 -t "${datadir}" ./changelog.md
 
 	cp -r ./script ./meta ./locale "${datadir}"
 }

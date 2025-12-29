@@ -1,8 +1,8 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -85,23 +85,6 @@
- 
- _set_fancy(LIB_INSTALL_DIR "${EXEC_INSTALL_PREFIX}${CMAKE_INSTALL_PREFIX}/${__LIB}" "libdir")
+@@ -74,23 +74,6 @@
+ 	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+ endif()
  
 -# libbpf uses reallocarray, which is not available in all versions of glibc
 -# libbpf's include/tools/libc_compat.h provides implementation, but needs

@@ -1,49 +1,33 @@
-TERMUX_PKG_HOMEPAGE=https://github.com/o2sh/onefetch
+TERMUX_PKG_HOMEPAGE=https://onefetch.dev/
 TERMUX_PKG_DESCRIPTION="A command-line Git information tool written in Rust"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_MAINTAINER="@ELWAER-M"
-TERMUX_PKG_VERSION="2.18.1"
+TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_VERSION="2.26.1"
 TERMUX_PKG_SRCURL=https://github.com/o2sh/onefetch/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=7b0f03e9d2383ac32283cfb9ec09d10c8789a298969c8b7d45fa0168bd909140
+TERMUX_PKG_SHA256=ff43255d7c138c448cfdd1abacb01c6abe0c3e3886024e98ff077b28d4dc0ddc
 TERMUX_PKG_AUTO_UPDATE=true
-TERMUX_PKG_DEPENDS="libgit2"
 TERMUX_PKG_BUILD_IN_SRC=true
 
 termux_step_pre_configure() {
-	termux_setup_rust
 	termux_setup_cmake
+	termux_setup_rust
 
-	export CFLAGS="${TARGET_CFLAGS}"
-
-	: "${CARGO_HOME:=$HOME/.cargo}"
-	export CARGO_HOME
-
-	rm -rf "${CARGO_HOME}"/registry/src/*/git-config*
-	rm -rf $CARGO_HOME/registry/src/*/rustix-*
-	cargo fetch --target "${CARGO_TARGET_NAME}"
-
-	for d in $CARGO_HOME/registry/src/*/rustix-*; do
-		patch --silent -p1 -d ${d} < $TERMUX_PKG_BUILDER_DIR/0001-upstream-fix-libc-removing-unsafe-on-makedev.diff || :
-	done
-
-	for d in $CARGO_HOME/registry/src/*/git-config*; do
-		patch --silent -p1 -d ${d} < $TERMUX_PKG_BUILDER_DIR/0002-rust-git-config-path.diff || :
-	done
-
-	local f
-	for f in $CARGO_HOME/registry/src/*/libgit2-sys-*/build.rs; do
-		sed -i -E 's/\.range_version\(([^)]*)\.\.[^)]*\)/.atleast_version(\1)/g' "${f}"
-	done
+	# Dummy CMake toolchain file to workaround build error:
+	# error: failed to run custom build command for `libz-ng-sys v1.1.9`
+	# ...
+	# CMake Error at /home/builder/.termux-build/_cache/cmake-3.28.3/share/cmake-3.28/Modules/Platform/Android-Determine.cmake:217 (message):
+	# Android: Neither the NDK or a standalone toolchain was found.
+	export TARGET_CMAKE_TOOLCHAIN_FILE="${TERMUX_PKG_BUILDDIR}/android.toolchain.cmake"
+	touch "${TERMUX_PKG_BUILDDIR}/android.toolchain.cmake"
 }
 
 termux_step_make() {
-	termux_setup_rust
 	cargo build \
-		--jobs $TERMUX_MAKE_PROCESSES \
+		--jobs $TERMUX_PKG_MAKE_PROCESSES \
 		--target $CARGO_TARGET_NAME \
 		--release
 }
-	
+
 termux_step_make_install() {
 	install -Dm700 target/"${CARGO_TARGET_NAME}"/release/onefetch "$TERMUX_PREFIX"/bin
 

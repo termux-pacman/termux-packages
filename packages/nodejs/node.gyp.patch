@@ -1,6 +1,15 @@
---- ./node.gyp.orig	2023-05-16 12:28:21.000000000 +0530
-+++ ./node.gyp	2023-05-27 19:10:17.150845679 +0530
-@@ -466,7 +466,8 @@
+--- ./node.gyp.orig	2025-11-26 23:46:03.696854242 +0530
++++ ./node.gyp	2025-12-03 21:00:02.566150699 +0530
+@@ -527,7 +527,7 @@
+           '-Wl,-bnoerrmsg',
+         ],
+       }],
+-      ['OS=="linux" and clang==1', {
++      ['(OS=="linux" or OS=="android") and clang==1', {
+         'libraries': ['-latomic'],
+       }],
+     ],
+@@ -568,7 +568,8 @@
        ],
  
        'sources': [
@@ -10,15 +19,7 @@
        ],
  
        'dependencies': [
-@@ -761,6 +762,7 @@
-       'include_dirs': [
-         'src',
-         'deps/postject',
-+	'deps/cares/src/lib',
-         '<(SHARED_INTERMEDIATE_DIR)' # for node_natives.h
-       ],
-       'dependencies': [
-@@ -947,294 +949,6 @@
+@@ -1063,314 +1064,6 @@
          },
        ],
      }, # node_lib_target_name
@@ -28,8 +29,8 @@
 -      'dependencies': [
 -        '<(node_lib_target_name)',
 -        'deps/histogram/histogram.gyp:histogram',
--        'deps/uvwasi/uvwasi.gyp:uvwasi',
 -      ],
+-
 -      'includes': [
 -        'node.gypi'
 -      ],
@@ -39,9 +40,9 @@
 -        'deps/v8/include',
 -        'deps/cares/include',
 -        'deps/uv/include',
--        'deps/uvwasi/include',
 -        'test/cctest',
 -      ],
+-
 -      'defines': [
 -        'NODE_ARCH="<(target_arch)"',
 -        'NODE_PLATFORM="<(OS)"',
@@ -52,11 +53,11 @@
 -        'test/fuzzers/fuzz_env.cc',
 -      ],
 -      'conditions': [
--        ['OS=="linux"', {
+-        ['OS=="linux" or OS=="openharmony"', {
 -          'ldflags': [ '-fsanitize=fuzzer' ]
 -        }],
 -        # Ensure that ossfuzz flag has been set and that we are on Linux
--        [ 'OS!="linux" or ossfuzz!="true"', {
+-        [ 'OS not in "linux openharmony" or ossfuzz!="true"', {
 -          'type': 'none',
 -        }],
 -        # Avoid excessive LTO
@@ -65,19 +66,109 @@
 -        }],
 -      ],
 -    }, # fuzz_env
+-    { # fuzz_ClientHelloParser.cc
+-      'target_name': 'fuzz_ClientHelloParser',
+-      'type': 'executable',
+-      'dependencies': [
+-        '<(node_lib_target_name)',
+-        'deps/histogram/histogram.gyp:histogram',
+-      ],
+-      'includes': [
+-        'node.gypi'
+-      ],
+-      'include_dirs': [
+-        'src',
+-        'tools/msvs/genfiles',
+-        'deps/v8/include',
+-        'deps/cares/include',
+-        'deps/uv/include',
+-        'test/cctest',
+-      ],
+-      'defines': [
+-        'NODE_ARCH="<(target_arch)"',
+-        'NODE_PLATFORM="<(OS)"',
+-        'NODE_WANT_INTERNALS=1',
+-      ],
+-      'sources': [
+-        'src/node_snapshot_stub.cc',
+-        'test/fuzzers/fuzz_ClientHelloParser.cc',
+-      ],
+-      'conditions': [
+-        [ 'node_shared_uvwasi=="false"', {
+-          'dependencies': [ 'deps/uvwasi/uvwasi.gyp:uvwasi' ],
+-          'include_dirs': [ 'deps/uvwasi/include' ],
+-        }],
+-        ['OS=="linux" or OS=="openharmony"', {
+-          'ldflags': [ '-fsanitize=fuzzer' ]
+-        }],
+-        # Ensure that ossfuzz flag has been set and that we are on Linux
+-        [ 'OS not in "linux openharmony" or ossfuzz!="true"', {
+-          'type': 'none',
+-        }],
+-        # Avoid excessive LTO
+-        ['enable_lto=="true"', {
+-          'ldflags': [ '-fno-lto' ],
+-        }],
+-      ],
+-    }, # fuzz_ClientHelloParser.cc
+-    { # fuzz_strings
+-      'target_name': 'fuzz_strings',
+-      'type': 'executable',
+-      'dependencies': [
+-        '<(node_lib_target_name)',
+-        'deps/googletest/googletest.gyp:gtest_prod',
+-        'deps/histogram/histogram.gyp:histogram',
+-        'deps/nbytes/nbytes.gyp:nbytes',
+-      ],
+-      'includes': [
+-        'node.gypi'
+-      ],
+-      'include_dirs': [
+-        'src',
+-        'tools/msvs/genfiles',
+-        'deps/v8/include',
+-        'deps/cares/include',
+-        'deps/uv/include',
+-        'test/cctest',
+-      ],
+-      'defines': [
+-        'NODE_ARCH="<(target_arch)"',
+-        'NODE_PLATFORM="<(OS)"',
+-        'NODE_WANT_INTERNALS=1',
+-      ],
+-      'sources': [
+-        'src/node_snapshot_stub.cc',
+-        'test/fuzzers/fuzz_strings.cc',
+-      ],
+-      'conditions': [
+-        [ 'node_shared_uvwasi=="false"', {
+-          'dependencies': [ 'deps/uvwasi/uvwasi.gyp:uvwasi' ],
+-          'include_dirs': [ 'deps/uvwasi/include' ],
+-        }],
+-        ['OS=="linux" or OS=="openharmony"', {
+-          'ldflags': [ '-fsanitize=fuzzer' ]
+-        }],
+-        # Ensure that ossfuzz flag has been set and that we are on Linux
+-        [ 'OS not in "linux openharmony" or ossfuzz!="true"', {
+-          'type': 'none',
+-        }],
+-        # Avoid excessive LTO
+-        ['enable_lto=="true"', {
+-          'ldflags': [ '-fno-lto' ],
+-        }],
+-      ],
+-    }, # fuzz_strings
 -    {
 -      'target_name': 'cctest',
 -      'type': 'executable',
 -
 -      'dependencies': [
 -        '<(node_lib_target_name)',
--        'deps/base64/base64.gyp:base64',
 -        'deps/googletest/googletest.gyp:gtest',
 -        'deps/googletest/googletest.gyp:gtest_main',
 -        'deps/histogram/histogram.gyp:histogram',
--        'deps/uvwasi/uvwasi.gyp:uvwasi',
--        'deps/simdutf/simdutf.gyp:simdutf',
--        'deps/ada/ada.gyp:ada',
+-        'deps/nbytes/nbytes.gyp:nbytes',
+-        'tools/v8_gypfiles/abseil.gyp:abseil',
 -      ],
 -
 -      'includes': [
@@ -90,7 +181,6 @@
 -        'deps/v8/include',
 -        'deps/cares/include',
 -        'deps/uv/include',
--        'deps/uvwasi/include',
 -        'test/cctest',
 -      ],
 -
@@ -100,51 +190,36 @@
 -        'NODE_WANT_INTERNALS=1',
 -      ],
 -
--      'sources': [
--        'src/node_snapshot_stub.cc',
--        'test/cctest/node_test_fixture.cc',
--        'test/cctest/node_test_fixture.h',
--        'test/cctest/test_aliased_buffer.cc',
--        'test/cctest/test_base64.cc',
--        'test/cctest/test_base_object_ptr.cc',
--        'test/cctest/test_node_postmortem_metadata.cc',
--        'test/cctest/test_environment.cc',
--        'test/cctest/test_linked_binding.cc',
--        'test/cctest/test_node_api.cc',
--        'test/cctest/test_per_process.cc',
--        'test/cctest/test_platform.cc',
--        'test/cctest/test_report.cc',
--        'test/cctest/test_json_utils.cc',
--        'test/cctest/test_sockaddr.cc',
--        'test/cctest/test_traced_value.cc',
--        'test/cctest/test_util.cc',
--        'test/cctest/test_dataqueue.cc',
--      ],
+-      'sources': [ '<@(node_cctest_sources)' ],
 -
 -      'conditions': [
 -        [ 'node_use_openssl=="true"', {
 -          'defines': [
 -            'HAVE_OPENSSL=1',
 -          ],
--          'sources': [
--            'test/cctest/test_crypto_clienthello.cc',
--            'test/cctest/test_node_crypto.cc',
--            'test/cctest/test_quic_cid.cc',
--            'test/cctest/test_quic_tokens.cc',
--          ]
+-          'dependencies': [
+-            'deps/ncrypto/ncrypto.gyp:ncrypto',
+-          ],
+-        }, {
+-          'sources!': [ '<@(node_cctest_openssl_sources)' ],
 -        }],
 -        ['v8_enable_inspector==1', {
--          'sources': [
--            'test/cctest/test_inspector_socket.cc',
--            'test/cctest/test_inspector_socket_server.cc'
--          ],
 -          'defines': [
 -            'HAVE_INSPECTOR=1',
+-          ],
+-          'include_dirs': [
+-            # TODO(legendecas): make node_inspector.gypi a dependable target.
+-            '<(SHARED_INTERMEDIATE_DIR)', # for inspector
+-            '<(SHARED_INTERMEDIATE_DIR)/src', # for inspector
+-          ],
+-          'dependencies': [
+-            'deps/inspector_protocol/inspector_protocol.gyp:crdtp',
 -          ],
 -        }, {
 -           'defines': [
 -             'HAVE_INSPECTOR=0',
--           ]
+-           ],
+-           'sources!': [ '<@(node_cctest_inspector_sources)' ],
 -        }],
 -        ['OS=="solaris"', {
 -          'ldflags': [ '-I<(SHARED_INTERMEDIATE_DIR)' ]
@@ -179,8 +254,7 @@
 -      'dependencies': [
 -        '<(node_lib_target_name)',
 -        'deps/histogram/histogram.gyp:histogram',
--        'deps/uvwasi/uvwasi.gyp:uvwasi',
--        'deps/ada/ada.gyp:ada',
+-        'deps/nbytes/nbytes.gyp:nbytes',
 -      ],
 -
 -      'includes': [
@@ -189,11 +263,11 @@
 -
 -      'include_dirs': [
 -        'src',
+-        'tools',
 -        'tools/msvs/genfiles',
 -        'deps/v8/include',
 -        'deps/cares/include',
 -        'deps/uv/include',
--        'deps/uvwasi/include',
 -        'test/embedding',
 -      ],
 -
@@ -251,65 +325,12 @@
 -      ]
 -    }, # overlapped-checker
 -    {
--      'target_name': 'node_mksnapshot',
+-      'target_name': 'nop',
 -      'type': 'executable',
--
--      'dependencies': [
--        '<(node_lib_target_name)',
--        'deps/histogram/histogram.gyp:histogram',
--        'deps/uvwasi/uvwasi.gyp:uvwasi',
--        'deps/ada/ada.gyp:ada',
--      ],
--
--      'includes': [
--        'node.gypi'
--      ],
--
--      'include_dirs': [
--        'src',
--        'tools/msvs/genfiles',
--        'deps/v8/include',
--        'deps/cares/include',
--        'deps/uv/include',
--        'deps/uvwasi/include',
--      ],
--
--      'defines': [ 'NODE_WANT_INTERNALS=1' ],
--
 -      'sources': [
--        'src/node_snapshot_stub.cc',
--        'tools/snapshot/node_mksnapshot.cc',
--      ],
--
--      'conditions': [
--        [ 'node_use_openssl=="true"', {
--          'defines': [
--            'HAVE_OPENSSL=1',
--          ],
--        }],
--        [ 'node_use_node_code_cache=="true"', {
--          'defines': [
--            'NODE_USE_NODE_CODE_CACHE=1',
--          ],
--        }],
--        ['v8_enable_inspector==1', {
--          'defines': [
--            'HAVE_INSPECTOR=1',
--          ],
--        }],
--        ['OS=="win"', {
--          'libraries': [
--            'Dbghelp.lib',
--            'winmm.lib',
--            'Ws2_32.lib',
--          ],
--        }],
--        # Avoid excessive LTO
--        ['enable_lto=="true"', {
--          'ldflags': [ '-fno-lto' ],
--        }],
--      ],
--    }, # node_mksnapshot
-   ], # end targets
- 
-   'conditions': [
+-        'test/nop/nop.c',
+-      ]
+-    }, # nop
+     {
+       'target_name': 'node_js2c',
+       'type': 'executable',

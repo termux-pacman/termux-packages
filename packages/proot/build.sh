@@ -1,13 +1,15 @@
+# Contributor: @michalbednarski
 TERMUX_PKG_HOMEPAGE=https://proot-me.github.io/
 TERMUX_PKG_DESCRIPTION="Emulate chroot, bind mount and binfmt_misc for non-root users"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="Michal Bednarski @michalbednarski"
 # Just bump commit and version when needed:
-_COMMIT=2d7c70eec7e2688e465c7bfba60c927fad0abfb1
+_COMMIT=228a5f28b078f4e2504de46758ce17948f73f507
 TERMUX_PKG_VERSION=5.1.107
-TERMUX_PKG_REVISION=60
+TERMUX_PKG_REVISION=68
 TERMUX_PKG_SRCURL=https://github.com/termux/proot/archive/${_COMMIT}.zip
-TERMUX_PKG_SHA256=1bdc610dd38aad27af9a1d42b108adcdf8605d2089ed708db31dd65dcbf7f19a
+TERMUX_PKG_SHA256=39ed5eeb6ebde37be8e53591c670bf35d05869f196eff697c8dd1c20af3c0034
+TERMUX_PKG_AUTO_UPDATE=false
 TERMUX_PKG_DEPENDS="libtalloc"
 TERMUX_PKG_SUGGESTS="proot-distro"
 TERMUX_PKG_BUILD_IN_SRC=true

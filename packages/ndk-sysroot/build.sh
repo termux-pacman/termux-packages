@@ -4,9 +4,11 @@ TERMUX_PKG_LICENSE="NCSA"
 TERMUX_PKG_MAINTAINER="@termux"
 # Version should be equal to TERMUX_NDK_{VERSION_NUM,REVISION} in
 # scripts/properties.sh
-TERMUX_PKG_VERSION=25c
+TERMUX_PKG_VERSION=29
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://dl.google.com/android/repository/android-ndk-r${TERMUX_PKG_VERSION}-linux.zip
-TERMUX_PKG_SHA256=769ee342ea75f80619d985c2da990c48b3d8eaf45f48783a2d48870d04b46108
+TERMUX_PKG_SHA256=4abbbcdc842f3d4879206e9695d52709603e52dd68d3c1fff04b3b5e7a308ecf
+TERMUX_PKG_AUTO_UPDATE=false
 # This package has taken over <pty.h> from the previous libutil-dev
 # and iconv.h from libandroid-support-dev:
 TERMUX_PKG_CONFLICTS="libutil-dev, libgcc, libandroid-support-dev"
@@ -27,10 +29,28 @@ include/sys/capability.h
 include/sys/sem.h
 include/sys/shm.h
 include/unicode
+include/vk_video
 include/vulkan
 include/zconf.h
 include/zlib.h
 "
+
+termux_step_get_source() {
+	mkdir -p "$TERMUX_PKG_SRCDIR"
+	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
+		termux_download_src_archive
+		cd $TERMUX_PKG_TMPDIR
+		termux_extract_src_archive
+		mv "$TERMUX_PKG_SRCDIR/android-ndk-r$TERMUX_PKG_VERSION"/* "$TERMUX_PKG_SRCDIR"
+	else
+		local lib_path="toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		mkdir -p "$TERMUX_PKG_SRCDIR"/"$lib_path"
+		cp -fr "$NDK"/"$lib_path"/* "$TERMUX_PKG_SRCDIR"/"$lib_path"/
+		lib_path="toolchains/llvm/prebuilt/linux-x86_64/lib"
+		mkdir -p "$TERMUX_PKG_SRCDIR"/"$lib_path"
+		cp -fr "$NDK"/"$lib_path"/* "$TERMUX_PKG_SRCDIR"/"$lib_path"/
+	fi
+}
 
 termux_step_post_get_source() {
 	pushd toolchains/llvm/prebuilt/linux-x86_64/sysroot/
@@ -44,9 +64,7 @@ termux_step_post_get_source() {
 			-e "s%\@TERMUX_PREFIX\@%${TERMUX_PREFIX}%g" \
 			"$patch" | patch --silent -p1
 	done
-	sed -i "s/define __ANDROID_API__ __ANDROID_API_FUTURE__/define __ANDROID_API__ $TERMUX_PKG_API_LEVEL/" \
-		usr/include/android/api-level.h
-	grep -lrw usr/include/c++/v1 -e '<version>' | xargs -n 1 sed -i 's/<version>/\"version\"/g'
+	grep -lrw usr/include/c++/v1 -e 'include <version>' | xargs -n 1 sed -i 's/include <version>/include \"version\"/g'
 	popd
 }
 
@@ -65,29 +83,23 @@ termux_step_make_install() {
 	cp toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_API_LEVEL/*.o \
 		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib
 
-	if [ $TERMUX_ARCH == "i686" ]; then
-		LIBATOMIC=toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/*/lib/linux/i386
-	elif [ $TERMUX_ARCH == "arm64" ]; then
-		LIBATOMIC=toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/*/lib/linux/aarch64
-	else
-		LIBATOMIC=toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/*/lib/linux/$TERMUX_ARCH
-	fi
-
-	cp $LIBATOMIC/libatomic.a $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/
-
 	cp toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/libcompiler_rt-extras.a \
 		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/
-	# librt and libpthread are built into libc on android, so setup them as symlinks
-	# to libc for compatibility with programs that users try to build:
-	local _SYSTEM_LIBDIR=/system/lib64
-	if [ $TERMUX_ARCH_BITS = 32 ]; then _SYSTEM_LIBDIR=/system/lib; fi
+
+	cp toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/libc++experimental.a \
+		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/
+
 	NDK_ARCH=$TERMUX_ARCH
 	test $NDK_ARCH == 'i686' && NDK_ARCH='i386'
 
-	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib
-	# clang 13 requires libunwind on Android.
-	cp toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/14.0.7/lib/linux/$NDK_ARCH/libunwind.a \
+	# clang requires libunwind on Android.
+	cp toolchains/llvm/prebuilt/linux-x86_64/lib/clang/21/lib/linux/$NDK_ARCH/libatomic.a \
 		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib
+	cp toolchains/llvm/prebuilt/linux-x86_64/lib/clang/21/lib/linux/$NDK_ARCH/libunwind.a \
+		$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib
+
+	# librt and libpthread are built into libc on android, so setup them as symlinks
+	# to libc for compatibility with programs that users try to build:
 	for lib in librt.so libpthread.so libutil.so; do
 		echo 'INPUT(-lc)' > $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/lib/$lib
 	done

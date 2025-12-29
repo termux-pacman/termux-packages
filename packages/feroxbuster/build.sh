@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE="https://github.com/epi052/feroxbuster"
 TERMUX_PKG_DESCRIPTION="A fast, simple, recursive content discovery tool written in Rust"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="2.10.0"
+TERMUX_PKG_VERSION="2.13.1"
 TERMUX_PKG_SRCURL="https://github.com/epi052/feroxbuster/archive/refs/tags/v$TERMUX_PKG_VERSION.tar.gz"
-TERMUX_PKG_SHA256=687f4b9a09ab146355fcaef132307b0cd802923728ba1fe14029a115f841be57
+TERMUX_PKG_SHA256=6f1f3466319ea5485b9d6f05000718c6ccbe1210c1cea7b2af83a5343d068a23
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="openssl"
@@ -14,6 +14,8 @@ termux_step_post_get_source() {
 }
 
 termux_step_pre_configure() {
+	termux_setup_rust
+
 	rm -f Makefile
 }
 

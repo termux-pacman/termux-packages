@@ -2,10 +2,12 @@ TERMUX_PKG_HOMEPAGE=https://www.xpdfreader.com/
 TERMUX_PKG_DESCRIPTION="Xpdf is an open source viewer for Portable Document Format (PDF) files."
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=4.04
+TERMUX_PKG_VERSION="4.06"
 TERMUX_PKG_SRCURL=https://dl.xpdfreader.com/xpdf-$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=63ce23fcbf76048f524c40be479ac3840d7a2cbadb6d1e0646ea77926656bade
-TERMUX_PKG_DEPENDS="fontconfig, freetype, libc++, libpng, qt5-qtbase, qt5-qtsvg"
+TERMUX_PKG_SHA256=1c38f527c46caee0f712386d42a885b96a31ed9ce11904e872559859894d137e
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="fontconfig, freetype, libc++, libpng, qt6-qtbase, qt6-qtsvg"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
 
 # Remove files conflicting with poppler:
 TERMUX_PKG_RM_AFTER_INSTALL="

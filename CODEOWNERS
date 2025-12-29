@@ -1,59 +1,52 @@
 # Default assignment: frequent contributors from @termux.
-* @finagolfin @Grimler91
+* @Grimler91 @TomJo2000
+
+# GitHub Actions & other stuff
+/.github @thunder-coding
+
+# Documentation for contributors
+/CONTRIBUTING.md @thunder-coding
+/README.md @thunder-coding
 
 # Build system.
 /build-all.sh @Grimler91
-/build-package.sh @Grimler91
-/clean.sh @Grimler91
-/scripts/ @Grimler91
+/build-package.sh @Grimler91 @thunder-coding
+/clean.sh @Grimler91 @thunder-coding
+/scripts/ @Grimler91 @thunder-coding
+/repo.json @Grimler91 @thunder-coding
+
+# Build script linter
+/scripts/lint-packages.sh @TomJo2000
+
+# Repository Health Check
+/scripts/check-repository-health.js @thunder-coding
+/scripts/generate-apt-packages-list.sh @thunder-coding
 
 # GN setup script
 /scripts/build/setup/termux_setup_gn.sh @thunder-coding
 
-# GIR (GObject Introspection Repository) setup script and other stuff
-/packages/gobject-introspection/gi-cross-launcher-on-device.in @xtkoba
-/packages/gobject-introspection/gi-cross-launcher.sh @xtkoba
-/packages/ldd/ @xtkoba
-/scripts/build/setup/termux_setup_gir.sh @xtkoba
-
-# Pre-generated XML dumps for GIR
-/packages/*/gir/ @xtkoba
-/x11-packages/*/gir/ @xtkoba
+# Nodejs setup script
+/scripts/build/setup/termux_setup_nodejs.sh @thunder-coding
 
 # Packages owned by @finagolfin
-/packages/kak-lsp/ @finagolfin
 /packages/libdispatch/ @finagolfin
 /packages/libllvm/ @finagolfin
 /packages/llbuild/ @finagolfin
 /packages/swift/ @finagolfin
 
-# Packages owned by @DLC01
-/packages/exhale/ @DLC01
-/packages/fdkaac/ @DLC01
-/packages/libfdk-aac/ @DLC01
-
 # Packages owned by @Grimler91
 /packages/chezmoi/ @Grimler91
 /packages/docopt/ @Grimler91
-/packages/game-repo/ @Grimler91
 /packages/libprotobuf-c/ @Grimler91
 /packages/libqrencode/ @Grimler91
 /packages/mpdscribble/ @Grimler91
 /packages/pass-otp/ @Grimler91
 /packages/root-repo/ @Grimler91
 /packages/runit/ @Grimler91
-/packages/science-repo/ @Grimler91
 /packages/smalltalk/ @Grimler91
 /packages/teckit/ @Grimler91
 /packages/termux-services/ @Grimler91
 /packages/texlive-bin/ @Grimler91
-
-# Packages owned by @ian4hu
-/packages/php-apcu/ @ian4hu
-/packages/php-imagick/ @ian4hu
-/packages/php-psr/ @ian4hu
-/packages/php-zephir-parser/ @ian4hu
-/packages/re2c/ @ian4hu
 
 # Packages owned by @kcubeterm
 /packages/brook/ @kcubeterm
@@ -76,105 +69,14 @@
 /packages/shiori/ @kcubeterm
 /packages/youtubedr/ @kcubeterm
 
-# Packages owned by @librehat
-/packages/flatbuffers/ @librehat
-/packages/mimetic/ @librehat
-
-# Packages owned by @msoose
-/packages/dns2tcp/ @msoose
-/packages/proxmark3/ @msoose
-/packages/proxmark3-git/ @msoose
-/packages/recode/ @msoose
-
-# Packages owned by @michalbednarski
-/packages/proot/ @michalbednarski
-/packages/termux-am/ @michalbednarski
-
 # Packages owned by @MrAdityaAlok
-/packages/haskell-base-compat-batteries/ @MrAdityaAlok
-/packages/haskell-cabal-syntax/ @MrAdityaAlok
-/packages/ghc-libs/ @MrAdityaAlok
-/packages/haskell-these/ @MrAdityaAlok
-/packages/haskell-hashable/ @MrAdityaAlok
-/packages/haskell-edit-distance/ @MrAdityaAlok
-/packages/haskell-hackage-security/ @MrAdityaAlok
-/packages/haskell-ed25519/ @MrAdityaAlok
-/packages/haskell-indexed-traversable/ @MrAdityaAlok
-/packages/haskell-transformers-compat/ @MrAdityaAlok
-/packages/haskell-witherable/ @MrAdityaAlok
-/packages/haskell-text-short/ @MrAdityaAlok
-/packages/haskell-bifunctors/ @MrAdityaAlok
-/packages/haskell-http/ @MrAdityaAlok
-/packages/haskell-integer-logarithms/ @MrAdityaAlok
-/packages/haskell-statevar/ @MrAdityaAlok
-/packages/haskell-attoparsec/ @MrAdityaAlok
-/packages/haskell-diff/ @MrAdityaAlok
-/packages/haskell-regex-tdfa/ @MrAdityaAlok
-/packages/haskell-lukko/ @MrAdityaAlok
-/packages/haskell-zlib/ @MrAdityaAlok
-/packages/haskell-semialign/ @MrAdityaAlok
-/packages/haskell-network-uri/ @MrAdityaAlok
-/packages/haskell-contravariant/ @MrAdityaAlok
-/packages/haskell-scientific/ @MrAdityaAlok
-/packages/haskell-strict/ @MrAdityaAlok
-/packages/haskell-network/ @MrAdityaAlok
-/packages/haskell-quickcheck/ @MrAdityaAlok
-/packages/haskell-base-orphans/ @MrAdityaAlok
-/packages/haskell-time-compat/ @MrAdityaAlok
-/packages/haskell-tar/ @MrAdityaAlok
-/packages/haskell-uuid-types/ @MrAdityaAlok
-/packages/haskell-semigroupoids/ @MrAdityaAlok
-/packages/haskell-th-abstraction/ @MrAdityaAlok
-/packages/haskell-regex-base/ @MrAdityaAlok
-/packages/haskell-cabal/ @MrAdityaAlok
-/packages/haskell-data-fix/ @MrAdityaAlok
-/packages/haskell-regex-posix/ @MrAdityaAlok
-/packages/haskell-resolv/ @MrAdityaAlok
-/packages/haskell-base-compat/ @MrAdityaAlok
-/packages/haskell-cryptohash-sha256/ @MrAdityaAlok
+/packages/ghc/ @MrAdityaAlok
 /packages/cabal-install/ @MrAdityaAlok
-/packages/haskell-th-compat/ @MrAdityaAlok
-/packages/haskell-unordered-containers/ @MrAdityaAlok
-/packages/haskell-aeson/ @MrAdityaAlok
-/packages/haskell-echo/ @MrAdityaAlok
-/packages/haskell-base16-bytestring/ @MrAdityaAlok
-/packages/haskell-async/ @MrAdityaAlok
-/packages/haskell-primitive/ @MrAdityaAlok
-/packages/shellcheck/ @MrAdityaAlok
-/packages/haskell-tagged/ @MrAdityaAlok
-/packages/haskell-onetuple/ @MrAdityaAlok
-/packages/haskell-vector/ @MrAdityaAlok
-/packages/haskell-splitmix/ @MrAdityaAlok
-/packages/haskell-distributive/ @MrAdityaAlok
-/packages/haskell-dlist/ @MrAdityaAlok
-/packages/haskell-comonad/ @MrAdityaAlok
-/packages/haskell-indexed-traversable-instances/ @MrAdityaAlok
-/packages/haskell-assoc/ @MrAdityaAlok
-/packages/haskell-random/ @MrAdityaAlok
-/packages/haskell-base64-bytestring/ @MrAdityaAlok
-/packages/helix/ @MrAdityaAlok
 /packages/libdvbcsa/ @MrAdityaAlok
-/packages/lua-language-server/ @MrAdityaAlok
 /packages/tvheadend/ @MrAdityaAlok
 
-# Packages owned by @Neo-Oli
-/packages/cava/ @Neo-Oli
-/packages/colordiff/ @Neo-Oli
-/packages/ed/ @Neo-Oli
-/packages/libmesode/ @Neo-Oli
-/packages/libotr/ @Neo-Oli
-/packages/libsignal-protocol-c/ @Neo-Oli
-/packages/nyancat/ @Neo-Oli
-/packages/par2/ @Neo-Oli
-/packages/profanity/ @Neo-Oli
-/packages/tsocks/ @Neo-Oli
-/packages/tty-clock/ @Neo-Oli
-
-# Packages owned by @suhan-paradkar
-/packages/libsecret/ @suhan-paradkar
-/packages/mailutils/ @suhan-paradkar
-
 # Packages owned by @thunder-coding
+/packages/command-not-found/ @thunder-coding
 /packages/flyctl/ @thunder-coding
 /packages/git-sizer/ @thunder-coding
 /packages/gn/ @thunder-coding
@@ -184,25 +86,76 @@
 /packages/silicon/ @thunder-coding
 /packages/slides/ @thunder-coding
 
-# Packages owned by @Yonle
-/packages/chafa/ @Yonle
-/packages/fluidsynth/ @Yonle
-
-# Packages owned by @PeroSar
-/packages/gitui/ @PeroSar
-/packages/rxfetch/ @PeroSar
+# Packages owned by @TomJo2000
+/packages/bash-completion/ @TomJo2000
+/packages/bash/ @TomJo2000
+/packages/borgbackup/ @TomJo2000
+/packages/coreutils/ @TomJo2000
+/packages/diffutils/ @TomJo2000
+/packages/eza/ @TomJo2000
+/packages/git/ @TomJo2000
+/packages/git-delta/ @TomJo2000
+/packages/gopass/ @TomJo2000
+/packages/gopls/ @TomJo2000
+/packages/grep/ @TomJo2000
+/packages/less/ @TomJo2000
+/packages/lesspipe/ @TomJo2000
+/packages/lua-language-server/ @TomJo2000
+/packages/lua-lpeg/ @TomJo2000
+/packages/mandoc/ @TomJo2000
+/packages/moreutils/ @TomJo2000
+/packages/mpv/ @TomJo2000
+/packages/ncdu/ @TomJo2000
+/packages/ncdu2/ @TomJo2000
+/packages/neovim/ @TomJo2000
+/packages/nerdfix/ @TomJo2000
+/packages/openssh/ @TomJo2000
+/packages/rip2/ @TomJo2000
+/packages/rsgain/ @TomJo2000
+/packages/rsync/ @TomJo2000
+/packages/shellcheck/ @TomJo2000
+/packages/starship/ @TomJo2000
+/packages/taplo/ @TomJo2000
+/packages/tinymist/ @TomJo2000
+/packages/tmux/ @TomJo2000
+/packages/tree-sitter* @TomJo2000
+/packages/typstfmt/ @TomJo2000
+/packages/vim/ @TomJo2000
+/packages/zls/ @TomJo2000
+/packages/zrok/ @TomJo2000
+/packages/zsh/ @TomJo2000
+/x11-packages/alacritty/ @TomJo2000
+/x11-packages/jwm/ @TomJo2000
+/x11-packages/mpv-x/ @TomJo2000
+/x11-packages/qbittorrent/ @TomJo2000
+/x11-packages/vim-gtk/ @TomJo2000
 
 # Packages owned by @2096779623
-/packages/alist/ @2096779623
+/packages/openlist/ @2096779623
 /packages/frp/ @2096779623
 
-# Misc
-/packages/blogc/ @rafaelmartins
-/packages/cfengine/ @craigcomstock
-/packages/composer/ @PuneetGopinath
-/packages/emscripten/ @truboxl
-/packages/germanium/ @ravener
-/packages/gotop/ @medzikuser
-/packages/rust/ @kcotugno
-/packages/xmake/ @waruqi
+# Packages owned by @twaik
+/x11-packages/termux-x11-nightly/ @twaik
+
+# Packages owned by @Maxython
 /packages/pacman/ @Maxython
+/packages/glibc-repo/ @Maxython
+
+# Packages owned by @licy183
+/packages/deno/ @licy183
+/packages/llvm-mingw-w64/ @licy183
+/packages/llvm-mingw-w64-libcompiler-rt/ @licy183
+/packages/llvm-mingw-w64-tools/ @licy183
+/packages/llvm-mingw-w64-ucrt/ @licy183
+/packages/pypy/ @licy183
+/packages/pypy3/ @licy183
+/packages/virglrenderer-android/ @licy183
+/x11-packages/carbonyl/ @licy183
+/x11-packages/carbonyl-host-tools/ @licy183
+/x11-packages/code-oss/ @licy183
+/x11-packages/chromium/ @licy183
+/x11-packages/chromium-host-tools/ @licy183
+/x11-packages/electron-for-code-oss @licy183
+/x11-packages/electron-host-tools-for-code-oss @licy183
+/x11-packages/qt5-qtwebengine/ @licy183
+/x11-packages/qt6-qtwebengine/ @licy183

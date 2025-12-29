@@ -2,11 +2,13 @@ TERMUX_PKG_HOMEPAGE=https://www.tug.org/texlive/
 TERMUX_PKG_DESCRIPTION="TeX Live is a distribution of the TeX typesetting system. This package contains architecture dependent binaries."
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="Henrik Grimler @Grimler91"
-TERMUX_PKG_VERSION=20230313
-TERMUX_PKG_SRCURL=https://github.com/TeX-Live/texlive-source/archive/refs/heads/tags/texlive-${TERMUX_PKG_VERSION:0:4}.0.tar.gz
-TERMUX_PKG_SHA256=b14ec8c6873ae04d77cd1de239b660e30f3d6f0e97449aee67e3300ea4a259fd
-TERMUX_PKG_DEPENDS="freetype, harfbuzz, harfbuzz-icu, libc++, libcairo, libgd, libgmp, libgraphite, libiconv, libicu, liblua52, libmpfr, libpaper, libpixman, libpng, teckit, zlib, zziplib"
-# libpcre, glib, fonconfig are dependencies to libcairo. pkg-config gives an error if they are missing
+TERMUX_PKG_VERSION=1:2025.0
+TERMUX_PKG_REVISION=2
+TERMUX_PKG_SRCURL="https://github.com/TeX-Live/texlive-source/archive/refs/heads/tags/texlive-${TERMUX_PKG_VERSION:2}.tar.gz"
+TERMUX_PKG_SHA256=b792039f08d6f8cf0e74ce26bf7958badb3f45db6cadeebacc05ec9fe95e2908
+TERMUX_PKG_AUTO_UPDATE=false
+TERMUX_PKG_DEPENDS="freetype, harfbuzz, harfbuzz-icu, libc++, libcairo, libgd, libgmp, libgraphite, libiconv, libicu, liblua52, libmpfr, libpaper, libpixman, libpng, teckit, zlib"
+# libpcre, glib, fontconfig are dependencies of libcairo. pkg-config gives an error if they are missing
 # libuuid, libxml2 are needed by fontconfig
 TERMUX_PKG_BUILD_DEPENDS="icu-devtools, pcre, glib, fontconfig, libuuid, libxml2"
 TERMUX_PKG_BREAKS="texlive (<< 20180414), texlive-bin-dev"
@@ -14,7 +16,7 @@ TERMUX_PKG_REPLACES="texlive (<< 20170524-3), texlive-bin-dev"
 TERMUX_PKG_RECOMMENDS="texlive-installer"
 TERMUX_PKG_HOSTBUILD=true
 
-TL_ROOT=$TERMUX_PREFIX/share/texlive
+TL_ROOT=$TERMUX_PREFIX/share/texlive/${TERMUX_PKG_VERSION:2:6}
 TL_BINDIR=$TERMUX_PREFIX/bin/texlive
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
@@ -55,7 +57,6 @@ RANLIB=ranlib
 --with-system-mpfr
 --with-system-teckit
 --with-system-zlib
---with-system-zziplib
 --without-texi2html
 --without-texinfo
 --without-x
@@ -117,4 +118,8 @@ termux_step_pre_configure() {
 	export TIE=$TERMUX_PKG_HOSTBUILD_DIR/texk/web2c/tie
 	export OTANGLE=$TERMUX_PKG_HOSTBUILD_DIR/texk/web2c/otangle
 	export HIMKTABLES=$TERMUX_PKG_HOSTBUILD_DIR/texk/web2c/himktables
+
+	sed -e "s%@TERMUX_PREFIX@%$TERMUX_PREFIX%g" \
+		-e "s%@YEAR@%${TERMUX_PKG_VERSION:2:6}%g" \
+		"$TERMUX_PKG_BUILDER_DIR"/texk-kpathsea-texmf.cnf.diff | patch --silent -p1
 }

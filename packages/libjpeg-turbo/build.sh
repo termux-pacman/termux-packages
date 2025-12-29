@@ -3,9 +3,10 @@ TERMUX_PKG_DESCRIPTION="Library for reading and writing JPEG image files"
 TERMUX_PKG_LICENSE="IJG, BSD 3-Clause, ZLIB"
 TERMUX_PKG_LICENSE_FILE="README.ijg, LICENSE.md"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=3.0.0
-TERMUX_PKG_SRCURL=https://downloads.sourceforge.net/project/libjpeg-turbo/${TERMUX_PKG_VERSION}/libjpeg-turbo-${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=c77c65fcce3d33417b2e90432e7a0eb05f59a7fff884022a9d931775d583bfaa
+TERMUX_PKG_VERSION="3.1.3"
+TERMUX_PKG_SRCURL=https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${TERMUX_PKG_VERSION}/libjpeg-turbo-${TERMUX_PKG_VERSION}.tar.gz
+TERMUX_PKG_SHA256=075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BREAKS="libjpeg-turbo-dev"
 TERMUX_PKG_REPLACES="libjpeg-turbo-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DWITH_JPEG8=1"
@@ -21,4 +22,17 @@ termux_step_post_massage() {
 	if ! readelf -d lib/libjpeg.so | grep -q '(SONAME).*\[libjpeg\.so\.'; then
 		termux_error_exit "SONAME for libjpeg.so is not properly set."
 	fi
+
+	# Do not forget to bump revision of reverse dependencies and rebuild them
+	# after SOVERSION is changed.
+	local _SOVERSION_GUARD_FILES="
+lib/libjpeg.so.8
+lib/libturbojpeg.so.0
+"
+	local f
+	for f in ${_SOVERSION_GUARD_FILES}; do
+		if [ ! -e "${f}" ]; then
+			termux_error_exit "SOVERSION guard check failed."
+		fi
+	done
 }

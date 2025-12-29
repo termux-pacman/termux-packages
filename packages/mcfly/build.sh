@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://github.com/cantino/mcfly
 TERMUX_PKG_DESCRIPTION="Replaces your default ctrl-r shell history search with an intelligent search engine"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="0.8.1"
+TERMUX_PKG_VERSION="0.9.4"
 TERMUX_PKG_SRCURL=https://github.com/cantino/mcfly/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=727fc98b7291cc5b79c90a48d2e4460bc71550f221be8d2dad2377580f9b2d72
+TERMUX_PKG_SHA256=31cdd76bfab3b05b4873bc20f03eb022e5a5d68f6595bc6df5dd9fce4b519e53
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
 
@@ -13,7 +13,8 @@ termux_step_pre_configure() {
 		local libdir=target/x86_64-linux-android/release/deps
 		mkdir -p $libdir
 		pushd $libdir
-		RUSTFLAGS+=" -C link-arg=$($CC -print-libgcc-file-name)"
+		local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
+		export CARGO_TARGET_${env_host}_RUSTFLAGS+=" -C link-arg=$($CC -print-libgcc-file-name)"
 		echo "INPUT(-l:libunwind.a)" > libgcc.so
 		popd
 	fi
@@ -21,24 +22,10 @@ termux_step_pre_configure() {
 
 termux_step_make() {
 	termux_setup_rust
-	cargo build --jobs $TERMUX_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
+	cargo build --jobs $TERMUX_PKG_MAKE_PROCESSES --target $CARGO_TARGET_NAME --release
 }
 
 termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin target/${CARGO_TARGET_NAME}/release/mcfly
-	install -Dm600 -t $TERMUX_PREFIX/share/mcfly mcfly.{fi,z}sh
-}
-
-termux_step_create_debscripts() {
-	cat <<-EOF > ./postinst
-		#!$TERMUX_PREFIX/bin/sh
-		echo
-		echo "********"
-		echo "McFly does not support Bash on Android."
-		echo
-		echo "https://github.com/termux/termux-packages/issues/8722"
-		echo "https://github.com/cantino/mcfly/issues/215"
-		echo "********"
-		echo
-	EOF
+	install -Dm600 -t $TERMUX_PREFIX/share/mcfly mcfly.{ba,fi,z}sh
 }

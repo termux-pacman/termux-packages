@@ -2,13 +2,16 @@ TERMUX_PKG_HOMEPAGE=https://swiftshader.googlesource.com/SwiftShader
 TERMUX_PKG_DESCRIPTION="A high-performance CPU-based implementation of the Vulkan graphics API"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-_CHROMIUM_VERSION=110.0.5481.177
-TERMUX_PKG_VERSION=$_CHROMIUM_VERSION
-TERMUX_PKG_SRCURL=https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$_CHROMIUM_VERSION.tar.xz
-TERMUX_PKG_SHA256=7b2f454d1195270a39f94a9ff6d8d68126be315e0da4e31c20f4ba9183a1c9b7
+_COMMIT_DATE=2025.06.25
+_COMMIT_HASH=436722b391188ad8c1d1d5dd2447c38ac7f71439
+TERMUX_PKG_VERSION=$_COMMIT_DATE
+TERMUX_PKG_REVISION=2
+TERMUX_PKG_SRCURL=https://github.com/google/swiftshader/archive/$_COMMIT_HASH.tar.gz
+TERMUX_PKG_SHA256=971423bdf3e5890234bc9d9f82e7d6e648b2533f8e2dfe4265c3209b831dfd06
 TERMUX_PKG_DEPENDS="libandroid-shmem, libc++, vulkan-loader-generic"
 TERMUX_PKG_BUILD_DEPENDS="vulkan-headers"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCMAKE_POLICY_VERSION_MINIMUM=3.5
 -DSWIFTSHADER_BUILD_TESTS=FALSE
 -DSWIFTSHADER_WARNINGS_AS_ERRORS=FALSE
 -DSPIRV_HEADERS_SKIP_INSTALL=ON
@@ -16,7 +19,8 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 "
 
 termux_step_pre_configure() {
-	TERMUX_PKG_SRCDIR=$TERMUX_PKG_SRCDIR/third_party/swiftshader
+	CFLAGS+=" -fcommon"
+	LDFLAGS+=" -Wl,-undefined-version"
 }
 
 termux_step_make_install() {

@@ -2,19 +2,17 @@ TERMUX_PKG_HOMEPAGE=https://github.com/pytorch/audio
 TERMUX_PKG_DESCRIPTION="Data manipulation and transformation for audio signal processing, powered by PyTorch"
 TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2.0.1
-TERMUX_PKG_SRCURL=git+https://github.com/pytorch/audio
-# FFMPEG
-TERMUX_PKG_DEPENDS="libc++, python, python-pip, python-torch"
+TERMUX_PKG_VERSION="2.9.1"
+TERMUX_PKG_SRCURL="https://github.com/pytorch/audio/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
+TERMUX_PKG_SHA256=590492c90552959b3df6f601eb733135064bf2d9e53c516adcf6845a4e545662
+TERMUX_PKG_DEPENDS="libc++, python, python-torch, python-torchcodec"
 TERMUX_PKG_PYTHON_COMMON_DEPS="wheel, setuptools"
 
 termux_step_pre_configure() {
 	termux_setup_cmake
 	termux_setup_ninja
 
-	export BUILD_VERSION=$TERMUX_PKG_VERSION
-	# FIXME: The same as torchvision, upstream doesn't support ffmpeg 6.
-	export USE_FFMPEG=0
+	export BUILD_VERSION="$TERMUX_PKG_VERSION"
 	export TORCHAUDIO_CMAKE_PREFIX_PATH="$TERMUX_PYTHON_HOME/site-packages/torch;$TERMUX_PREFIX"
 	export host_alias="$TERMUX_HOST_PLATFORM"
 }

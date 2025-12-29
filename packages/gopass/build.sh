@@ -1,16 +1,20 @@
 TERMUX_PKG_HOMEPAGE=https://github.com/gopasspw/gopass
 TERMUX_PKG_DESCRIPTION="The slightly more awesome standard unix password manager for teams"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.15.7"
+TERMUX_PKG_MAINTAINER="Joshua Kahn @TomJo2000"
+TERMUX_PKG_VERSION="1.16.1"
 TERMUX_PKG_SRCURL=https://github.com/gopasspw/gopass/archive/v$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=35d1af333de479e429da31427b70b2043e20ef9a7ab0f8b816867ffc6f44927b
+TERMUX_PKG_SHA256=33451a782b66266c59560a5ec7f4e34c104c501a36b445fc574fad71e3b3d884
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="git, gnupg"
 TERMUX_PKG_SUGGESTS="termux-api, openssh"
 
 termux_step_make() {
 	termux_setup_golang
+	# The commit introducing this is 2 years old, no idea why its only causing build failures now
+	# https://github.com/gopasspw/gopass/commit/ffaa9e372999a4c5db82f0a281fc67758d107ac0
+	# needed as of 1.15.13 for all architectures except AArch64
+	sed -i 's|CGO_ENABLED=0|CGO_ENABLED=1|g' "$TERMUX_PKG_SRCDIR/Makefile"
 	export GOPATH=$TERMUX_PKG_BUILDDIR
 
 	mkdir -p ./src

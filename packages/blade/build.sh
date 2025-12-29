@@ -3,16 +3,19 @@ TERMUX_PKG_DESCRIPTION="A simple, fast, clean and dynamic language"
 TERMUX_PKG_LICENSE="custom"
 TERMUX_PKG_LICENSE_FILE="LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.0.81
+TERMUX_PKG_VERSION="0.0.87"
 TERMUX_PKG_SRCURL=https://github.com/blade-lang/blade/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=a149db8c8d667d7834039f005c720bfbe0651e6f1e34ec9ec7ea74d425e73a82
-TERMUX_PKG_BUILD_DEPENDS="libcurl, openssl"
+TERMUX_PKG_SHA256=7a438f126eed74077d6112b89c9d890a8cc0a3affbccde0b023ad43639fed4de
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_BUILD_DEPENDS="libgd, libcurl, openssl"
 TERMUX_PKG_HOSTBUILD=true
 
 termux_step_host_build() {
+	sed -i '/add_subdirectory(imagine)/d' $TERMUX_PKG_SRCDIR/packages/CMakeLists.txt
 	termux_setup_cmake
 	cmake $TERMUX_PKG_SRCDIR
-	make -j $TERMUX_MAKE_PROCESSES
+	make -j $TERMUX_PKG_MAKE_PROCESSES
+	echo "add_subdirectory(imagine)" >> $TERMUX_PKG_SRCDIR/packages/CMakeLists.txt
 }
 
 termux_step_pre_configure() {
@@ -26,6 +29,6 @@ termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/lib libblade.so
 	local sharedir=$TERMUX_PREFIX/share/blade
 	mkdir -p $sharedir
-	cp -r benchmarks includes libs tests $sharedir/
+	cp -r $TERMUX_PKG_SRCDIR/benchmarks $TERMUX_PKG_BUILDDIR/blade/includes $TERMUX_PKG_SRCDIR/libs $TERMUX_PKG_SRCDIR/tests $sharedir/
 	popd
 }

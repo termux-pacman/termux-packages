@@ -1,45 +1,34 @@
 TERMUX_PKG_HOMEPAGE=https://www.qt.io/
 TERMUX_PKG_DESCRIPTION="Integrated Development Environment for Qt"
-TERMUX_PKG_LICENSE="LGPL-3.0"
-TERMUX_PKG_MAINTAINER="Simeon Huang <symeon@librehat.com>"
-TERMUX_PKG_VERSION=4.15.2
-TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL="https://github.com/qt-creator/qt-creator/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=e23e76ea518cc65949f29e9eff18331a9a1da0817b292afbcbb4d5cdeada3c47
-TERMUX_PKG_DEPENDS="libc++, qt5-qtbase, qt5-qtdeclarative, qt5-qtxmlpatterns, qt5-qttools, qt5-qtx11extras, qt5-qtsvg, llvm, clang"
-TERMUX_PKG_BUILD_DEPENDS="qt5-qtbase-cross-tools, qt5-qtdeclarative-cross-tools, qt5-qttools-cross-tools"
-TERMUX_PKG_RECOMMENDS="gdb, git, make, cmake, valgrind"
-TERMUX_PKG_SUGGESTS="cvs, subversion"
+TERMUX_PKG_LICENSE="GPL-3.0-only"
+TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_VERSION="18.0.1"
+TERMUX_PKG_SRCURL="https://download.qt.io/official_releases/qtcreator/${TERMUX_PKG_VERSION%.*}/${TERMUX_PKG_VERSION}/qt-creator-opensource-src-${TERMUX_PKG_VERSION}.tar.gz"
+TERMUX_PKG_SHA256=1e67ac2441ef35f9bbc428a4e7935adfd75385058c5b34cae68d5c803ed60000
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_DEPENDS="clang, glib, libandroid-execinfo, libarchive, libelf, libllvm, libsecret, opengl, python, qt6-qtbase, qt6-qtcharts, qt6-qtdeclarative, qt6-qttools, qt6-qtsvg, libyaml-cpp, zstd"
+TERMUX_PKG_BUILD_DEPENDS="libllvm-static, qt6-qtbase-cross-tools, qt6-qtcharts-cross-tools, qt6-qtdeclarative-cross-tools, qt6-qttools-cross-tools, qt6-qtsvg-cross-tools"
+TERMUX_PKG_RECOMMENDS="gdb, git, make, cmake, mlocate"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+-DCMAKE_SYSTEM_NAME=Linux
+-DCMAKE_INSTALL_LIBDIR=lib
+-DCMAKE_INSTALL_INCLUDEDIR=include
+-DBUILD_WITH_PCH=OFF
+"
 
-termux_step_configure () {
-    # -r to force Makefile generations for all subdirs at this step so process_stub can be patched
-    # Disable QML Designer plugin which requires OpenGL
-    # Disable clang refactoring plugin which has odd linking issues at the moment
-    export QTC_DO_NOT_BUILD_QMLDESIGNER=1
-    export QTC_DISABLE_CLANG_REFACTORING=1
-    "${TERMUX_PREFIX}/opt/qt/cross/bin/qmake" -r \
-        -spec "${TERMUX_PREFIX}/lib/qt/mkspecs/termux-cross"
-}
+termux_step_pre_configure() {
+	termux_setup_golang
 
-termux_step_post_configure() {
-    # process_stub's Makefile has the incorrect LINK executable (it should've been QMAKE_CXX)
-    sed -i "s|^LINK          = clang|LINK = ${CXX}|" \
-        ${TERMUX_PKG_SRCDIR}/src/libs/utils/Makefile.process_stub
+	LDFLAGS+=" -landroid-execinfo"
 
-    # clangbackend's Makefile lacks -lc++_shared to link against libc++ on x86_64
-    sed -i -e 's|^LIBS          = $(SUBLIBS)|LIBS = $(SUBLIBS) -lc++_shared|' \
-	-e 's|-Wl,-rpath,'${TERMUX_COMMON_CACHEDIR//./\\.}'/android-r[0-9][^/]*/lib64||g' \
-	-e 's|-L'${TERMUX_COMMON_CACHEDIR//./\\.}'/android-r[0-9][^/]*/lib64||g' \
-        ${TERMUX_PKG_SRCDIR}/src/tools/clangbackend/Makefile
-
-    # make sure clangtools link against libc++_shared on x86_64
-    sed -i -e 's|^LIBS          = $(SUBLIBS)|LIBS = $(SUBLIBS) -lc++_shared|' \
-	-e 's|-Wl,-rpath,'${TERMUX_COMMON_CACHEDIR//./\\.}'/android-r[0-9][^/]*/lib64||g' \
-	-e 's|-L'${TERMUX_COMMON_CACHEDIR//./\\.}'/android-r[0-9][^/]*/lib64||g' \
-        ${TERMUX_PKG_SRCDIR}/src/plugins/clangtools/Makefile
-
-    # required by make install, otherwise it installs to '/'
-    export INSTALL_ROOT="${TERMUX_PREFIX}"
+	# add the directories of all .so files found in the package
+	# to the library run paths of all executables in the package
+	# the 'qtcreator.sh' script sets LD_LIBRARY_PATH automatically so does not
+	# seem to need this, but setting these makes the 'qtcreator' binary
+	# possible to launch directly without errors.
+	LDFLAGS+=" -Wl,-rpath=$TERMUX_PREFIX/lib/qtcreator"
+	LDFLAGS+=" -Wl,-rpath=$TERMUX_PREFIX/lib/qtcreator/plugins"
+	LDFLAGS+=" -Wl,-rpath=$TERMUX_PREFIX/lib/qtcreator/plugins/qmldesigner"
 }
