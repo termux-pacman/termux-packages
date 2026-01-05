@@ -26,3 +26,4 @@ termux_step_pre_configure() {
 	local _libgcc_name="$(basename $_libgcc_file)"
 	LDFLAGS+=" -L$_libgcc_path -l:$_libgcc_name"
 }
+
