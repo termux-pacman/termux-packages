@@ -29,4 +29,3 @@ ac_cv_func_strtouq=no
 --enable-clgd54xx
 --enable-voodoo
 "
-
