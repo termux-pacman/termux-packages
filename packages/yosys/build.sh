@@ -22,4 +22,3 @@ termux_step_pre_configure() {
 	ln -sf "$(command -v $STRIP)" "$TERMUX_PKG_TMPDIR/strip"
 	rm "$TERMUX_PKG_SRCDIR"/{setup.py,pyproject.toml}
 }
-
