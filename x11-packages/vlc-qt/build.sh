@@ -93,3 +93,4 @@ termux_step_post_configure() {
 	# Avoid overlinking
 	sed -i 's/ -shared / -Wl,--as-needed\0/g' ./libtool
 }
+

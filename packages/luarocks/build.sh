@@ -41,3 +41,4 @@ termux_step_post_massage() {
 		rm bin/lua"$__LUA_VERSION"
 	fi
 }
+

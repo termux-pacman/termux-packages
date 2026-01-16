@@ -21,3 +21,4 @@ termux_step_pre_configure() {
 		-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${TERMUX_STANDALONE_TOOLCHAIN}/bin/clang-scan-deps
 	"
 }
+

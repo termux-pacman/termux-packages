@@ -153,3 +153,4 @@ termux_step_pre_configure() {
 		export PATH="$TERMUX_PKG_HOSTBUILD_DIR:$PATH"
 	fi
 }
+

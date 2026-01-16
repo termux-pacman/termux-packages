@@ -11,3 +11,4 @@ TERMUX_PKG_DEPENDS="freetype, lua54, pcre2, sdl3"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Duse_system_lua=true
 "
+

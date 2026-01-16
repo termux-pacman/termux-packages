@@ -26,3 +26,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-spawn"
 	LDFLAGS+=" $($CC -print-libgcc-file-name)"
 }
+

@@ -34,3 +34,4 @@ termux_step_pre_configure() {
 	export DEFINES_L="-DHAVE_STAT"
 	export LIBS="-llog -Wl,--rpath=$TERMUX_PREFIX/lib"
 }
+

@@ -19,3 +19,4 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-wordexp"
 	TERMUX_PKG_BUILDDIR+="/src"
 }
+

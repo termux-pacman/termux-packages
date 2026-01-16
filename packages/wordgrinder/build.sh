@@ -30,3 +30,4 @@ termux_step_make_install() {
 		"$TERMUX_PKG_SRCDIR"/bin/wordgrinder.1 \
 		"$TERMUX_PREFIX"/share/man/man1/
 }
+
