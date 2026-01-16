@@ -49,4 +49,3 @@ termux_step_pre_configure() {
 	chmod 0700 "${bin}/gcc-wrapper"
 	export PATH="${bin}:$PATH"
 }
-
