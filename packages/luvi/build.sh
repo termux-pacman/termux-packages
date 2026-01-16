@@ -44,4 +44,3 @@ termux_step_pre_configure() {
 
 	echo "${TERMUX_PKG_VERSION:2}" > "${TERMUX_PKG_SRCDIR}/VERSION"
 }
-
