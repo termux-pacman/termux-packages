@@ -42,4 +42,3 @@ termux_step_pre_configure() {
 	# https://github.com/termux/termux-packages/issues/23148
 	export LDFLAGS+=" -Wl,--no-as-needed,-lOpenSLES,--as-needed"
 }
-
