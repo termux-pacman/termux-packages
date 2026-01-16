@@ -13,4 +13,3 @@ TERMUX_PKG_EXTRA_MAKE_ARGS="LUA=lua54"
 termux_step_post_configure() {
 	mkdir -p obj
 }
-
