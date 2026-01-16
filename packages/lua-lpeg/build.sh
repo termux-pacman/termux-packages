@@ -39,4 +39,3 @@ termux_step_make_install() {
 	# make liblpeg-5.5.so the default one
 	ln -s "${TERMUX_PREFIX}/lib/liblpeg-5.5.so" "${TERMUX_PREFIX}/lib/liblpeg.so"
 }
-
