@@ -35,4 +35,3 @@ termux_step_post_massage() {
 	mv -v bin/ncat bin/netcat-nmap
 	mv -v share/man/man1/ncat.1.gz share/man/man1/netcat-nmap.1.gz
 }
-
