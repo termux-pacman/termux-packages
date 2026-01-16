@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	export LUA_LIBS="-L$TERMUX_PREFIX/lib/liblua5.4.so"
 	LDFLAGS+=" -llua5.4 -landroid-spawn $($CC -print-libgcc-file-name)"
 }
-
