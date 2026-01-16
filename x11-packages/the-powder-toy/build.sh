@@ -29,4 +29,3 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/share/applications resources/powder.desktop
 	install -Dm700 -T $TERMUX_PKG_SRCDIR/resources/generated_icons/icon_exe.png $TERMUX_PREFIX/share/pixmaps/powdertoy-powder.png
 }
-
