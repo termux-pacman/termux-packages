@@ -36,4 +36,3 @@ termux_step_pre_configure() {
 	sed "s|@TERMUX_PKG_BUILDER_DIR@|${TERMUX_PKG_BUILDER_DIR}|g" \
 		"${TERMUX_PKG_BUILDER_DIR}"/reallocarray.diff | patch -p1
 }
-
