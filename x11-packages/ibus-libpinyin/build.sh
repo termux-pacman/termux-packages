@@ -7,4 +7,3 @@ TERMUX_PKG_SRCURL=https://github.com/libpinyin/ibus-libpinyin/releases/download/
 TERMUX_PKG_SHA256=cc652d48e68b8b03afc5e9e08509676aee89f9d492b9a3897cd028bcc800ce31
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="ibus, libpinyin, libopencc, libsqlite, lua51, libdb"
-
