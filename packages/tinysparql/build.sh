@@ -7,7 +7,7 @@ TERMUX_PKG_SRCURL="https://github.com/GNOME/tinysparql/archive/refs/tags/${TERMU
 TERMUX_PKG_SHA256=37a987a4b59dd20b671eb21791a8d37d3c6d1172906f70edcee7889547986956
 TERMUX_PKG_DEPENDS="libicu, dbus, pygobject, python, json-glib, libxml2, sqlite"
 TERMUX_PKG_BUILD_DEPENDS="g-ir-scanner, icu-devtools, libsoup3, asciidoc, xorgproto, valac, gettext, libstemmer, binutils"
-TERMUX_PKG_PYTHON_COMMON_DEPS="docutils, setuptools"
+TERMUX_PKG_PYTHON_COMMON_BUILD_DEPS="docutils, setuptools"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Ddocs=false
 -Dbash_completion=false
@@ -17,8 +17,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtests=false
 -Doverride_sqlite_version_check=true
 "
-# Temporary - remove after the merge of https://github.com/termux/termux-packages/pull/23652
-TERMUX_PKG_RM_AFTER_INSTALL="lib/python$TERMUX_PYTHON_VERSION/site-packages/asciidoc/__pycache__"
 
 termux_step_post_get_source() {
 	rm -f subprojects/*.wrap
