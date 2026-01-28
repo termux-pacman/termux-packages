@@ -26,4 +26,3 @@ termux_step_pre_configure() {
 	termux_setup_gir
 	termux_setup_glib_cross_pkg_config_wrapper
 }
-
