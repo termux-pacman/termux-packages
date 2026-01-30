@@ -27,4 +27,3 @@ termux_step_pre_configure() {
 	CFLAGS+=" -DMDB_USE_ROBUST=0"
 	LDFLAGS+=" -lcrypto -llog"
 }
-
