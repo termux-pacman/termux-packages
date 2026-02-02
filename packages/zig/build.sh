@@ -78,3 +78,4 @@ termux_step_create_debscripts() {
 	EOL
 	chmod 700 postinst
 }
+
