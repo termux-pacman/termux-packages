@@ -39,4 +39,3 @@ lib/librevenge-stream-0.0.so
 		fi
 	done
 }
-
