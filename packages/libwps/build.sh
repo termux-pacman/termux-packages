@@ -38,4 +38,3 @@ lib/libwps-0.4.so
 		fi
 	done
 }
-
