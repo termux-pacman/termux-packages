@@ -36,3 +36,4 @@ lib/libodfgen-0.1.so
 		fi
 	done
 }
+

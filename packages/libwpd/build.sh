@@ -39,3 +39,4 @@ lib/libwpd-0.10.so
 		fi
 	done
 }
+

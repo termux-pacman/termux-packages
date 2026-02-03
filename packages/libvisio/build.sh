@@ -33,3 +33,4 @@ lib/libvisio-0.1.so
 		fi
 	done
 }
+
