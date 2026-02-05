@@ -252,3 +252,4 @@ termux_step_make_install() {
 	fi
 	install -Dm700 -t "${TERMUX_PREFIX}/bin" "target/${CARGO_TARGET_NAME}/${_folder}/deno"
 }
+
