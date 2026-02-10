@@ -65,4 +65,3 @@ termux_step_post_make_install() {
 	mkdir -p "$styles_dir"
 	install -Dm644 "$TERMUX_PKG_BUILDER_DIR/22_termux.styles" "$styles_dir/22_termux.styles"
 }
-
