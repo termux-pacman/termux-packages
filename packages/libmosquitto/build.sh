@@ -18,4 +18,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DWITH_SRV=ON
 "
 TERMUX_PKG_SERVICE_SCRIPT=("mosquitto" 'exec mosquitto 2>&1')
-
