@@ -37,3 +37,4 @@ termux_step_make_install() {
 	install -Dm 644 doc/testssl.1 "$TERMUX_PREFIX/share/man/man1/testssl.sh.1"
 	ln -sfr "$TERMUX_PREFIX/share/man/man1/testssl.sh.1" "$TERMUX_PREFIX/share/man/man1/testssl.1"
 }
+
