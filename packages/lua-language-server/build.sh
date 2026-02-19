@@ -114,4 +114,3 @@ termux_step_make_install() {
 
 	cp -r ./script ./meta ./locale "${datadir}"
 }
-
