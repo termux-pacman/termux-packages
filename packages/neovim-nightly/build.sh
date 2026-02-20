@@ -142,4 +142,3 @@ termux_step_post_make_install() {
 	} > "$TERMUX_PREFIX/libexec/nvim/vimtutor"
 	chmod 700 "$TERMUX_PREFIX/libexec/nvim/"{ex,view,vimdiff,vimtutor}
 }
-
