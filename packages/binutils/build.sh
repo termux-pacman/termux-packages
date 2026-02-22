@@ -2,8 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://www.gnu.org/software/binutils/
 TERMUX_PKG_DESCRIPTION="A GNU collection of binary utilities"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
+# `lua-language-server` links against libbfd,
+# remember to rebuild it when updating `binutils`.
 TERMUX_PKG_VERSION="2.46.0"
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://mirrors.kernel.org/gnu/binutils/binutils-${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=d75a94f4d73e7a4086f7513e67e439e8fcdcbb726ffe63f4661744e6256b2cf2
 TERMUX_PKG_DEPENDS="binutils-bin, zlib, zstd"
@@ -39,8 +41,13 @@ ZSTD_LIBS=-l:libzstd.a
 "
 
 termux_step_post_get_source() {
-	# Remove this marker all the time, as binutils is architecture-specific.
+	# Remove the marker every time, as binutils is architecture-specific.
 	rm -rf "$TERMUX_HOSTBUILD_MARKER"
+
+	# https://gitlab.archlinux.org/archlinux/packaging/packages/binutils/-/blob/2.46-1/PKGBUILD#L76-77
+	# Turn off development mode (-Werror, gas run-time checks, date in sonames)
+	sed -i '/^development=/s/true/false/' "$TERMUX_PKG_SRCDIR/bfd/development.sh"
+
 }
 
 termux_step_host_build() {
@@ -73,8 +80,8 @@ termux_step_post_make_install() {
 	mkdir -p "$TERMUX_PREFIX/bin"
 	cd "$TERMUX_PREFIX/libexec/binutils" || termux_error_exit "failed to change into 'libexec/binutils' directory"
 
-	mv ld{.bfd,}
-	ln -sf ld{,.bfd}
+	mv ld.bfd ld
+	ln -sf ld ld.bfd
 	ln -sfr "$TERMUX_PREFIX/libexec/binutils/ld" "$TERMUX_PREFIX/bin/ld.bfd"
 
 	local bin
@@ -90,8 +97,4 @@ termux_step_post_make_install() {
 		ln -sfr "$TERMUX_PREFIX/libexec/binutils/$bin" \
 			"$TERMUX_PREFIX/bin/$TERMUX_HOST_PLATFORM-$bin"
 	done
-}
-
-termux_step_post_massage() {
-	rm -rf bin
 }
