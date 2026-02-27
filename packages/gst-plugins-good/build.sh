@@ -2,10 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://gstreamer.freedesktop.org/
 TERMUX_PKG_DESCRIPTION="GStreamer Good Plug-ins"
 TERMUX_PKG_LICENSE="LGPL-2.1"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.28.0"
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_VERSION="1.28.1"
 TERMUX_PKG_SRCURL=https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=d97700f346fdf9ef5461c035e23ed1ce916ca7a31d6ddad987f774774361db77
+TERMUX_PKG_SHA256=738e26aee41b7a62050e40b81adc017a110a7f32d1ec49fa6a0300846c44368d
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="glib, gst-plugins-base, gstreamer, libandroid-shmem, libbz2, libcaca, libflac, libjpeg-turbo, libmp3lame, libnettle, libpng, libvpx, libx11, libxext, libxfixes, libxml2, libmpg123, pulseaudio, zlib"
 # -Dqt5=disabled and -Dqt6=disabled avoid
