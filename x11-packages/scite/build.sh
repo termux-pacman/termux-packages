@@ -38,4 +38,3 @@ termux_step_make_install() {
 	make -j ${TERMUX_PKG_MAKE_PROCESSES} -C scite/gtk install \
 		${TERMUX_PKG_EXTRA_MAKE_ARGS}
 }
-
