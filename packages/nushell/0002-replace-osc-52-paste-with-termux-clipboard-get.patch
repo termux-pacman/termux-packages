@@ -1,10 +1,19 @@
+From 56b1b3dd22cf67472f9959cab5eca603eff6e079 Mon Sep 17 00:00:00 2001
+From: Termux <contact@termux.dev>
+Date: Mon, 8 Sep 2025 02:07:14 +0600
+Subject: [PATCH 2/2] replace osc 52 paste with termux-clipboard-get
+
+---
+ crates/nu-std/std/clip/mod.nu | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
 diff --git a/crates/nu-std/std/clip/mod.nu b/crates/nu-std/std/clip/mod.nu
-index ef2da0b..d313485 100644
+index d559fab..fb08e3a 100644
 --- a/crates/nu-std/std/clip/mod.nu
 +++ b/crates/nu-std/std/clip/mod.nu
-@@ -30,16 +30,13 @@ export def copy [
+@@ -52,16 +52,13 @@ export def paste []: [nothing -> string] {
  } --result "Hello"
- export def paste []: [nothing -> string] {
+ export def paste52 []: [nothing -> string] {
    try {
 -    term query $'(ansi osc)52;c;?(ansi st)' -p $'(ansi osc)52;c;' -t (ansi st)
 +    ^@TERMUX_PREFIX@/bin/termux-clipboard-get
@@ -21,4 +30,7 @@ index ef2da0b..d313485 100644
 -  | decode
  }
  
- # Add a prefix to each line of the content to be copied
+ # After deprecated commands are removed, prefix will need to be changed to use clip copy or clip copy52.
+-- 
+2.53.0
+
