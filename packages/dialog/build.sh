@@ -3,23 +3,51 @@ TERMUX_PKG_DESCRIPTION="Application used in shell scripts which displays text us
 TERMUX_PKG_LICENSE="LGPL-2.1"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_DEPENDS="libandroid-support, ncurses"
-TERMUX_PKG_VERSION=1.3-20240307
+TERMUX_PKG_VERSION="1.3-20240307"
 TERMUX_PKG_REVISION=1
-TERMUX_PKG_SRCURL=https://invisible-island.net/archives/dialog/dialog-${TERMUX_PKG_VERSION}.tgz
+TERMUX_PKG_SRCURL="https://invisible-island.net/archives/dialog/dialog-${TERMUX_PKG_VERSION}.tgz"
 TERMUX_PKG_SHA256=339d311c6abb240213426b99ad63565cbcb3e8641ef1989c033e945b754d34ef
-TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--with-ncursesw --enable-widec --with-pkg-config"
+TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_ON_DEVICE_BUILD_NOT_SUPPORTED=true
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+--with-ncursesw
+--enable-widec
+--with-pkg-config
+"
 
-termux_step_pre_configure() {
-	# Certain packages are not safe to build on device because their
-	# build.sh script deletes specific files in $TERMUX_PREFIX.
-	if $TERMUX_ON_DEVICE_BUILD; then
-		termux_error_exit "Package '$TERMUX_PKG_NAME' is not safe for on-device builds."
+termux_pkg_auto_update() {
+	local latest_version version_part date_part
+	latest_version="$(termux_repology_api_get_latest_version "${TERMUX_PKG_NAME}")"
+	# dialog is commonly packaged with a '-', '.', '_' or '+' delimiter
+	# between the version and date parts. We want to normalize that to a '-'.
+	version_part="${latest_version%[^0-9]*}"
+	date_part="${latest_version##*[^0-9]}"
+
+	if [[ -z "$version_part" || -z "$date_part" ]]; then
+		termux_error_exit <<-EOF
+			Couldn't parse latest_version for '$TERMUX_PKG_NAME'
+			Current version: $TERMUX_PKG_VERSION
+			Fetched version: $latest_version
+			Version part   : $version_part
+			Date part      : $date_part
+		EOF
+	# Sanity check that the new version is newer than the current one.
+	elif (( date_part < ${TERMUX_PKG_VERSION##*[^0-9]} )); then
+		termux_error_exit <<-EOF
+			Reported latest_version appears to be older than what we package?
+			Current version: $TERMUX_PKG_VERSION
+			Reported latest: $latest_version
+		EOF
 	fi
 
+	termux_pkg_upgrade_version "${version_part}-${date_part}"
+}
+
+termux_step_pre_configure() {
 	# Put a temporary link for libtinfo.so
-	ln -s -f $TERMUX_PREFIX/lib/libncursesw.so $TERMUX_PREFIX/lib/libtinfo.so
+	ln -sf "$TERMUX_PREFIX/lib/libncursesw.so" "$TERMUX_PREFIX/lib/libtinfo.so"
 }
 
 termux_step_post_make_install() {
-	rm $TERMUX_PREFIX/lib/libtinfo.so
+	rm "$TERMUX_PREFIX/lib/libtinfo.so"
 }
