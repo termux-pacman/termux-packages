@@ -14,4 +14,3 @@ TERMUX_PKG_PYTHON_COMMON_BUILD_DEPS="wheel"
 termux_step_pre_configure() {
 	export DEBVER="${TERMUX_PKG_VERSION#*:}"
 }
-
