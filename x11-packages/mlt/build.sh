@@ -28,4 +28,3 @@ termux_step_pre_configure() {
 	# Fix linker script error
 	LDFLAGS+=" -Wl,--undefined-version"
 }
-
