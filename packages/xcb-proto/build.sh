@@ -22,4 +22,3 @@ termux_step_post_make_install() {
 	# So get rid of it
 	rm -r "$TERMUX_PREFIX/lib/python3.13/site-packages/xcbgen/__pycache__/"
 }
-
