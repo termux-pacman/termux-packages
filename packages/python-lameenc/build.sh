@@ -30,4 +30,3 @@ termux_step_make_install() {
 
 	cross-pip install --no-deps --prefix=$TERMUX_PREFIX --force-reinstall $TERMUX_PKG_SRCDIR/build/$_whl
 }
-
