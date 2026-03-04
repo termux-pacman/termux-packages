@@ -41,4 +41,3 @@ termux_step_post_massage() {
 		[ -e "${f}" ] || termux_error_exit "SOVERSION guard check failed."
 	done
 }
-
