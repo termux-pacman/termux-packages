@@ -11,4 +11,3 @@ TERMUX_PKG_DEPENDS="python-pip, python-greenlet, python-msgpack"
 TERMUX_PKG_PYTHON_CROSS_BUILD_DEPS="wheel"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
-
