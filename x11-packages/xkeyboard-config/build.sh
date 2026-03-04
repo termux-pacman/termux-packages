@@ -15,3 +15,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dcompat-rules=true
 -Dxorg-rules-symlinks=true
 "
+

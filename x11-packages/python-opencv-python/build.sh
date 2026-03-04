@@ -38,3 +38,4 @@ termux_step_post_make_install() {
 	export ENABLE_CONTRIB=1
 	pip install --no-deps . --prefix "$TERMUX_PREFIX"
 }
+

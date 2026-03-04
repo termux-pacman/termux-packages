@@ -80,3 +80,4 @@ termux_step_make_install() {
 	install -DTm644 "$TERMUX_PKG_SRCDIR/LICENSE" \
 		"$TERMUX_PREFIX/share/doc/code-oss-extension-codelldb/copyright"
 }
+

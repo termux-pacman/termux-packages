@@ -56,3 +56,4 @@ termux_step_pre_configure() {
 		-DPYTHON3_NUMPY_INCLUDE_DIRS=$TERMUX_PYTHON_HOME/site-packages/numpy/_core/include
 		"
 }
+

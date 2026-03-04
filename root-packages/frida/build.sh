@@ -172,3 +172,4 @@ termux_step_post_make_install () {
 
 	touch $TERMUX_PREFIX/var/service/frida-server/down
 }
+

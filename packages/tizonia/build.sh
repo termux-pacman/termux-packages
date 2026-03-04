@@ -45,3 +45,4 @@ termux_step_configure_meson() {
 		--strip \
 		$TERMUX_PKG_EXTRA_CONFIGURE_ARGS
 }
+

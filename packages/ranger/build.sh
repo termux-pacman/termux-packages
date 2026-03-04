@@ -16,3 +16,4 @@ TERMUX_PKG_PLATFORM_INDEPENDENT=true
 termux_step_make() {
 	echo Skipping make step...
 }
+

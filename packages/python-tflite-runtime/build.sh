@@ -84,3 +84,4 @@ termux_step_make_install() {
 	local _wheel="tflite_runtime-${TERMUX_PKG_VERSION}-cp${_pyver}-cp${_pyver}-android_${TERMUX_ARCH}.whl"
 	pip install --force-reinstall --no-deps --prefix="$TERMUX_PREFIX" "$TFLITE_BUILD_DIR/dist/${_wheel}"
 }
+
