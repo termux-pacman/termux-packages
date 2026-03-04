@@ -26,4 +26,3 @@ termux_step_make_install() {
 	local _whl="yt_dlp_ejs-$TERMUX_PKG_VERSION-py3-none-any.whl"
 	pip install --force-reinstall --no-deps --prefix="$TERMUX_PREFIX" "$TERMUX_PKG_SRCDIR/dist/$_whl"
 }
-
