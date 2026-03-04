@@ -67,4 +67,3 @@ termux_step_make_install() {
 	local _wheel="onnxruntime-${TERMUX_PKG_VERSION}-cp${_pyver}-cp${_pyver}-android_${TERMUX_ARCH}.whl"
 	pip install --no-deps --prefix="$TERMUX_PREFIX" "$TERMUX_PKG_SRCDIR/dist/${_wheel}"
 }
-
