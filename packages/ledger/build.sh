@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	termux_setup_python_pip
 	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DPython3_EXECUTABLE=$(command -v cross-python)"
 }
-
