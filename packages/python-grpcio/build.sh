@@ -22,4 +22,3 @@ termux_step_pre_configure() {
 	export GRPC_PYTHON_BUILD_SYSTEM_ABSL=1
 	export GRPC_PYTHON_BUILD_WITH_CYTHON=1
 }
-
