@@ -181,4 +181,3 @@ termux_step_post_massage() {
 		termux_error_exit "$dir should not exist in $TERMUX_PKG_NAME!"
 	fi
 }
-
