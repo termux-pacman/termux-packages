@@ -18,6 +18,10 @@ on:
       packages:
         description: "A space-separated names of packages selected for rebuilding"
         required: true
+      free-space:
+        description: "Free space even if not building large package (useful when building a large number of packages)"
+        type: boolean
+        default: false
 
 permissions: {} # none
 
@@ -81,7 +85,6 @@ jobs:
           # Forces CI to cancel current build with status 'passed'
           if grep -qiP '^\s*%ci:no-build\s*$' <(git log --format="%B" -n 1 --no-merges "HEAD"); then
             tar cf artifacts/pkgs-${{ matrix.target_arch }}.tar pkgs
-            echo "docker-build=true" >> $GITHUB_OUTPUT
             echo "[!] Force exiting as tag '%ci:no-build' was applied to HEAD commit message."
             exit 0
           fi
@@ -169,31 +172,33 @@ jobs:
 
         echo "packages: ${packages[*]}"
 
-        docker='true'
+        free_space='false'
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          free_space=${{ github.event.inputs.free-space }}
+        else
+          if grep -qiP '^\s*%ci:free-disk\s*$' <(git log --format="%B" -n 1 --no-merges "HEAD"); then
+            free_space=true
+          fi
+        fi
         if [[ "${#packages[@]}" -gt 0 ]]; then
           for pkg in "${packages[@]}"; do
             if grep -qFx "$pkg" ./scripts/big-pkgs.list; then
-              docker='false'
+              free_space='true'
               break
             fi
           done
         fi
+        echo "free-space=$free_space" >> $GITHUB_OUTPUT
 
-        echo "docker-build=$docker" >> $GITHUB_OUTPUT
+        needs_docker_build=false
         if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
           # Build local Docker image if setup scripts were changed.
           # Useful for pull requests submitting changes for both build environment and packages.
           if grep -qP '^scripts/(Dockerfile|properties\.sh|setup-android-sdk\.sh|setup-ubuntu\.sh)$' <<< "$CHANGED_FILES"; then
-            echo "Detected changes for environment setup scripts. Building custom Docker image now."
-            if [ $docker == 'false' ]; then
-              echo "Skipping due to building large packages."
-              exit 0
-            fi
-            cd ./scripts
-            docker build -t ghcr.io/termux/package-builder:latest .
-            cd ..
+            needs_docker_build=true
           fi
         fi
+        echo "needs-docker-build=$needs_docker_build" >> $GITHUB_OUTPUT
 
     - name: Lint packages
       run: |
@@ -217,20 +222,23 @@ jobs:
         priority: 100
         device_name: /dev/zram0
 
-    - name: Free additional disk space (if needed)
-      if: ${{ steps.build-info.outputs.docker-build == 'false' }}
+    - name: Build docker image
+      if: ${{ steps.build-info.outputs.needs-docker-build == 'true' }}
       run: |
-        ./scripts/setup-ubuntu.sh
-        unset NDK ANDROID_HOME
-        ./scripts/setup-android-sdk.sh
-        rm -f ${HOME}/lib/ndk-*.zip ${HOME}/lib/sdk-*.zip
-        sudo apt install ninja-build
+        docker build -t ghcr.io/termux/package-builder:latest scripts/
+        docker buildx prune -af
+
+    - name: Load Docker image
+      if: ${{ steps.build-info.outputs.free-space == 'true' && steps.build-info.outputs.skip-building != 'true' }}
+      run: |
+        ./scripts/run-docker.sh echo ""
+
+    - name: Free additional disk space (if needed)
+      if: ${{ steps.build-info.outputs.free-space == 'true' }}
+      run: |
         ./scripts/free-space.sh
 
     - name: Build packages
-      env:
-        DOCKER_BUILD: ${{ steps.build-info.outputs.docker-build }}
-        TERMUX_DOCKER__CONTAINER_EXEC_COMMAND__PRE_CHECK_IF_WILL_BUILD_PACKAGES: "true"
       run: |
         declare -a packages=()
         for repo_path in $(jq --raw-output 'del(.pkg_format) | keys | .[]' repo.json); do
@@ -243,12 +251,7 @@ jobs:
         echo "packages: ${packages[*]}"
 
         if [[ "${#packages[@]}" -gt 0 ]]; then
-          if [ "$DOCKER_BUILD" == 'false' ]; then
-            unset NDK ANDROID_HOME
-            ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
-          else
-            ./scripts/run-docker.sh ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
-          fi
+          ./scripts/run-docker.sh -d ./build-package.sh --format pacman -I -C -a "${{ matrix.target_arch }}" "${packages[@]}"
         fi
 
     - name: Generate build artifacts
