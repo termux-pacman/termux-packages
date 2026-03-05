@@ -26,4 +26,3 @@ termux_step_configure() {
 		-e s,@COPYRIGHT_YEAR@,2025,g \
 	xfce4-panel-profiles.1.in > xfce4-panel-profiles.1
 }
-
