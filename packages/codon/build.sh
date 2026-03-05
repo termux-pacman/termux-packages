@@ -182,4 +182,3 @@ termux_step_post_massage() {
 	# Remove some unrelated includes and libraries
 	rm -rf include lib
 }
-
