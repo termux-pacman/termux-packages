@@ -40,4 +40,3 @@ termux_step_pre_configure() {
 	# Use shared library
 	sed -i 's/orc STATIC/orc SHARED/' c++/src/CMakeLists.txt
 }
-
