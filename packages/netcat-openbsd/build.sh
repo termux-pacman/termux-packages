@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="TCP/IP swiss army knife. OpenBSD variant."
 TERMUX_PKG_LICENSE="BSD 3-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION="1.234-1"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://salsa.debian.org/debian/netcat-openbsd/-/archive/debian/${TERMUX_PKG_VERSION}/netcat-openbsd-debian-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=54586351a3eb8b11fb95752d7efb42aabd06e7e30e7946cb6369d341e258db2f
 TERMUX_PKG_PROVIDES="nc, ncat, netcat"
