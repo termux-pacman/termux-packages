@@ -31,4 +31,3 @@ termux_step_post_make_install() {
 	install -Dm644 -t "$TERMUX_PREFIX/lib/$TERMUX_PKG_NAME" data/mate-tweak.ui
 	install -Dm644 -t "$TERMUX_PREFIX/lib/$TERMUX_PKG_NAME" util/mate-tweak-helper
 }
-
