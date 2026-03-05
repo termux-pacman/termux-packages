@@ -14,4 +14,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
 -DCMAKE_CXX_FLAGS="-fexperimental-library"
 "
-
