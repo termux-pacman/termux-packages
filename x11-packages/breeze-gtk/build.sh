@@ -51,3 +51,4 @@ termux_step_pre_configure() {
 		export PATH="$PATH:$SAVED_PATH"
 	fi
 }
+
