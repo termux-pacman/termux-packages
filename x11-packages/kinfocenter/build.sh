@@ -23,4 +23,3 @@ termux_step_pre_configure() {
 	# for some reason repeated builds will fail to reinstall the executable if it is already present
 	rm -f "$TERMUX_PREFIX/bin/kinfocenter"
 }
-
