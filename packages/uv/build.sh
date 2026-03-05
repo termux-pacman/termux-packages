@@ -70,4 +70,3 @@ termux_step_create_debscripts() {
 		uv generate-shell-completion zsh > "${TERMUX_PREFIX}/share/zsh/site-functions/_uv"
 	EOF
 }
-
