@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://github.com/upx/upx/releases/download/v${TERMUX_PKG_VER
 TERMUX_PKG_SHA256=8eb914115b306fd9fd2110bd3d27ddb8ae7c5a03bb965f7d10f046a3a4ff9dfe
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++"
+

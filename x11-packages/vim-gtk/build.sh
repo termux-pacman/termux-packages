@@ -141,3 +141,4 @@ termux_step_post_make_install() {
 	mkdir -p "$TERMUX_PREFIX/libexec/vim"
 	mv "${TERMUX_PREFIX}"/bin/{ex,view,vim{,diff,tutor}} "${TERMUX_PREFIX}"/libexec/vim
 }
+
