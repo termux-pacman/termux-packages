@@ -23,3 +23,4 @@ termux_step_pre_configure() {
 
 	export TERMUX_MESON_ENABLE_SOVERSION=1
 }
+
