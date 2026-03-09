@@ -21,4 +21,3 @@ termux_step_pre_configure() {
 	termux_setup_gir
 	autoreconf -fi
 }
-
