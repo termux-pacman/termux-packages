@@ -9,4 +9,3 @@ TERMUX_PKG_SHA256=0ebb603eaa34f34d44bc419119595c91785caf0e29a2ad2adaa7fea9cc2e6e
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_TAG_TYPE="newest-tag"
 TERMUX_PKG_DEPENDS="hicolor-icon-theme, python"
-
