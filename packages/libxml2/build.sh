@@ -62,3 +62,4 @@ termux_step_post_massage() {
 		termux_error_exit "Not proceeding with update."
 	fi
 }
+

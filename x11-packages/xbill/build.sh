@@ -19,3 +19,4 @@ termux_step_post_make_install() {
 	install -Dm644 -t "${TERMUX_PREFIX}/share/applications" "${TERMUX_PKG_BUILDER_DIR}/xbill.desktop"
 	install -Dm644 -t "${TERMUX_PREFIX}/share/pixmaps" "${TERMUX_PKG_BUILDER_DIR}/xbill.xpm"
 }
+

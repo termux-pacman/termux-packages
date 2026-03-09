@@ -13,3 +13,4 @@ TERMUX_PKG_BUILD_DEPENDS="autoconf-archive, caja, glib, mate-common, python"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-packagekit
 "
+

@@ -39,3 +39,4 @@ termux_step_make_install() {
 	install -Dm700 SABnzbd.py "${TERMUX_PREFIX}/bin/sabnzbd"
 	install -Dm600 linux/sabnzbd.bash-completion "${TERMUX_PREFIX}/share/bash-completion/completions/sabnzbd"
 }
+

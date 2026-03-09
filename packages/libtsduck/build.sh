@@ -80,3 +80,4 @@ termux_step_make() {
 		LDFLAGS_CROSS="$LDFLAGS" \
 		${TERMUX_PKG_EXTRA_MAKE_ARGS}
 }
+

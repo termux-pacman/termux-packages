@@ -28,3 +28,4 @@ termux_step_make_install() {
 	rm -Rf $TERMUX_PREFIX/etc/pastebin.d
 	mv pastebin.d $TERMUX_PREFIX/etc
 }
+

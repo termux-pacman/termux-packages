@@ -12,3 +12,4 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --sharedstatedir=$TERMUX_PREFIX/var/lib
 "
+

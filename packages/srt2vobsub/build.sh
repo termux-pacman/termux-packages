@@ -17,3 +17,4 @@ termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME \
 		README defaults.conf langcodes.txt srt2vobsub.html
 }
+
