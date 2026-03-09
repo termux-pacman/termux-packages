@@ -10,4 +10,3 @@ TERMUX_PKG_SHA256=2e8381368ec0a6ecb770834bce00fc62efa09a2b2f9710ed569acbb823ead9
 TERMUX_PKG_AUTO_UPDATE=false # can't be auto-updated since release correspond to clang version.
 TERMUX_PKG_DEPENDS="clang (>= 21), clang (<< 22), libc++, python"
 TERMUX_PKG_BUILD_DEPENDS="libllvm-static"
-
