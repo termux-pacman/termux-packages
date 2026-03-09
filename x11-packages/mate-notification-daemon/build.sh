@@ -12,4 +12,3 @@ TERMUX_PKG_BUILD_DEPENDS="autoconf-archive, glib, mate-common, python"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --sysconfdir=$TERMUX_PREFIX/etc
 "
-
