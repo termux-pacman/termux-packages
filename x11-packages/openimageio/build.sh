@@ -39,4 +39,3 @@ termux_step_pre_configure() {
 		CPPFLAGS+=" -Daligned_alloc=memalign"
 	fi
 }
-
