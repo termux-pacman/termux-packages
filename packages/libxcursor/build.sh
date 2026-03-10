@@ -10,4 +10,3 @@ TERMUX_PKG_SHA256=fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libx11, libxfixes, libxrender"
 TERMUX_PKG_BUILD_DEPENDS="xorg-util-macros"
-
