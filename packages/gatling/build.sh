@@ -18,3 +18,4 @@ termux_step_pre_configure() {
 	CFLAGS+=" $CPPFLAGS"
 	LDFLAGS+=" -lcrypt -lcrypto -liconv"
 }
+

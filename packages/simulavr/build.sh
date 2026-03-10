@@ -41,3 +41,4 @@ termux_step_make_install() {
 	# Might cause issues when using them.
 	cp -rf "$TERMUX_PKG_BUILDDIR"/include/ "$TERMUX_PREFIX"/include/"$TERMUX_PKG_NAME"
 }
+
