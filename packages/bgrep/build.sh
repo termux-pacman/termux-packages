@@ -17,4 +17,3 @@ gl_cv_func_strcasecmp_works=yes
 termux_step_pre_configure() {
 	./bootstrap
 }
-
