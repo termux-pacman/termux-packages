@@ -32,4 +32,3 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -Wl,-rpath=$TERMUX_PREFIX/lib/qtcreator/plugins"
 	LDFLAGS+=" -Wl,-rpath=$TERMUX_PREFIX/lib/qtcreator/plugins/qmldesigner"
 }
-
