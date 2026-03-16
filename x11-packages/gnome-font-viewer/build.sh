@@ -12,4 +12,3 @@ TERMUX_PKG_BUILD_DEPENDS="glib-cross"
 termux_step_pre_configure() {
 	termux_setup_glib_cross_pkg_config_wrapper
 }
-
