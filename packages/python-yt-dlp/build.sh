@@ -47,3 +47,4 @@ termux_step_make_install() {
 		EOF
 	fi
 }
+
