@@ -156,4 +156,3 @@ termux_step_create_debscripts() {
 		"$TERMUX_PKG_BUILDER_DIR/postinst.sh.in" > ./postinst
 	chmod +x ./postinst
 }
-
