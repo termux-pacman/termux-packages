@@ -36,4 +36,3 @@ lib/libturbojpeg.so.0
 		fi
 	done
 }
-
