@@ -64,4 +64,3 @@ termux_step_create_debscripts() {
 		atuin gen-completions -s fish > ${TERMUX_PREFIX}/share/fish/vendor_completions.d/atuin.fish
 	EOF
 }
-
