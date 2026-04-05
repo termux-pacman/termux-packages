@@ -12,3 +12,4 @@ TERMUX_PKG_PYTHON_CROSS_BUILD_DEPS="torch"
 termux_step_make_install() {
 	pip -v install --no-build-isolation --no-deps --prefix "$TERMUX_PREFIX" "$TERMUX_PKG_SRCDIR"
 }
+
