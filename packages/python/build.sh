@@ -197,4 +197,3 @@ termux_step_create_debscripts() {
 		echo "post_install" > postupg
 	fi
 }
-
