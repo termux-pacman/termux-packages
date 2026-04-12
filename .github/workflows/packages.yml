@@ -39,8 +39,7 @@ jobs:
       uses: actions/checkout@v6
       with:
         fetch-depth: 1000
-    - name: Set process id limit for 32-bit builds depending on aosp-libs
-      run: echo 65535 | sudo tee /proc/sys/kernel/pid_max
+
     - name: Gather build summary
       id: build-info
       env:
@@ -231,7 +230,7 @@ jobs:
     - name: Load Docker image
       if: ${{ steps.build-info.outputs.free-space == 'true' && steps.build-info.outputs.skip-building != 'true' }}
       run: |
-        ./scripts/run-docker.sh echo ""
+        ./scripts/run-docker.sh true
 
     - name: Free additional disk space (if needed)
       if: ${{ steps.build-info.outputs.free-space == 'true' }}
@@ -286,7 +285,7 @@ jobs:
         find pkgs -type f -name "*.pkg.*" -exec sha256sum "{}" \; | sort -k2
     - name: Store *.pkg.* files
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: pkgs-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
