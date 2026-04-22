@@ -14,7 +14,7 @@ on:
     - cron:  '0,30 0-23 * * *'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
+  group: ${{ github.ref_name }}-${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
@@ -25,6 +25,12 @@ jobs:
         target_repo: [main@aarch64, main@arm, main@i686, main@x86_64, x11@aarch64, x11@arm, x11@i686, x11@x86_64, root@aarch64, root@arm, root@i686, root@x86_64]
       fail-fast: false
     steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v6.1.0
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
     - name: Clone check-tools
       run: git clone "https://termux-pacman-bot:${{ secrets.TOKEN }}@github.com/termux-pacman/check-tools"
     - name: Import key of Termux-Pacman
@@ -67,10 +73,6 @@ jobs:
           fi
         done
         if [ -f "${DELETED_FILE}" ]; then
-          # Install aws-cli
-          git clone https://github.com/termux-pacman/aws-cli-action
-          ./aws-cli-action/setup.sh '${{ secrets.AWS_ACCESS_KEY_ID }}' '${{ secrets.AWS_ACCESS_KEY }}' '${{ secrets.AWS_REGION }}'
-
           # Import gpg key
           mkdir gk
           echo "${{ secrets.SF_GPG_BOT }}" > gk/termux-pacman-bot.gpg
@@ -96,7 +98,7 @@ jobs:
         tar cf total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz ./total
     - name: Store RESULT.* files
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: total-${{ matrix.target_repo }}-${{ github.sha }}
         path: ./check-tools/total-${{ matrix.target_repo }}-${{ github.sha }}.tar.gz
@@ -109,7 +111,7 @@ jobs:
     - name: Clone repository
       run: git clone -b "${{ github.head_ref || github.ref_name }}" https://github.com/termux-pacman/termux-packages.git termux-packages-pacman
     - name: Get RESULT.* files
-      uses: actions/download-artifact@v4.1.7
+      uses: actions/download-artifact@v7
       with:
         path: ./
     - name: Creating a REBUILD-LIST-BUILD
@@ -151,12 +153,18 @@ jobs:
           echo "-> $1"
         }
         install_list_issues() {
-          if [ -f ../LIST-ISSUES ]; then
-            rm ../LIST-ISSUES
-          fi
-          curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
-            "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
-          cat ../LIST-ISSUES
+          while true; do
+            if [ -f ../LIST-ISSUES ]; then
+              rm ../LIST-ISSUES
+            fi
+            curl --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G \
+              "https://api.github.com/repos/${{ github.repository }}/issues" -o ../LIST-ISSUES
+            if [ "$(jq 'length' ../LIST-ISSUES)" = "0" ]; then
+              sleep 5
+              continue
+            fi
+            break
+          done
         }
 
         # Edit
