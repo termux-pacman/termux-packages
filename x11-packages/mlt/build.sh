@@ -30,3 +30,4 @@ termux_step_pre_configure() {
 	# Link openmp library statically
 	LDFLAGS+=" -fopenmp -static-openmp"
 }
+
