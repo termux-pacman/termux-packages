@@ -1,4 +1,4 @@
-name: Generate bootstrap archives
+name: Generate bootstrap archives (android-7)
 
 on:
   schedule:
@@ -15,7 +15,7 @@ jobs:
   build:
     permissions:
       contents: read # actions/upload-artifact doesn't need contents: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     strategy:
       matrix:
         arch:
@@ -26,11 +26,11 @@ jobs:
     if: github.repository == 'termux-pacman/termux-packages'
     steps:
       - name: Git clone
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Create bootstrap archive
         run: ./scripts/generate-bootstraps.sh --pm pacman --architectures ${{ matrix.arch }}
       - name: Store artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bootstrap-archives-${{ matrix.arch }}-${{ github.sha }}
           path: "*.zip"
@@ -38,14 +38,14 @@ jobs:
     permissions:
       contents: write # for git push
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Git clone
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Fetch bootstrap archives
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v7
         with:
           merge-multiple: true
           path: ./
@@ -59,16 +59,13 @@ jobs:
           else
             tag_rev=1
           fi
-          new_tag="${new_tag}-r${tag_rev}+pacman-android-7"
-          git tag "$new_tag"
-          git push --tags
+          new_tag="${new_tag}-r${tag_rev}+pacman.android-7"
           echo "tag_name=$new_tag" >> $GITHUB_OUTPUT
       - name: Publish bootstrap zips to GitHub release
-        uses: termux/upload-release-action@v4.2.0
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "*.zip"
-          file_glob: true
-          release_name: "Bootstrap archives for Termux application"
-          tag: ${{ steps.get_tag.outputs.tag_name }}
-          checksums: sha256,sha512,md5
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ steps.get_tag.outputs.tag_name }} --title "Bootstrap archives for Termux application (pacman.android-7)"
+          for file in *.zip; do
+            gh release upload ${{ steps.get_tag.outputs.tag_name }} "$file"
+          done
