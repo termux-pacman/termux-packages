@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Basic file, shell and text manipulation utilities from t
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=9.10
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SRCURL=https://mirrors.kernel.org/gnu/coreutils/coreutils-${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=16535a9adf0b10037364e2d612aad3d9f4eca3a344949ced74d12faf4bd51d25
 TERMUX_PKG_DEPENDS="libandroid-selinux, libandroid-support, libgmp, libiconv, openssl (>= 1:3.5.0-1)"
