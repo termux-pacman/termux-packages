@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://github.com/go-acme/lego
 TERMUX_PKG_DESCRIPTION="Let's Encrypt/ACME client and library written in Go"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="Izumi Sena Sora <info@unordinary.eu.org>"
-TERMUX_PKG_VERSION="5.0.0"
+TERMUX_PKG_VERSION="5.0.1"
 TERMUX_PKG_SRCURL="https://github.com/go-acme/lego/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=34b55612f5f596ddc82d180bb451e700a3b381db358f8c58d161705a6e61a8ef
+TERMUX_PKG_SHA256=7d4430a7890026bc93e93fd0a892873eb83a497580fc5cdbce71d06b22196e9d
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
 
