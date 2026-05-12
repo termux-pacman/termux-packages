@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://algernon.roboticoverlords.org/
 TERMUX_PKG_DESCRIPTION="Small self-contained web server with Lua, Markdown, QUIC, Redis and PostgreSQL support"
 TERMUX_PKG_LICENSE="BSD 3-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.17.6"
+TERMUX_PKG_VERSION="1.17.7"
 TERMUX_PKG_SRCURL="https://github.com/xyproto/algernon/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=9e95d59c0d821e06b7193a115447bd16cd8bfa077538237a17bf508053ef15bb
+TERMUX_PKG_SHA256=6af9c67f16b12f5c9a565df73878b7f7056e79a74bd32f9adea498039a2116c2
 TERMUX_PKG_AUTO_UPDATE=true
 
 termux_step_make() {
