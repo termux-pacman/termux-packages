@@ -12,3 +12,4 @@ TERMUX_PKG_REPLACES="libcdk"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --with-shared
 "
+
