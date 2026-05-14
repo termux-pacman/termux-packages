@@ -25,4 +25,3 @@ termux_step_pre_configure() {
 	CFLAGS+=" -fPIC"
 	CXXFLAGS+=" -fPIC"
 }
-
