@@ -38,3 +38,4 @@ termux_step_make_install() {
 	install -Dm755 -t $TERMUX_PREFIX/bin target/${CARGO_TARGET_NAME}/release/broot
 	install -Dm644 -t $TERMUX_PREFIX/share/man/man1 build/broot.1
 }
+
