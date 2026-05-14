@@ -72,8 +72,8 @@ runs:
         set -euo pipefail
         sudo cp scripts/zram.ko.zst ${{ steps.kernel-info.outputs.modules_dir }}/kernel/
         sudo depmod
-        sudo modprobe zram
         set +e
+        sudo modprobe zram || true
         sudo swapoff ${{ inputs.device_name }} || true
         sudo zramctl --reset ${{ inputs.device_name }} || true
         set -e
