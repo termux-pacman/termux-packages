@@ -78,3 +78,4 @@ termux_step_post_make_install() {
 		ln -sfv "$target" "$TERMUX_PREFIX/$link"
 	done < "$PWD/user_facing_tool_links.txt"
 }
+
