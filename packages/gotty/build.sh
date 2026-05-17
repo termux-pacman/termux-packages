@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://github.com/sorenisanerd/gotty
 TERMUX_PKG_DESCRIPTION="Share your terminal as a web application"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="1.7.1"
+TERMUX_PKG_VERSION="1.7.2"
 TERMUX_PKG_SRCURL=https://github.com/sorenisanerd/gotty/archive/refs/tags/v$TERMUX_PKG_VERSION.tar.gz
-TERMUX_PKG_SHA256=1ad107511add8f5b50498d6520045da589f6f9540ab79f1bbdfd3b317c801214
+TERMUX_PKG_SHA256=2e9ccbd4d284ab8cc38db62c532d7bb80bad767e1608d9cabca1a1cb601007f3
 TERMUX_PKG_AUTO_UPDATE=true
 
 termux_step_make() {
