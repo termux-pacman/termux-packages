@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="Small, fast and limited text editor"
 TERMUX_PKG_LICENSE="BSD 3-Clause"
 TERMUX_PKG_MAINTAINER="Alexander F. Rødseth <xyproto@archlinux.org>"
 TERMUX_PKG_VERSION="2.74.0"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/xyproto/orbiton/archive/refs/tags/v$TERMUX_PKG_VERSION.tar.gz
 TERMUX_PKG_SHA256=3340f40517cd4d7c1e67b6e0ca8c777ed2e2387cd573f604c88ec96531cbba67
 TERMUX_PKG_AUTO_UPDATE=true
