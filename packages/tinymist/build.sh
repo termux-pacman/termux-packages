@@ -54,3 +54,4 @@ termux_step_make_install() {
 	# there are currently no completions for typlite
 	# and despite `clap_mangen` being present there is currently no manpages
 }
+
