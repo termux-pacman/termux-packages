@@ -19,4 +19,3 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm755 ./target/"${CARGO_TARGET_NAME}"/release/turbo "${TERMUX_PREFIX}"/bin/turbo
 }
-
