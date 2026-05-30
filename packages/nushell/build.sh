@@ -25,4 +25,3 @@ termux_step_post_make_install() {
 	sed "s|@TERMUX_PREFIX@|$TERMUX_PREFIX|" "$TERMUX_PKG_BUILDER_DIR/command-not-found.nu" \
 		>"$autoload_dir/command-not-found.nu"
 }
-
