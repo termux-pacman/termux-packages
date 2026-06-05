@@ -9,15 +9,15 @@ Session.vim
 # Vagrant
 scripts/*.log
 scripts/.vagrant/
-
 # Built *.deb files.
 /debs/
 /output/
-
 # Preinstalled build tools.
 /build-tools/
-
 # Predownloaded packages sources.
 /packages/*/cache
 /root-packages/*/cache
 /x11-packages/*/cache
+# macOS system files
+.DS_Store
+._*
