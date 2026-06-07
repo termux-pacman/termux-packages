@@ -129,4 +129,3 @@ termux_step_make() {
 termux_step_make_install() {
 	cp -rT linux-package "$TERMUX_PREFIX"
 }
-
