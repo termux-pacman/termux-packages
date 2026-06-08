@@ -19,3 +19,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dpgp=enabled
 -Dpython-plugins=enabled
 "
+
