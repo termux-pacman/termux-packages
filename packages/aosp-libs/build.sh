@@ -132,4 +132,3 @@ termux_step_make_install() {
 	mkdir -p "${TERMUX_PREFIX}/opt/aosp/"
 	cp -r "${TERMUX_PKG_SRCDIR}"/out/target/product/generic*/system/* "${TERMUX_PREFIX}/opt/aosp/"
 }
-
