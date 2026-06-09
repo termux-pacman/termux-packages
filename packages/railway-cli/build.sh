@@ -28,3 +28,4 @@ termux_step_pre_configure() {
 	echo "arboard = { path = \"./vendor/arboard\" }" >> Cargo.toml
 	echo "x11rb-protocol = { path = \"./vendor/x11rb-protocol\" }" >> Cargo.toml
 }
+

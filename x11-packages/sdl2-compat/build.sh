@@ -26,3 +26,4 @@ termux_step_pre_configure() {
 	echo "INFO: Modified files:"
 	diff -uNr "${TERMUX_PKG_TMPDIR}"/{a,b} --color || :
 }
+
