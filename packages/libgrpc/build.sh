@@ -60,4 +60,3 @@ termux_step_pre_configure() {
 	CPPFLAGS+=" -DPROTOBUF_USE_DLLS"
 	LDFLAGS+=" $($TERMUX_SCRIPTDIR/packages/libprotobuf/interface_link_libraries.sh)"
 }
-
