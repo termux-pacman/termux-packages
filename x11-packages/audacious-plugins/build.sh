@@ -24,4 +24,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dgl-spectrum=false
 -Dneon=false
 "
-
