@@ -80,4 +80,3 @@ termux_step_create_debscripts() {
 	echo "You must explicitly use 'npx create-next-app@v${TERMUX_PKG_VERSION//\~/-}' to avoid the error of Missing field 'isPersistentCachingEnabled'"
 	EOF
 }
-
