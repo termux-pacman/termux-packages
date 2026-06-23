@@ -31,4 +31,3 @@ termux_pkg_auto_update() {
 termux_step_pre_configure() {
 	autoreconf -fi
 }
-
