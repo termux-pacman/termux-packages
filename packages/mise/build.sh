@@ -77,3 +77,4 @@ termux_step_make_install() {
 	install -vDm644 "completions/${TERMUX_PKG_NAME}.fish" \
 		-t "${TERMUX_PREFIX}/share/fish/vendor_completions.d"
 }
+
