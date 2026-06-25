@@ -69,4 +69,3 @@ termux_step_create_debscripts()  {
 	exit 0
 	POSTINST_EOF
 }
-
