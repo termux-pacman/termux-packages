@@ -57,4 +57,3 @@ termux_step_pre_configure() {
 		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DKATEHIGHLIGHTINGINDEXER_EXECUTABLE=$TERMUX_PREFIX/opt/kf6/cross/bin/katehighlightingindexer"
 	fi
 }
-
