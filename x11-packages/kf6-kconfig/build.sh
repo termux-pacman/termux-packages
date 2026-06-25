@@ -65,3 +65,4 @@ termux_step_post_make_install() {
 	sed -e 's|_IMPORT_PREFIX "'"$TERMUX_PREFIX"'"|_IMPORT_PREFIX "'"$TERMUX_PREFIX"'/opt/kf6/cross"|' -i "$TERMUX_PREFIX/opt/kf6/cross/lib/cmake/KF6Config/KF6ConfigCompilerTargets.cmake"
 	sed -e 's|'"$TERMUX_PREFIX"'/lib/libexec/kf6/kconfig_compiler_kf6|'"$TERMUX_PREFIX"'/opt/kf6/cross/lib/libexec/kf6/kconfig_compiler_kf6|' -i "$TERMUX_PREFIX/opt/kf6/cross/lib/cmake/KF6Config/KF6ConfigCompilerTargets-release.cmake"
 }
+
