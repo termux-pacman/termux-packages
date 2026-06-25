@@ -43,4 +43,3 @@ termux_step_host_build() {
 termux_step_pre_configure() {
 	rm -rf $TERMUX_HOSTBUILD_MARKER
 }
-
