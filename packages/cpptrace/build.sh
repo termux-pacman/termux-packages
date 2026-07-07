@@ -20,4 +20,3 @@ termux_step_pre_configure() {
 	# >>> referenced by /data/data/com.termux/files/usr/lib/libcpptrace.so.1.0.4
 	LDFLAGS+=" -lzstd"
 }
-
