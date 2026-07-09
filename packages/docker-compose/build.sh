@@ -21,4 +21,3 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm755 -t "${TERMUX_PREFIX}"/libexec/docker/cli-plugins "${TERMUX_PKG_SRCDIR}"/bin/docker-compose
 }
-
