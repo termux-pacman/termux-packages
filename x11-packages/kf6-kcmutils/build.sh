@@ -47,4 +47,3 @@ termux_step_post_make_install() {
 	sed -e 's|_IMPORT_PREFIX "'"$TERMUX_PREFIX"'"|_IMPORT_PREFIX "'"$TERMUX_PREFIX"'/opt/kf6/cross"|' -i "$TERMUX_PREFIX/opt/kf6/cross/lib/cmake/KF6KCMUtils/KF6KCMUtilsToolingTargets.cmake"
 	sed -e 's|'"$TERMUX_PREFIX"'/lib/libexec/kf6/kcmdesktopfilegenerator|'"$TERMUX_PREFIX"'/opt/kf6/cross/lib/libexec/kf6/kcmdesktopfilegenerator|' -i "$TERMUX_PREFIX/opt/kf6/cross/lib/cmake/KF6KCMUtils/KF6KCMUtilsToolingTargets-release.cmake"
 }
-
