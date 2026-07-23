@@ -34,4 +34,3 @@ lib/libqxp-0.0.so
 		fi
 	done
 }
-
