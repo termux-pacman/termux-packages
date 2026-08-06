@@ -1,4 +1,7 @@
 # Termux packages for pacman - official git repo mirror
+<!-- hy-mt2-i18n:start -->
+**English** · [中文](./README_zh-CN.md) · [日本語](./README_ja.md) · [Español](./README_es.md)
+<!-- hy-mt2-i18n:end -->
 ![GitHub repo size](https://img.shields.io/github/repo-size/termux-pacman/termux-packages)
 ![Packages last build status](https://github.com/termux-pacman/termux-packages/workflows/Packages/badge.svg)
 ![Repo last update status](https://github.com/termux-pacman/termux-packages/workflows/Update%20repo/badge.svg)  
