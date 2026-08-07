@@ -33,4 +33,3 @@ termux_step_post_make_install() {
 	install -d -m700 "$TERMUX_PREFIX/share/openvpn/examples"
 	cp "$TERMUX_PKG_SRCDIR"/sample/sample-config-files/* "$TERMUX_PREFIX/share/openvpn/examples"
 }
-
