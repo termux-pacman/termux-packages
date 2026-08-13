@@ -40,3 +40,4 @@ termux_step_make_install() {
 		$TERMUX_PREFIX/share/doc/lazygit/
 
 }
+
