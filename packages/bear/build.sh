@@ -24,3 +24,4 @@ termux_step_make_install() {
 	mv "target/$CARGO_TARGET_NAME/release" target/release
 	scripts/install.sh
 }
+
