@@ -37,4 +37,3 @@ termux_step_post_make_install() {
 	# keep executable name same as previous
 	mv -v "${TERMUX_PREFIX}"/bin/{waypipe-c,waypipe}
 }
-
