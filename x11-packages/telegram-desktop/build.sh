@@ -269,4 +269,3 @@ termux_step_configure() {
 	cd "$TERMUX_PKG_BUILDDIR"
 	termux_step_configure_cmake
 }
-
