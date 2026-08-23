@@ -125,4 +125,3 @@ termux_step_post_make_install() {
 	# Create a symlink for zsh-$version instead of the hardlink:
 	ln -sf "$TERMUX_PREFIX/bin/zsh" "$TERMUX_PREFIX/bin/zsh-$TERMUX_PKG_VERSION"
 }
-
