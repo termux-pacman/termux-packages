@@ -23,4 +23,3 @@ termux_step_make_install() {
 	cross-pip install --no-deps --prefix="$TERMUX_PREFIX" "$_src/azure-cli-core"
 	cross-pip install --no-deps --prefix="$TERMUX_PREFIX" "$_src/azure-cli"
 }
-
