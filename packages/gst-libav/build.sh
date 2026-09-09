@@ -7,3 +7,4 @@ TERMUX_PKG_SRCURL=https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${TE
 TERMUX_PKG_SHA256=58da51dd39ecf1cf6faade34cc6412001be2e2e145bca8ae0f45336f60a36ab2
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="ffmpeg, glib, gst-plugins-base, gstreamer"
+

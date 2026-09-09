@@ -10,3 +10,4 @@ TERMUX_PKG_DEPENDS="glib, gst-plugins-base"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtests=disabled
 "
+
