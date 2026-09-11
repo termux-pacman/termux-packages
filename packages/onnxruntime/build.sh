@@ -76,3 +76,4 @@ termux_step_post_make_install() {
 	ln -sf "$TERMUX_PREFIX/lib/libonnxruntime_providers_shared.so" \
 		"$TERMUX_PYTHON_HOME/site-packages/onnxruntime/capi/libonnxruntime_providers_shared.so"
 }
+
