@@ -184,3 +184,4 @@ termux_step_make_install() {
 	install -Dm644 assets/shell-completion/zsh "${TERMUX_PREFIX}/share/zsh/site-functions/_${TERMUX_PKG_NAME//-nightly/}"
 	install -Dm644 assets/shell-integration/${TERMUX_PKG_NAME//-nightly/}.sh -t "${TERMUX_PREFIX}/etc/profile.d"
 }
+
