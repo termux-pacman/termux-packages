@@ -24,3 +24,4 @@ termux_step_post_make_install() {
 		"$TERMUX_PKG_SRCDIR/src/oci_cli/bin/oci_autocomplete.sh" \
 		"$TERMUX_PREFIX/etc/bash_completion.d/oci_autocomplete.sh"
 }
+
