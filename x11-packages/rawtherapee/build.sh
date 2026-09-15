@@ -18,4 +18,3 @@ termux_step_pre_configure() {
 	LDFLAGS+=" -fopenmp -static-openmp"
 	CXXFLAGS+=" -DTERMUX_APP_PACKAGE_NAME=\\\"${TERMUX_APP__PACKAGE_NAME}\\\""
 }
-
