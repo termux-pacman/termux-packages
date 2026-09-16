@@ -1,0 +1,14 @@
+diff --git a/src/gallium/drivers/zink/zink_device_info.py b/src/gallium/drivers/zink/zink_device_info.py
+index bf46f78..2f1a2fd 100644
+--- a/src/gallium/drivers/zink/zink_device_info.py
++++ b/src/gallium/drivers/zink/zink_device_info.py
+@@ -68,8 +68,7 @@ EXTENSIONS = [
+               features=True),
+     Extension("VK_KHR_maintenance5",
+               alias="maint5",
+-              features=True, properties=True,
+-              required=True),
++              features=True, properties=True),
+     Extension("VK_KHR_maintenance6",
+               alias="maint6",
+               features=True, properties=True),
