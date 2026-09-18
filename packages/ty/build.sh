@@ -59,3 +59,4 @@ termux_step_make_install() {
 		target/"${CARGO_TARGET_NAME}"/release/ty \
 		"$TERMUX_PREFIX"/bin/ty
 }
+
