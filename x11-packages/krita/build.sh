@@ -25,3 +25,4 @@ termux_step_pre_configure() {
 	CPPFLAGS="-I$TERMUX_PREFIX/include/qt6 -I$TERMUX_PREFIX/include/qt6/QtCore5Compat $CPPFLAGS"
 	CXXFLAGS="-I$TERMUX_PREFIX/include/qt6 -I$TERMUX_PREFIX/include/qt6/QtCore5Compat $CXXFLAGS"
 }
+
