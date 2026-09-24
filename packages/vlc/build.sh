@@ -96,4 +96,3 @@ termux_step_post_massage() {
 	# Remove unnecessary libtool files and static libraries
 	find "$TERMUX_PKG_MASSAGEDIR" -type f \( -name "*.a" -o -name "*.la" \) -exec rm {} \;
 }
-
