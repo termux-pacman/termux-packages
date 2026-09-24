@@ -10,4 +10,3 @@ TERMUX_PKG_DEPENDS="cjson, libmicrohttpd, liblz4, mbedtls"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dtest=false
 "
-
