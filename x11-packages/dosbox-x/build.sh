@@ -29,3 +29,4 @@ termux_step_pre_configure() {
 
 	LDFLAGS+=" -liconv -landroid-posix-semaphore"
 }
+
