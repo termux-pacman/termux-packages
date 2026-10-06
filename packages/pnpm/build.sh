@@ -59,4 +59,3 @@ termux_step_post_make_install() {
 	# Create symlink for pnpx pointing to pnpm
 	ln -sf pnpm "${TERMUX_PREFIX}/bin/pnpx"
 }
-
