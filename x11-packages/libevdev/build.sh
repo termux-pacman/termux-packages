@@ -14,4 +14,3 @@ share/man/man1/
 termux_step_pre_configure() {
 	autoreconf -i
 }
-
