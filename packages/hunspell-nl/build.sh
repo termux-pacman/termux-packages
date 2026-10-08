@@ -28,4 +28,3 @@ termux_step_make_install() {
 	install -Dm644 "$TERMUX_PKG_CACHEDIR/nl.dic" "$TERMUX_PREFIX/share/hunspell/nl_NL.dic"
 	install -Dm600 -t "$TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME" "$TERMUX_PKG_CACHEDIR/README.md"
 }
-
