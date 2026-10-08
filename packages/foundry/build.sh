@@ -308,4 +308,3 @@ termux_step_make_install() {
 		install -Dm755 "$solc_root/solc-$version" "$svm_dir/$version/solc-$version"
 	done
 }
-
