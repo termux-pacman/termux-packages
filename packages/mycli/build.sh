@@ -37,4 +37,3 @@ termux_step_create_debscripts() {
 	rm -f "${TERMUX_PREFIX}/share/fish/vendor_completions.d/mycli.fish"
 	EOF
 }
-
