@@ -29,4 +29,3 @@ termux_step_post_make_install() {
 	ln -sfr "$TERMUX_PREFIX/lib/libv4l/v4l2convert.so" "$TERMUX_PREFIX/lib/v4l2convert.so"
 	rm -rf "$TERMUX_PREFIX/etc/rules.d"
 }
-
