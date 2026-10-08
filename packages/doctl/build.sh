@@ -37,3 +37,4 @@ termux_step_make_install() {
 	go run ./cmd/doctl completion zsh  > "${TERMUX_PREFIX}/share/zsh/site-functions/_doctl"
 	go run ./cmd/doctl completion fish > "${TERMUX_PREFIX}/share/fish/vendor_completions.d/doctl.fish"
 }
+
