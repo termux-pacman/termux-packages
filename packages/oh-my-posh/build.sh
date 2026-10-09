@@ -32,4 +32,3 @@ termux_step_make_install() {
 	install -d "${TERMUX_PREFIX}/share/oh-my-posh/themes"
 	install -m 600 ../themes/* -t "${TERMUX_PREFIX}/share/oh-my-posh/themes"
 }
-
