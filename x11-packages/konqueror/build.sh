@@ -31,3 +31,4 @@ termux_step_pre_configure() {
 			-DKF6_HOST_TOOLING=$TERMUX_PREFIX/opt/kf6/cross/lib/cmake/"
 	fi
 }
+
