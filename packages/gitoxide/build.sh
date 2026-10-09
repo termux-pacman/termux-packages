@@ -67,4 +67,3 @@ termux_step_make_install() {
 		target/${CARGO_TARGET_NAME}/release/ein \
 		target/${CARGO_TARGET_NAME}/release/gix
 }
-
