@@ -33,4 +33,3 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 termux_step_pre_configure() {
 	export LDFLAGS+=" -lxml2"
 }
-
