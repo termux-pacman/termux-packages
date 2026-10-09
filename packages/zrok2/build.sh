@@ -32,3 +32,4 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm700 zrok2 "$TERMUX_PREFIX/bin/zrok2"
 }
+

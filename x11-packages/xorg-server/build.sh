@@ -100,3 +100,4 @@ if [ "${#}" -eq 1 ] && [ "${1}" == "xorg_server_flags" ]; then
 	echo ${TERMUX_PKG_EXTRA_CONFIGURE_ARGS}
 	return
 fi
+

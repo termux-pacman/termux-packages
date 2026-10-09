@@ -20,3 +20,4 @@ termux_step_pre_configure() {
 		export PATH="${TERMUX__PREFIX__OPT_DIR}/qt6/cross/lib/qt6:${PATH}"
 	fi
 }
+
