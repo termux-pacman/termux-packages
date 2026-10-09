@@ -24,4 +24,3 @@ termux_step_pre_configure() {
 		TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DQt6LinguistTools_DIR=$TERMUX_PREFIX/opt/qt6/cross/lib/cmake/Qt6LinguistTools"
 	fi
 }
-
