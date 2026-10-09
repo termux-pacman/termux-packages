@@ -52,4 +52,3 @@ termux_step_post_make_install() {
 		"perl5/site_perl/$perl_version/${TERMUX_ARCH}-android"
 	rmdir x86_64-linux-gnu/{perl/{"$host_perl_version/",},}
 }
-
