@@ -22,4 +22,3 @@ termux_step_pre_configure() {
 termux_step_post_make_install() {
 	rm -f $TERMUX_PREFIX/share/mime/mime.cache
 }
-
