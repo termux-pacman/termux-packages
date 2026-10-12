@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://mise.jdx.dev/
 TERMUX_PKG_DESCRIPTION="dev tools, env vars, task runner"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION="2026.10.3"
+TERMUX_PKG_VERSION="2026.10.8"
 TERMUX_PKG_SRCURL="https://github.com/jdx/mise/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=c9385e0a3907b1dc3419a5f2b6f3df5629f7622e7854ed25e4a24800028c8a01
+TERMUX_PKG_SHA256=f1d5e30852f973a435a78859058c698d1f6d8f9a6da8c5a0d933ac6415a293f8
 TERMUX_PKG_DEPENDS="bzip2, openssl"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_MAKE_PROCESSES=1
@@ -14,6 +14,9 @@ TERMUX_PKG_UPDATE_TAG_TYPE=latest-release-tag
 termux_step_pre_configure() {
 	termux_setup_cmake
 	termux_setup_rust
+
+	# jitterentropy needs -O0, which -Oz in CFLAGS overrides
+	export AWS_LC_SYS_NO_JITTER_ENTROPY=1
 
 	# Dummy CMake toolchain file to workaround build error:
 	# error: failed to run custom build command for `libz-ng-sys v1.1.29`
@@ -33,12 +36,18 @@ termux_step_pre_configure() {
 	find ./vendor-termux \
 		-mindepth 1 -maxdepth 1 -type d \
 		! -wholename ./vendor-termux/cc \
+		! -wholename ./vendor-termux/decmpfs \
 		! -wholename ./vendor-termux/sonic-rs \
 		! -wholename ./vendor-termux/sonic-simd \
 		-exec rm -rf '{}' \;
 
 	local patch="$TERMUX_PKG_BUILDER_DIR/rust-cc-do-not-concatenate-all-the-CFLAGS.diff"
 	local dir="vendor-termux/cc"
+	echo "Applying patch: $patch"
+	patch -p1 -d "$dir" < "$patch"
+
+	patch="$TERMUX_PKG_BUILDER_DIR/decmpfs-android-libc.diff"
+	dir="vendor-termux/decmpfs"
 	echo "Applying patch: $patch"
 	patch -p1 -d "$dir" < "$patch"
 
@@ -56,6 +65,7 @@ termux_step_pre_configure() {
 
 		[patch.crates-io]
 		cc = { path = "./vendor-termux/cc" }
+		decmpfs = { path = "./vendor-termux/decmpfs" }
 		sonic-rs = { path = "./vendor-termux/sonic-rs" }
 		sonic-simd = { path = "./vendor-termux/sonic-simd" }
 	EOL
