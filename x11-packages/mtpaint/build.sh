@@ -60,3 +60,4 @@ termux_step_pre_configure() {
 termux_step_configure() {
 	sh $TERMUX_PKG_SRCDIR/configure ${TERMUX_PKG_EXTRA_CONFIGURE_ARGS}
 }
+
