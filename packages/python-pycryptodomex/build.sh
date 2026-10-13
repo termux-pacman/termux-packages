@@ -22,3 +22,4 @@ termux_step_make() {
 termux_step_make_install() {
 	pip install . --prefix="$TERMUX_PREFIX" -vv --no-build-isolation --no-deps
 }
+
