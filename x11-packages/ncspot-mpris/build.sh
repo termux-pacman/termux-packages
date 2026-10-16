@@ -52,3 +52,4 @@ termux_step_pre_configure() {
 	CFLAGS+=" --target=$CCTERMUX_HOST_PLATFORM"
 	LDFLAGS+=" --target=$CCTERMUX_HOST_PLATFORM"
 }
+

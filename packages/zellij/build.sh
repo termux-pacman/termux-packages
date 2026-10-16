@@ -66,3 +66,4 @@ termux_step_create_debscripts() {
 		zellij setup --generate-completion fish > ${TERMUX_PREFIX}/share/fish/vendor_completions.d/zellij.fish
 	EOF
 }
+

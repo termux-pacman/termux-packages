@@ -40,3 +40,4 @@ termux_step_host_build() {
 termux_step_post_configure() {
 	export GENNMTAB=$TERMUX_PKG_HOSTBUILD_DIR/lib/expat/gennmtab/gennmtab
 }
+

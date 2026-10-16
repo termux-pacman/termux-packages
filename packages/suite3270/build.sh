@@ -37,3 +37,4 @@ termux_step_post_configure() {
 	popd
 	PATH=$bin:$PATH
 }
+
