@@ -25,3 +25,4 @@ termux_step_make_install() {
 	# Conflicts with the playwright package; use "python -m playwright" instead
 	rm -f "$TERMUX_PREFIX/bin/playwright"
 }
+

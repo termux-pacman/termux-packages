@@ -52,3 +52,4 @@ termux_step_create_debscripts() {
 	echo "For ESM/TypeScript projects, run: npm link playwright"
 	EOF
 }
+
