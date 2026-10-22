@@ -23,4 +23,3 @@ termux_step_make() {
 termux_step_make_install() {
 	install -Dm755 mkcert "$TERMUX_PREFIX/bin/mkcert"
 }
-
