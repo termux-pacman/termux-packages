@@ -32,4 +32,3 @@ termux_step_make_install() {
 	go run . completion --shell zsh > "${TERMUX_PREFIX}/share/zsh/site-functions/_${TERMUX_PKG_NAME}"
 	)
 }
-
