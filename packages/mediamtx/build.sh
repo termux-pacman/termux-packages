@@ -27,4 +27,3 @@ termux_step_make_install() {
 	install -Dm700 -t "${TERMUX_PREFIX}"/bin mediamtx
 	install -Dm600 -t "${TERMUX_PREFIX}"/etc/mediamtx mediamtx.yml
 }
-
