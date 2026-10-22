@@ -48,4 +48,3 @@ termux_step_create_debscripts() {
 	echo "Please change font from termux-styling addon"
 	POSTINST_EOF
 }
-
