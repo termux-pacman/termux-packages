@@ -38,4 +38,3 @@ termux_step_make_install() {
 	go run . completion zsh  > "${TERMUX_PREFIX}/share/zsh/site-functions/_mailpit"
 	go run . completion fish > "${TERMUX_PREFIX}/share/fish/vendor_completions.d/mailpit.fish"
 }
-
