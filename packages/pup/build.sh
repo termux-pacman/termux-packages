@@ -23,3 +23,4 @@ termux_step_make_install() {
 	install -Dm700 -t "$TERMUX_PREFIX"/bin pup
 	install -Dm644 -t "$TERMUX_PREFIX"/share/doc/"$TERMUX_PKG_NAME" README*
 }
+

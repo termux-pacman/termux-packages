@@ -25,3 +25,4 @@ termux_step_make_install() {
 	mkdir -p "$TERMUX_PREFIX/share/man/man1"
 	scdoc < cmd/shfmt/shfmt.1.scd > "$TERMUX_PREFIX/share/man/man1/shfmt.1"
 }
+

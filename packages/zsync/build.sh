@@ -24,3 +24,4 @@ termux_step_make_install() {
 	install -Dm644 man/zsync.1 "$TERMUX_PREFIX/share/man/man1/zync.1"
 	install -Dm644 man/zsyncmake.1 "$TERMUX_PREFIX/share/man/man1/zsyncmake.1"
 }
+

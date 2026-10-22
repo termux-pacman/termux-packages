@@ -81,3 +81,4 @@ termux_step_make_install() {
 	install -Dm600 -t $TERMUX_PREFIX/share/v2ray $TERMUX_PKG_SRCDIR/v2ray-linux-64/geosite.dat
 	install -Dm600 -t $TERMUX_PREFIX/share/v2ray $TERMUX_PKG_SRCDIR/v2ray-linux-64/geoip-only-cn-private.dat
 }
+

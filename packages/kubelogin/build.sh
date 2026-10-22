@@ -22,3 +22,4 @@ termux_step_make_install() {
 	install -Dm700 ${TERMUX_PKG_BUILDDIR}/src/github.com/int128/kubelogin/kubelogin \
 		$TERMUX_PREFIX/bin/kubectl-oidc_login
 }
+

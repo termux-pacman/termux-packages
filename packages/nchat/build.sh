@@ -40,3 +40,4 @@ termux_step_pre_configure() {
 	# ncutil calls backtrace() when execinfo.h is found, link it explicitly.
 	LDFLAGS+=" -landroid-execinfo"
 }
+

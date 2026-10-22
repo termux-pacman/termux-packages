@@ -23,3 +23,4 @@ termux_step_create_debscripts() {
 	mkdir -p $TERMUX_PREFIX/var/lib/soju
 	EOF
 }
+

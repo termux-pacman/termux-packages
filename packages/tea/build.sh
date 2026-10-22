@@ -47,3 +47,4 @@ termux_step_make_install() {
 	mkdir -p "$TERMUX_PREFIX"/share/man/man1
 	"$TERMUX_PKG_HOSTBUILD_DIR"/tea man --out "$TERMUX_PREFIX"/share/man/man1/tea.1
 }
+

@@ -20,3 +20,4 @@ termux_step_make_install() {
 	install -Dm700 -t "${TERMUX_PREFIX}/bin" moor
 	install -Dm600 -t "${TERMUX_PREFIX}/share/man/man1" moor.1
 }
+

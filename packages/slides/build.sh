@@ -21,3 +21,4 @@ termux_step_make_install() {
 		"$TERMUX_PKG_SRCDIR"/slides \
 		"$TERMUX_PREFIX"/bin/
 }
+

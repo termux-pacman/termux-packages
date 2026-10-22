@@ -56,3 +56,4 @@ termux_step_create_debscripts() {
 		navidrome completion fish -n > ${TERMUX_PREFIX}/share/fish/vendor_completions.d/navidrome.fish
 	EOF
 }
+
