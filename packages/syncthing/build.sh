@@ -48,4 +48,3 @@ termux_step_make_install() {
 		cp $TERMUX_PKG_SRCDIR/man/*.$section $MANDIR
 	done
 }
-
