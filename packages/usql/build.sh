@@ -30,4 +30,3 @@ termux_step_make_install() {
 
 	install -Dm644 "$TERMUX_PKG_SRCDIR/README.md" -t "$TERMUX_PREFIX/share/doc/usql"
 }
-
