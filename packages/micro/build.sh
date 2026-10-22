@@ -28,4 +28,3 @@ termux_step_make_install() {
 	mv micro "$TERMUX_PREFIX/bin/micro"
 	install -Dm644 -t $TERMUX_PREFIX/share/man/man1 assets/packaging/${TERMUX_PKG_NAME}.1
 }
-
