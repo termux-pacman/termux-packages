@@ -46,4 +46,3 @@ termux_step_create_debscripts() {
 		sing-box completion zsh > ${TERMUX_PREFIX}/share/zsh/site-functions/_sing-box
 	EOF
 }
-
