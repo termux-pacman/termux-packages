@@ -19,4 +19,3 @@ termux_step_make_install() {
 	install -Dm700 -t $TERMUX_PREFIX/bin bin/*
 	install -Dm600 -t $TERMUX_PREFIX/share/doc/$TERMUX_PKG_NAME README.*
 }
-
