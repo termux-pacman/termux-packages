@@ -53,4 +53,3 @@ termux_step_make_install() {
 	mkdir -p "$TERMUX_PREFIX"/var/lib/sftpgo
 	touch "$TERMUX_PREFIX"/var/lib/sftpgo/.placeholder
 }
-
