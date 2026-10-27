@@ -132,3 +132,4 @@ termux_step_make_install() {
 	termux-proot-run env PATH="$TERMUX_PKG_TMPDIR/bin:$TERMUX_PREFIX/bin:$PATH" \
 		make install
 }
+
