@@ -232,4 +232,3 @@ termux_step_make_install() {
 		install -Dm755 -t "$TERMUX_PREFIX/lib/lwjgl3/$v" "$_LWJGL_ROOT/$v"/lib/*.so
 	done
 }
-
