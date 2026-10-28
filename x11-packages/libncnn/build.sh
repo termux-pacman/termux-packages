@@ -114,4 +114,3 @@ termux_step_post_make_install() {
 		esac
 	done
 }
-
