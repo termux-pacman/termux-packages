@@ -49,4 +49,3 @@ termux_step_post_make_install() {
 	export ENABLE_CONTRIB=0
 	pip install --no-deps . --prefix "$TERMUX_PREFIX" # -> opencv-python-headless
 }
-
