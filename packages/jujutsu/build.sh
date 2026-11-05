@@ -41,3 +41,4 @@ termux_step_post_make_install() {
 		cargo run --bin jj -- util completion nushell > "${TERMUX_PREFIX}/share/nushell/vendor/autoload/jj.nu"
 	)
 }
+
