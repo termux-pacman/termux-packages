@@ -17,3 +17,4 @@ TERMUX_PKG_EXCLUDED_ARCHES="arm, i686"
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-execinfo"
 }
+

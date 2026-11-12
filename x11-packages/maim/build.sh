@@ -12,3 +12,4 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
 termux_step_pre_configure() {
 	LDFLAGS+=" -landroid-shmem"
 }
+
