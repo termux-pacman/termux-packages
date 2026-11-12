@@ -63,4 +63,3 @@ termux_step_post_massage() {
 		"$TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX_CLASSICAL/lib/zig/zig" init
 	)
 }
-
