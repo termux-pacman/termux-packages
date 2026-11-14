@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="Findomain is the fastest subdomain enumerator and the on
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION="11.0.0"
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/Findomain/Findomain/archive/refs/tags/${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=94a6980136ac1d96034bf2f4b30d4fab15f4c2b4dc1e99dfe226b7e7ca79ae37
 TERMUX_PKG_AUTO_UPDATE=true
@@ -32,6 +33,11 @@ termux_step_pre_configure() {
 	patch --silent -p1 \
 		-d ./vendor/hickory-resolver/ \
 		< "$TERMUX_PKG_BUILDER_DIR"/hickory-resolver.diff
+
+	find vendor/hickory-resolver -type f -print0 | \
+		xargs -0 sed -i \
+		-e 's|"android"|"disabling_this_because_it_is_for_building_an_apk"|g' \
+		-e "s|ANDROID|DISABLING_THIS_BECAUSE_IT_IS_FOR_BUILDING_AN_APK|g"
 
 	cat <<- EOF >> Cargo.toml
 
