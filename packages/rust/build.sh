@@ -337,4 +337,3 @@ termux_step_make_install() {
 # References:
 # https://src.fedoraproject.org/rpms/rust/blob/rawhide/f/rust.spec
 # https://gitlab.archlinux.org/archlinux/packaging/packages/rust/-/blob/main/PKGBUILD
-
