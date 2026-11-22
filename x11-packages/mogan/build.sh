@@ -128,4 +128,3 @@ termux_step_post_make_install() {
 	cp "$TERMUX_PKG_TMPDIR/backup_dir/libcurl.so" "$TERMUX_PREFIX/lib/libcurl.so"
 	cp "$TERMUX_PKG_TMPDIR/backup_dir/xmake" "$XMAKE_ORIG"
 }
-
