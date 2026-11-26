@@ -46,3 +46,4 @@ termux_step_make_install() {
 	#cp -f "$TERMUX_PKG_SRCDIR"/docs/man/man1/kubectl-*.1 \
 	#	"$TERMUX_PREFIX"/share/man/man1/
 }
+
